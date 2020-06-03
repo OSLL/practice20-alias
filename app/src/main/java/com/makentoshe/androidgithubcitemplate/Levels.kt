@@ -37,6 +37,7 @@ class Levels : AppCompatActivity() {
         button1.setOnClickListener {
             val intent = Intent(this, GameSettings::class.java)
             startActivity(intent)
+            finish()
         }
     }
 }
