@@ -76,24 +76,24 @@
         android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
         android:text="Средний уровень"
         android:textColor="#000000"
-        android:clickable="true"
         android:textSize="30sp"
-        tools:layout_editor_absoluteX="105dp"
-        tools:layout_editor_absoluteY="345dp" />
+        tools:layout_editor_absoluteX="112dp"
+        tools:layout_editor_absoluteY="341dp" />
 
     <TextView
         android:id="@+id/hard_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="108dp"
-        android:text="Сложный уровень"
         android:clickable="true"
+        android:text="Сложный уровень"
         android:textColor="#000000"
         android:textSize="30sp"
         app:layout_constraintTop_toBottomOf="@+id/textView10"
-        tools:layout_editor_absoluteX="104dp" />
+        tools:layout_editor_absoluteX="112dp" />
 
     <ImageView
         android:id="@+id/hard_button"
