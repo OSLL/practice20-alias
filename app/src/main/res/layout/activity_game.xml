@@ -56,7 +56,7 @@
                 android:layout_height="50dp"
                 android:layout_weight="0"
                 app:srcCompat="@drawable/crown"
-                android:layout_marginStart="15"/>
+                android:layout_marginStart="15dp"/>
 
             <TextView
                 android:id="@+id/textView9"
