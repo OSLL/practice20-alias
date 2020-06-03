@@ -16,9 +16,15 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Continue", Toast.LENGTH_LONG).show()
         }
 
+
         new_game_button.setOnClickListener {
             val intent = Intent(this, Teams::class.java)
+
+        button.setOnClickListener{
+            val intent= Intent(this,GameSettings::class.java)
+
             startActivity(intent)
         }
     }
+
 }

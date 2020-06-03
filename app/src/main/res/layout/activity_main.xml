@@ -60,6 +60,7 @@
             android:id="@+id/rules_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:layout_margin="20dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/first_buttons"
@@ -67,6 +68,15 @@
             android:textAllCaps="false"
             android:textColor="@color/mainColor"
             android:textSize="25sp" />
+
+            android:text="@string/rules" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Button" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
