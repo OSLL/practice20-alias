@@ -9,10 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".Teams"></activity>
-
-        <activity android:name=".GameSettings"></activity>
+        <activity android:name=".Round"></activity>
+        <activity android:name=".Game" />
+        <activity android:name=".Levels" />
+        <activity android:name=".Teams" />
+        <activity android:name=".GameSettings" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
