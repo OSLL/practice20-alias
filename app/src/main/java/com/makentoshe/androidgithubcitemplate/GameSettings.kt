@@ -10,8 +10,12 @@ class GameSettings : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_settings)
-        textView4.setOnClickListener {
+        textView6.setOnClickListener {
             val intent = Intent(this, Levels::class.java)
+            startActivity(intent)
+        }
+        button4.setOnClickListener {
+            val intent = Intent(this, Teams::class.java)
             startActivity(intent)
         }
     }

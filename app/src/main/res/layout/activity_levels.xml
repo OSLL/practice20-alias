@@ -7,7 +7,7 @@
     tools:context=".Levels">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button1"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="10dp"
@@ -17,6 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:id="@+id/button2"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="15dp"
@@ -29,80 +30,107 @@
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:text="Сложность"
         android:textColor="@color/black"
         android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/button2"
+        app:layout_constraintStart_toEndOf="@+id/button"
+        tools:layout_editor_absoluteY="15dp" />
 
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="140dp"
-        android:layout_marginEnd="27dp"
-        android:clickable="true"
-        app:layout_constraintEnd_toStartOf="@+id/textView9"
-        app:layout_constraintTop_toBottomOf="@id/textView8"
-        app:srcCompat="@drawable/easy_level_button" />
-
-    <TextView
-        android:id="@+id/textView9"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
-        android:layout_marginBottom="85dp"
-        android:text="Лёгкий уровень"
-        android:clickable="true"
-        android:textColor="#000000"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView10"
-        app:layout_constraintTop_toBottomOf="@+id/textView8"
-        tools:layout_editor_absoluteX="112dp" />
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="670dp" />
 
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="100dp"
-        android:clickable="true"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4"
-        app:srcCompat="@drawable/medium_level_button"
-        tools:layout_editor_absoluteX="35dp" />
+    <LinearLayout
+        android:layout_width="409dp"
+        android:layout_height="669dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="61dp">
 
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:text="Средний уровень"
-        android:textColor="#000000"
-        android:textSize="30sp"
-        tools:layout_editor_absoluteX="112dp"
-        tools:layout_editor_absoluteY="341dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="70dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/hard_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="108dp"
-        android:clickable="true"
-        android:text="Сложный уровень"
-        android:textColor="#000000"
-        android:textSize="30sp"
-        app:layout_constraintTop_toBottomOf="@+id/textView10"
-        tools:layout_editor_absoluteX="112dp" />
+            <ImageView
+                android:id="@+id/imageView8"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_weight="0"
+                android:clickable="true"
+                app:srcCompat="@drawable/easy_level_button" />
 
-    <ImageView
-        android:id="@+id/hard_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="100dp"
-        android:clickable="true"
-        app:layout_constraintTop_toBottomOf="@+id/imageView5"
-        app:srcCompat="@drawable/hard_level_button"
-        tools:layout_editor_absoluteX="35dp" />
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:layout_weight="0"
+                android:clickable="true"
+                android:paddingStart="30dp"
+                android:text="Лёгкий"
+                android:textAllCaps="false"
+                android:textSize="40dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_weight="0"
+                android:clickable="true"
+                app:srcCompat="@drawable/medium_level_button" />
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:layout_weight="0"
+                android:clickable="true"
+                android:paddingStart="30dp"
+                android:text="Средний"
+                android:textAllCaps="false"
+                android:textSize="40dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView10"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_weight="0"
+                android:clickable="true"
+                app:srcCompat="@drawable/hard_level_button" />
+
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:layout_weight="0"
+                android:clickable="true"
+                android:paddingStart="30dp"
+                android:text="Сложный"
+                android:textAllCaps="false"
+                android:textSize="40dp" />
+        </LinearLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
