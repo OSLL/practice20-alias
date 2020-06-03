@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="bottom"
+    android:background="@color/mainColor"
     tools:context=".MainActivity">
 
 
@@ -13,46 +15,63 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="140dp"
         android:text="Alias"
-        android:textColor="#000000"
+        android:textColor="@color/white"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:layout_width="409dp"
-        android:layout_height="469dp"
-        android:layout_marginTop="1dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
         android:orientation="vertical"
+        android:paddingBottom="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/continue_button"
-            android:layout_margin="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+            android:layout_margin="20dp"
+            android:background="@drawable/first_buttons"
+            android:clickable="false"
+            android:shadowColor="#00000000"
+            android:text="@string/continue_game"
             android:textAllCaps="false"
-            android:text="@string/continue_game" />
+            android:textColor="@color/mainColor"
+            android:textSize="25sp" />
 
         <Button
             android:id="@+id/new_game_button"
-            android:textAllCaps="false"
-            android:layout_margin="20dp"
             android:layout_width="match_parent"
+
             android:layout_height="wrap_content"
-            android:text="@string/new_game" />
+            android:layout_margin="20dp"
+            android:background="@drawable/first_buttons"
+            android:text="@string/new_game"
+            android:textAllCaps="false"
+            android:textColor="@color/mainColor"
+            android:textSize="25sp" />
 
         <Button
             android:id="@+id/rules_button"
-            android:layout_marginTop="20dp"
-            android:layout_margin="20dp"
-            android:textAllCaps="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
+            android:layout_margin="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/first_buttons"
+            android:text="@string/rules"
+            android:textAllCaps="false"
+            android:textColor="@color/mainColor"
+            android:textSize="25sp" /><![CDATA[
+
             android:text="@string/rules" />
+
+        ]]>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
