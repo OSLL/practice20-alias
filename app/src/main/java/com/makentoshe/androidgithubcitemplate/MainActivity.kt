@@ -21,5 +21,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, Teams::class.java)
             startActivity(intent)
         }
+
+        rules_button.setOnClickListener{
+            val intent = Intent(this, Rules::class.java)
+            startActivity(intent)
+        }
     }
 }
