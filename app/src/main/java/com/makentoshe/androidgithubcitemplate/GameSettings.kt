@@ -13,7 +13,7 @@ class GameSettings : AppCompatActivity() {
         continueButton.setOnClickListener {
             val intent = Intent(this, Levels::class.java)
             startActivity(intent)
-            intent.putExtra("teams", this.getIntent().getStringArrayExtra("teams"))
+            intent.putExtra("teams", this.intent.getStringArrayExtra("teams"))
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 

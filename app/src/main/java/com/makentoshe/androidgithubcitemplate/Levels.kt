@@ -12,14 +12,14 @@ class Levels : AppCompatActivity() {
 
         easyLevelIcon.setOnClickListener {
             val intent = Intent(this, Game::class.java)
-            intent.putExtra("teams", getIntent().getStringArrayExtra("teams"))
+            intent.putExtra("teams", this.intent.getStringArrayExtra("teams"))
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 
         middleLevelIcon.setOnClickListener {
             val intent = Intent(this, Game::class.java)
-            intent.putExtra("teams", getIntent().getStringArrayExtra("teams"))
+            intent.putExtra("teams", this.intent.getStringArrayExtra("teams"))
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
