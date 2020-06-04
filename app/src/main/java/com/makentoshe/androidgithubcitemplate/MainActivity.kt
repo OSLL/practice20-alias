@@ -12,12 +12,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        continue_button.setOnClickListener {
+        continueGameButton.setOnClickListener {
             Toast.makeText(this, "Continue", Toast.LENGTH_LONG).show()
         }
 
 
-        new_game_button.setOnClickListener {
+        newGameButton.setOnClickListener {
             val intent = Intent(this, Teams::class.java)
             startActivity(intent)
         }

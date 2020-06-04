@@ -7,7 +7,7 @@
     tools:context=".GameSettings">
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/continueButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="72dp"
@@ -21,7 +21,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/backButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="10dp"
@@ -31,7 +31,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/roundTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -43,7 +43,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/settings"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="15dp"
@@ -61,10 +61,10 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button4">
+        app:layout_constraintTop_toBottomOf="@+id/backButton">
 
         <TextView
-            android:id="@+id/words_amoint_text"
+            android:id="@+id/wordsAmountText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -86,7 +86,7 @@
             android:orientation="horizontal">
 
             <SeekBar
-                android:id="@+id/words_amount_slider"
+                android:id="@+id/wordsAmountSlider"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -94,7 +94,7 @@
                 android:layout_weight="4" />
 
             <TextView
-                android:id="@+id/words_amount_counter"
+                android:id="@+id/wordsAmountCounter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -126,7 +126,7 @@
             android:orientation="horizontal">
 
             <SeekBar
-                android:id="@+id/round_time_slider"
+                android:id="@+id/roundTimeSlider"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -134,7 +134,7 @@
                 android:layout_weight="4" />
 
             <TextView
-                android:id="@+id/round_time_counter"
+                android:id="@+id/roundTimeCounter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -153,7 +153,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/fine_text"
+                android:id="@+id/fineText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="17dp"
@@ -163,7 +163,7 @@
                 android:textSize="20sp" />
 
             <Button
-                android:id="@+id/fine_button"
+                android:id="@+id/fineButton"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="19dp"
@@ -171,7 +171,7 @@
                 android:layout_weight="0" />
 
             <Switch
-                android:id="@+id/fine_switcher"
+                android:id="@+id/fineSwitcher"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="15dp"
@@ -187,7 +187,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/general_last_word_text"
+                android:id="@+id/generalLastWordText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="17dp"
@@ -197,7 +197,7 @@
                 android:textSize="20sp" />
 
             <Button
-                android:id="@+id/general_last_word_button"
+                android:id="@+id/generalLastWordButton"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="19dp"
@@ -205,7 +205,7 @@
                 android:layout_weight="0" />
 
             <Switch
-                android:id="@+id/general_last_word_switcher"
+                android:id="@+id/generalLastWordSwitcher"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="15dp"
@@ -221,7 +221,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/task_text"
+                android:id="@+id/taskText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -231,7 +231,7 @@
                 android:textSize="20sp" />
 
             <Button
-                android:id="@+id/task_button"
+                android:id="@+id/taskButton"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="19dp"
@@ -239,7 +239,7 @@
                 android:layout_weight="0" />
 
             <Switch
-                android:id="@+id/task_switch"
+                android:id="@+id/taskSwitcher"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="15dp"
@@ -255,7 +255,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/robbery_text"
+                android:id="@+id/robberyText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="17dp"
@@ -265,7 +265,7 @@
                 android:textSize="20sp" />
 
             <Button
-                android:id="@+id/robbery_button"
+                android:id="@+id/robberyButton"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="19dp"
@@ -273,7 +273,7 @@
                 android:layout_weight="0" />
 
             <Switch
-                android:id="@+id/robbery_switcher"
+                android:id="@+id/robberySwitcher"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="15dp"
