@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_game.*
-import kotlinx.android.synthetic.main.activity_teams.*
 
 class Game : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,8 +15,8 @@ class Game : AppCompatActivity() {
 
 
         val teamsAdapter = TeamsAdapter(this, teams)
-        teamsView.adapter = teamsAdapter
-        teamsView.layoutManager = LinearLayoutManager(this)
+        teamsViewGame.adapter = teamsAdapter
+        teamsViewGame.layoutManager = LinearLayoutManager(this)
 
         startRound.setOnClickListener {
             val intent = Intent(this, Round::class.java)
