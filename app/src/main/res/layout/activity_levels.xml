@@ -56,6 +56,7 @@
                 android:id="@+id/imageView8"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:layout_marginStart="40dp"
                 android:layout_weight="0"
                 android:clickable="true"
                 app:srcCompat="@drawable/easy_level_button" />
@@ -83,6 +84,7 @@
                 android:id="@+id/imageView9"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:layout_marginStart="40dp"
                 android:layout_weight="0"
                 android:clickable="true"
                 app:srcCompat="@drawable/medium_level_button" />
@@ -110,6 +112,7 @@
                 android:id="@+id/imageView10"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:layout_marginStart="40dp"
                 android:layout_weight="0"
                 android:clickable="true"
                 app:srcCompat="@drawable/hard_level_button" />

@@ -48,13 +48,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <Button
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="72dp"
         android:text="Далее"
+        android:textAllCaps="false"
         android:clickable="true"
+        android:background="#00000000"
         android:textColor="#00862E"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
