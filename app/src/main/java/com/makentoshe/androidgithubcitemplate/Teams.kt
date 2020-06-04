@@ -18,7 +18,7 @@ class Teams : AppCompatActivity() {
         teamsView.layoutManager = LinearLayoutManager(this)
 
         continueButton.setOnClickListener {
-            val intent = Intent(this, Game::class.java)
+            val intent = Intent(this, GameSettings::class.java)
             intent.putExtra("teams", teams)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)

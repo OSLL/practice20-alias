@@ -9,11 +9,13 @@ class GameSettings : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_settings)
-
+        var teams = this.intent.getStringArrayExtra("teams")
         continueButton.setOnClickListener {
+
             val intent = Intent(this, Levels::class.java)
+            intent.putExtra("teams", teams)
             startActivity(intent)
-            intent.putExtra("teams", this.intent.getStringArrayExtra("teams"))
+
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 
