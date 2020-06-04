@@ -67,11 +67,8 @@
             android:text="@string/rules"
             android:textAllCaps="false"
             android:textColor="@color/mainColor"
-            android:textSize="25sp" /><![CDATA[
+            android:textSize="25sp" />
 
-            android:text="@string/rules" />
-
-        ]]>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
