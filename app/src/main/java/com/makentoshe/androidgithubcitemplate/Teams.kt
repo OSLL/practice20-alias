@@ -10,11 +10,11 @@ class Teams : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teams)
 
-        textView3.setOnClickListener {
+        continueButton.setOnClickListener {
             val intent = Intent(this, GameSettings::class.java)
             startActivity(intent)
         }
-        button.setOnClickListener {
+        backButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }

@@ -7,19 +7,18 @@
     tools:context=".Teams">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/teamName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
         android:text="1 команда"
         android:textColor="@color/black"
         android:textSize="30sp"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="@+id/imageView" />
+        app:layout_constraintStart_toEndOf="@id/teamIcon"
+        app:layout_constraintTop_toBottomOf="@+id/backButton" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/backButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="10dp"
@@ -29,6 +28,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:id="@+id/settings"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="15dp"
@@ -38,6 +38,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/teamsTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -49,7 +50,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/textView3"
+        android:id="@+id/continueButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="72dp"
@@ -64,20 +65,12 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="60dp" />
-
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/teamIcon"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_marginStart="70dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/backButton"
         app:srcCompat="@drawable/money" />
 </androidx.constraintlayout.widget.ConstraintLayout>
