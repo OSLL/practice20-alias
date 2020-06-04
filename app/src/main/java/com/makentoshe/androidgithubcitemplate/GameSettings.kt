@@ -18,5 +18,6 @@ class GameSettings : AppCompatActivity() {
             val intent = Intent(this, Teams::class.java)
             startActivity(intent)
         }
+
     }
 }

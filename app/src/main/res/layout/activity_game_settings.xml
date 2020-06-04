@@ -73,7 +73,8 @@
             android:layout_marginBottom="5dp"
             android:gravity="center"
             android:text="Количество слов для победы"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
 
         <LinearLayout
@@ -89,9 +90,14 @@
                 android:id="@+id/words_amount_slider"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="19dp"
                 android:layout_marginBottom="15dp"
-                android:layout_weight="4" />
+                android:layout_weight="4"
+                android:min="10"
+                android:max="60"
+                android:theme="@style/SeekBarStyle"
+
+                />
 
             <TextView
                 android:id="@+id/words_amount_counter"
@@ -101,7 +107,9 @@
                 android:layout_marginBottom="15dp"
                 android:layout_weight="1"
                 android:text="60"
-                android:textSize="20sp" />
+                android:textColor="@color/mainColor"
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <TextView
@@ -113,8 +121,10 @@
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="5dp"
             android:gravity="center"
-            android:text="Время раунда"
-            android:textSize="20sp" />
+            android:text="Время раунда, сек"
+
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -129,9 +139,12 @@
                 android:id="@+id/round_time_slider"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="19dp"
                 android:layout_marginBottom="15dp"
-                android:layout_weight="4" />
+                android:layout_weight="4"
+                android:min="30"
+                android:max="120"
+                android:theme="@style/SeekBarStyle"/>
 
             <TextView
                 android:id="@+id/round_time_counter"
@@ -141,7 +154,9 @@
                 android:layout_marginBottom="15dp"
                 android:layout_weight="1"
                 android:text="60"
-                android:textSize="20sp" />
+                android:textColor="@color/mainColor"
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -160,15 +175,18 @@
                 android:layout_marginBottom="15dp"
                 android:layout_weight="1"
                 android:text="Штраф за пропуск"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/fine_button"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginTop="19dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
-                android:layout_weight="0" />
+                android:layout_marginEnd="5dp"
+                android:layout_weight="0"
+                android:background="@drawable/about"/>
 
             <Switch
                 android:id="@+id/fine_switcher"
@@ -176,7 +194,8 @@
                 android:layout_height="30dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
-                android:layout_weight="0" />
+                android:layout_weight="0"
+                android:theme="@style/MySwitch"/>
         </LinearLayout>
 
         <LinearLayout
@@ -194,15 +213,18 @@
                 android:layout_marginBottom="15dp"
                 android:layout_weight="1"
                 android:text="Общее последнее слово"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/general_last_word_button"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginTop="19dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginBottom="15dp"
-                android:layout_weight="0" />
+                android:layout_weight="0"
+                android:background="@drawable/about"/>
 
             <Switch
                 android:id="@+id/general_last_word_switcher"
@@ -210,7 +232,8 @@
                 android:layout_height="30dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
-                android:layout_weight="0" />
+                android:layout_weight="0"
+                android:theme="@style/MySwitch"/>
         </LinearLayout>
 
         <LinearLayout
@@ -228,15 +251,18 @@
                 android:layout_marginBottom="15dp"
                 android:layout_weight="1"
                 android:text="Задания"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/task_button"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginTop="19dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginBottom="15dp"
-                android:layout_weight="0" />
+                android:layout_weight="0"
+                android:background="@drawable/about"/>
 
             <Switch
                 android:id="@+id/task_switch"
@@ -244,7 +270,8 @@
                 android:layout_height="30dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
-                android:layout_weight="0" />
+                android:layout_weight="0"
+                android:theme="@style/MySwitch"/>
         </LinearLayout>
 
         <LinearLayout
@@ -262,15 +289,18 @@
                 android:layout_marginBottom="15dp"
                 android:layout_weight="1"
                 android:text="Право на 'Грабёж'"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/robbery_button"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginTop="19dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginBottom="15dp"
-                android:layout_weight="0" />
+                android:layout_weight="0"
+                android:background="@drawable/about"/>
 
             <Switch
                 android:id="@+id/robbery_switcher"
@@ -278,7 +308,8 @@
                 android:layout_height="30dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
-                android:layout_weight="0" />
+                android:layout_weight="0"
+                android:theme="@style/MySwitch"/>
         </LinearLayout>
 
     </LinearLayout>
