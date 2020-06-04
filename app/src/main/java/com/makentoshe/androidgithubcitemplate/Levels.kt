@@ -13,6 +13,7 @@ class Levels : AppCompatActivity() {
         easyLevelIcon.setOnClickListener {
             val intent = Intent(this, Game::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 
         middleLevelIcon.setOnClickListener {
