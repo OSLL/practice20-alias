@@ -13,6 +13,14 @@ class Game : AppCompatActivity() {
         startRound.setOnClickListener {
             val intent = Intent(this, Round::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_up)
         }
+    }
+
+    override fun finish() {
+        super.finish()
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
     }
 }
