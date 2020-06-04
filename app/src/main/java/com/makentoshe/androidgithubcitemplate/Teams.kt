@@ -14,7 +14,7 @@ class Teams : AppCompatActivity() {
             val intent = Intent(this, GameSettings::class.java)
             startActivity(intent)
         }
-        button.setOnClickListener {
+        backButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
