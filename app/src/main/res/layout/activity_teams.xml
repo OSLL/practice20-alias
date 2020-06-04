@@ -6,17 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".Teams">
 
-    <TextView
-        android:id="@+id/teamName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:text="1 команда"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        app:layout_constraintStart_toEndOf="@id/teamIcon"
-        app:layout_constraintTop_toBottomOf="@+id/backButton" />
-
     <Button
         android:id="@+id/backButton"
         android:layout_width="50dp"
@@ -65,12 +54,10 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/teamIcon"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="70dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backButton"
-        app:srcCompat="@drawable/money" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/teamsView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/backButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

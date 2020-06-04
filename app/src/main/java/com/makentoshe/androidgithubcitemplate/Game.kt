@@ -3,12 +3,21 @@ package com.makentoshe.androidgithubcitemplate
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_game.*
+import kotlinx.android.synthetic.main.activity_teams.*
 
 class Game : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+
+        var teams = this.intent.getStringArrayExtra("teams")
+
+
+        val teamsAdapter = TeamsAdapter(this, teams)
+        teamsView.adapter = teamsAdapter
+        teamsView.layoutManager = LinearLayoutManager(this)
 
         startRound.setOnClickListener {
             val intent = Intent(this, Round::class.java)

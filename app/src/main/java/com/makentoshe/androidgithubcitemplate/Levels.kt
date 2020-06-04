@@ -12,36 +12,42 @@ class Levels : AppCompatActivity() {
 
         easyLevelIcon.setOnClickListener {
             val intent = Intent(this, Game::class.java)
+            intent.putExtra("teams", getIntent().getStringArrayExtra("teams"))
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 
         middleLevelIcon.setOnClickListener {
             val intent = Intent(this, Game::class.java)
+            intent.putExtra("teams", getIntent().getStringArrayExtra("teams"))
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 
         hardLevelIcon.setOnClickListener {
             val intent = Intent(this, Game::class.java)
+            intent.putExtra("teams", getIntent().getStringArrayExtra("teams"))
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 
         easyLevelText.setOnClickListener {
             val intent = Intent(this, Game::class.java)
+            intent.putExtra("teams", getIntent().getStringArrayExtra("teams"))
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 
         middleLevelText.setOnClickListener {
             val intent = Intent(this, Game::class.java)
+            intent.putExtra("teams", getIntent().getStringArrayExtra("teams"))
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 
         hardLevelText.setOnClickListener {
             val intent = Intent(this, Game::class.java)
+            intent.putExtra("teams", getIntent().getStringArrayExtra("teams"))
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
