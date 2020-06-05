@@ -19,7 +19,7 @@ class Teams : AppCompatActivity() {
 
         continueButton.setOnClickListener {
             val intent = Intent(this, GameSettings::class.java)
-            teams = teamsAdapter.teamsNames
+            teams = teamsAdapter.getter().toMutableList()
             intent.putExtra("teams", teams.toTypedArray())
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
