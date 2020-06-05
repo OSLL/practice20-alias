@@ -24,8 +24,17 @@ class Teams : AppCompatActivity() {
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
+
         backButton.setOnClickListener {
             finish()
         }
+
+        addTeamButton.setOnClickListener {
+            teams.add("New team")
+            val teamsAdapter = TeamsAdapter(this, teams)
+            teamsView.adapter = teamsAdapter
+            teamsView.layoutManager = LinearLayoutManager(this)
+        }
+
     }
 }
