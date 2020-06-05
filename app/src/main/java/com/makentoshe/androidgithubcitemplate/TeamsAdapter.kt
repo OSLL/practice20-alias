@@ -25,7 +25,7 @@ class TeamsAdapter(var context: Context, var teamsNames: MutableList<String>) :
     override fun onBindViewHolder(holder: TeamsAdapterHolder, position: Int) {
         holder.teamName.text = teamsNames[position]
         if (teamsNames.size <= 2) holder.buttonDelete.visibility = View.GONE
-        a[position] = holder.teamName.text.toString()
+        teamsNames[position]=holder.teamName.text.toString()
     }
 
     class TeamsAdapterHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
