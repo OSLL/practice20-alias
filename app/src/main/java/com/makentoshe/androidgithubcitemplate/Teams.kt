@@ -11,7 +11,7 @@ class Teams : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teams)
 
-        var teams: Array<String> = arrayOf("1 команда", "2 комнада")
+        var teams: MutableList<String> = listOf("1 team", "2 team", "3 team") as MutableList<String>
 
         val teamsAdapter = TeamsAdapter(this, teams)
         teamsView.adapter = teamsAdapter
@@ -19,17 +19,13 @@ class Teams : AppCompatActivity() {
 
         continueButton.setOnClickListener {
             val intent = Intent(this, GameSettings::class.java)
-            intent.putExtra("teams", teams)
+            teams = teamsAdapter.getter().toMutableList()
+            intent.putExtra("teams", teams.toTypedArray())
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
         backButton.setOnClickListener {
             finish()
         }
-    }
-
-    override fun finish() {
-        super.finish()
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
     }
 }

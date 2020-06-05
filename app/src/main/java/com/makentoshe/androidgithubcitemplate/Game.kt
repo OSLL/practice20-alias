@@ -13,8 +13,7 @@ class Game : AppCompatActivity() {
 
         var teams = this.intent.getStringArrayExtra("teams")
 
-
-        val teamsAdapter = TeamsAdapter(this, teams)
+        val teamsAdapter = TeamsAdapterGame(this, teams)
         teamsViewGame.adapter = teamsAdapter
         teamsViewGame.layoutManager = LinearLayoutManager(this)
 

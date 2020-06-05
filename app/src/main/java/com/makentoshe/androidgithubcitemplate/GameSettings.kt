@@ -15,7 +15,6 @@ class GameSettings : AppCompatActivity() {
             val intent = Intent(this, Levels::class.java)
             intent.putExtra("teams", teams)
             startActivity(intent)
-
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 
