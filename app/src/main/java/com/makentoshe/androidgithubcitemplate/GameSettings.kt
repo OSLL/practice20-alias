@@ -1,22 +1,31 @@
 package com.makentoshe.androidgithubcitemplate
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_game_settings.*
-import kotlinx.android.synthetic.main.activity_teams.*
 
 class GameSettings : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_settings)
-        textView6.setOnClickListener {
+        var teams = this.intent.getStringArrayExtra("teams")
+        continueButton.setOnClickListener {
+
             val intent = Intent(this, Levels::class.java)
+            intent.putExtra("teams", teams)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
-        button4.setOnClickListener {
-            val intent = Intent(this, Teams::class.java)
-            startActivity(intent)
+
+        backButton.setOnClickListener {
+            finish()
         }
+
+    }
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
     }
 }

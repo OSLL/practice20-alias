@@ -12,14 +12,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        continue_button.setOnClickListener {
-            Toast.makeText(this, "Continue", Toast.LENGTH_LONG).show()
+        continueGameButton.setOnClickListener {
+            Toast.makeText(this, "Continue", Toast.LENGTH_SHORT).show()
         }
 
 
-        new_game_button.setOnClickListener {
+        newGameButton.setOnClickListener {
             val intent = Intent(this, Teams::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+        }
+
+        rules_button.setOnClickListener{
+            val intent = Intent(this, Rules::class.java)
+            startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_up)
         }
     }
 }

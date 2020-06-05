@@ -2,14 +2,15 @@ package com.makentoshe.androidgithubcitemplate
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_round.*
+import kotlinx.android.synthetic.main.activity_rules.*
 
-class Round : AppCompatActivity() {
+class Rules : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_round)
+        setContentView(R.layout.activity_rules)
 
-        backButton.setOnClickListener {
+        back_button.setOnClickListener {
             finish()
         }
     }

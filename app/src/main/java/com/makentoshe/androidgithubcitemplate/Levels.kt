@@ -4,40 +4,67 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_levels.*
-import kotlinx.android.synthetic.main.activity_teams.*
 
 class Levels : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_levels)
-        imageView8.setOnClickListener {
+        var teams = this.intent.getStringArrayExtra("teams")
+        easyLevelIcon.setOnClickListener {
+
             val intent = Intent(this, Game::class.java)
+            intent.putExtra("teams", teams)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
-        imageView9.setOnClickListener {
+
+        middleLevelIcon.setOnClickListener {
+
             val intent = Intent(this, Game::class.java)
+            intent.putExtra("teams", teams)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
-        imageView10.setOnClickListener {
+
+        hardLevelIcon.setOnClickListener {
+
             val intent = Intent(this, Game::class.java)
+            intent.putExtra("teams", teams)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
-        textView17.setOnClickListener {
+
+        easyLevelText.setOnClickListener {
+
             val intent = Intent(this, Game::class.java)
+            intent.putExtra("teams", teams)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
-        textView18.setOnClickListener {
+
+        middleLevelText.setOnClickListener {
+
             val intent = Intent(this, Game::class.java)
+            intent.putExtra("teams", teams)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
-        textView19.setOnClickListener {
+
+        hardLevelText.setOnClickListener {
+
             val intent = Intent(this, Game::class.java)
+            intent.putExtra("teams", teams)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
-        button1.setOnClickListener {
-            val intent = Intent(this, GameSettings::class.java)
-            startActivity(intent)
+
+        backButton.setOnClickListener {
             finish()
         }
+    }
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
     }
 }
