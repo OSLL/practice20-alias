@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 class TeamsAdapter(var context: Context, var teamsNames: MutableList<String>) :
     RecyclerView.Adapter<TeamsAdapter.TeamsAdapterHolder>() {
 
-
-
     fun textChanged(a:EditText,position: Int) : String{
         a.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
@@ -26,15 +24,13 @@ class TeamsAdapter(var context: Context, var teamsNames: MutableList<String>) :
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int){
                 teamsNames[position]= a.text.toString()
             }
-
         })
- return a.text.toString()
+        return a.text.toString()
     }
 
     class TeamsAdapterHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val teamName = itemView.findViewById<EditText>(R.id.teamName)
         val buttonDelete = itemView.findViewById<Button>(R.id.buttonDelete)
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeamsAdapterHolder {
@@ -50,12 +46,7 @@ class TeamsAdapter(var context: Context, var teamsNames: MutableList<String>) :
         holder.teamName.setText(teamsNames[position])
 
         if (teamsNames.size <= 2) holder.buttonDelete.visibility = View.GONE
-        //teamsNames[position]=holder.teamName.getText().toString()
         teamsNames[ position]= textChanged(holder.teamName,position)
-
-
-
-
         }
 
     fun getter(): Array<String> = teamsNames.toTypedArray()
