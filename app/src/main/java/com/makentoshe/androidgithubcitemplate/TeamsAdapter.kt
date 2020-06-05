@@ -9,20 +9,31 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.textfield.TextInputLayout
 
 class TeamsAdapter(var context: Context, var teamsNames: MutableList<String>) :
     RecyclerView.Adapter<TeamsAdapter.TeamsAdapterHolder>() {
 
-    fun textChanged(a:EditText,position: Int) : String{
+    fun textChanged(a: EditText, position: Int, teamNameLayout: TextInputLayout): String {
         a.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
-                teamsNames[position]= a.text.toString()
+                teamsNames[position] = a.text.toString()
             }
 
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                teamNameLayout.error = "Имя не должно быть пустым"
+            }
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int){
-                teamsNames[position]= a.text.toString()
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                teamsNames[position] = a.text.toString()
+                if (teamNameLayout.editText?.text.toString()
+                        .isEmpty() || teamNameLayout.editText?.text.toString().isBlank()
+                ) {
+                    teamNameLayout.error = "Имя не должно быть пустым"
+                } else {
+                    teamNameLayout.isErrorEnabled = false
+                    teamNameLayout.isErrorEnabled = true
+                }
             }
         })
         return a.text.toString()
@@ -31,6 +42,7 @@ class TeamsAdapter(var context: Context, var teamsNames: MutableList<String>) :
     class TeamsAdapterHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val teamName = itemView.findViewById<EditText>(R.id.teamName)
         val buttonDelete = itemView.findViewById<Button>(R.id.buttonDelete)
+        val teamNameLayout = itemView.findViewById<TextInputLayout>(R.id.teamNameLayout)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeamsAdapterHolder {
@@ -43,14 +55,13 @@ class TeamsAdapter(var context: Context, var teamsNames: MutableList<String>) :
     override fun getItemCount(): Int = teamsNames.size
 
     override fun onBindViewHolder(holder: TeamsAdapterHolder, position: Int) {
-        holder.teamName.setText(teamsNames[position])
-
         if (teamsNames.size <= 2) holder.buttonDelete.visibility = View.GONE
-        teamsNames[ position]= textChanged(holder.teamName,position)
-        }
+        teamsNames[position] = textChanged(holder.teamName, position, holder.teamNameLayout)
+        holder.teamNameLayout.error = "Имя не должно быть пустым"
+    }
 
     fun getter(): Array<String> = teamsNames.toTypedArray()
-    }
+}
 
 
 
