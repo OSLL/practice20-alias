@@ -34,19 +34,6 @@ class Teams : AppCompatActivity() {
             finish()
         }
 
-        if (currentPosition <= 2) {
-            for (i in teamsAdapter.buttonsGetter()) {
-                i.background = resources.getDrawable(R.drawable.delete_button_no_active)
-                i.isClickable = false
-            }
-        } else {
-            for (i in teamsAdapter.buttonsGetter()) {
-                i.background = resources.getDrawable(R.drawable.delete_button)
-                i.isClickable = true
-            }
-        }
-
-
             for (i in teamsAdapter.textsGetter()) {
                 if (!i.editText?.text.toString().isEmpty() && !i.editText?.text.toString().isBlank() && !(i.editText?.text.toString().length>25)) {
                     continueButtonTeams.isClickable=true
@@ -56,10 +43,13 @@ class Teams : AppCompatActivity() {
             }
 
 
+
         addTeamButton.setOnClickListener {
+
             if (currentPosition<7) addTeam(currentPosition++)
             else Toast.makeText(this, "You don't have so many friends", Toast.LENGTH_LONG).show()
         }
+
     }
 
     override fun finish() {
