@@ -20,12 +20,11 @@ class TeamsAdapter(
     val noActiveColor: ColorStateList,
     val activeColor: ColorStateList,
     val deleteActive: Drawable,
-    val deleteNoActive: Drawable
-    ) :
-    RecyclerView.Adapter<TeamsAdapter.TeamsAdapterHolder>() {
+    val deleteNoActive: Drawable,
+    var currentPosition: Int
+    ) : RecyclerView.Adapter<TeamsAdapter.TeamsAdapterHolder>() {
 
-    var contain = MutableList(teamsNames.size, { it -> false })
-
+    var contain = MutableList(currentPosition, { it -> false })
 
     fun textChanged(a: EditText, position: Int, teamNameLayout: TextInputLayout): String {
 
@@ -94,6 +93,7 @@ class TeamsAdapter(
     override fun getItemCount(): Int = teamsNames.size
 
     override fun onBindViewHolder(holder: TeamsAdapterHolder, position: Int) {
+        contain.add(false)
         if (teamsNames.size <= 2) {
             holder.buttonDelete.isClickable = false
             holder.buttonDelete.background = deleteNoActive
