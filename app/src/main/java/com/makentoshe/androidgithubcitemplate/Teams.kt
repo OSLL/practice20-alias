@@ -11,14 +11,16 @@ class Teams : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teams)
 
-        var teams: MutableList<String> = listOf("1 team", "2 team") as MutableList<String>
+        var teams: MutableList<String> = listOf("1 team", "2 team", "3 team") as MutableList<String>
 
         val teamsAdapter = TeamsAdapter(
             this,
             teams,
             continueButtonTeams,
             resources.getColorStateList(R.color.noActiveButton),
-            resources.getColorStateList(R.color.activeButton)
+            resources.getColorStateList(R.color.activeButton),
+            resources.getDrawable(R.drawable.delete_button),
+            resources.getDrawable(R.drawable.delete_button_no_active)
         )
         teamsView.adapter = teamsAdapter
         teamsView.layoutManager = LinearLayoutManager(this)

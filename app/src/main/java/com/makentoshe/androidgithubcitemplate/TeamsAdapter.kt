@@ -2,6 +2,7 @@ package com.makentoshe.androidgithubcitemplate
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -16,9 +17,11 @@ class TeamsAdapter(
     var context: Context,
     var teamsNames: MutableList<String>,
     var b: Button,
-    var noActiveColor: ColorStateList,
-    var activeColor: ColorStateList
-) :
+    val noActiveColor: ColorStateList,
+    val activeColor: ColorStateList,
+    val deleteActive: Drawable,
+    val deleteNoActive: Drawable
+    ) :
     RecyclerView.Adapter<TeamsAdapter.TeamsAdapterHolder>() {
 
     var contain = MutableList(teamsNames.size, { it -> false })
@@ -91,7 +94,14 @@ class TeamsAdapter(
     override fun getItemCount(): Int = teamsNames.size
 
     override fun onBindViewHolder(holder: TeamsAdapterHolder, position: Int) {
-        if (teamsNames.size <= 2) holder.buttonDelete.visibility = View.GONE
+        if (teamsNames.size <= 2) {
+            holder.buttonDelete.isClickable = false
+            holder.buttonDelete.background = deleteNoActive
+        } else {
+            holder.buttonDelete.isClickable = true
+            holder.buttonDelete.background = deleteActive
+        }
+
         teamsNames[position] = textChanged(holder.teamName, position, holder.teamNameLayout)
         holder.teamNameLayout.error = "Имя не должно быть пустым"
     }

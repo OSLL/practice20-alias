@@ -5,7 +5,8 @@
     <color name="colorAccent">#FF03DAC5</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="noActiveButton">#FFAAAAAA</color>
+    <color name="noActiveButton">#AAAAAA</color>
+    <color name="lightGrey">#EAEAEA</color>
     <color name="green">#32BEA6</color>
     <color name="mainColor">#D01313</color>
     <color name="activeButton">#FF00862E</color>
