@@ -9,6 +9,11 @@ class Round : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_round)
 
+        var settingsText:IntArray = this.intent.getIntArrayExtra("settingsText")
+        var settingsInfo:BooleanArray = this.intent.getBooleanArrayExtra("settingsInfo")
+
+        timerCounter.setText(settingsText[1].toString())
+
         backButton.setOnClickListener {
             finish()
         }

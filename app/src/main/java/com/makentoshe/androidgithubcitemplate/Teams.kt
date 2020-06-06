@@ -34,7 +34,7 @@ class Teams : AppCompatActivity() {
             finish()
         }
 
-        if (true) {
+        if (currentPosition <= 2) {
             for (i in teamsAdapter.buttonsGetter()) {
                 i.background = resources.getDrawable(R.drawable.delete_button_no_active)
                 i.isClickable = false
@@ -45,6 +45,16 @@ class Teams : AppCompatActivity() {
                 i.isClickable = true
             }
         }
+
+
+            for (i in teamsAdapter.textsGetter()) {
+                if (!i.editText?.text.toString().isEmpty() && !i.editText?.text.toString().isBlank() && !(i.editText?.text.toString().length>25)) {
+                    continueButtonTeams.isClickable=true
+                    continueButtonTeams.setTextColor(resources.getColor(R.color.activeButton))
+                }
+
+            }
+
 
         addTeamButton.setOnClickListener {
             if (currentPosition<7) addTeam(currentPosition++)

@@ -40,7 +40,11 @@ class TeamsAdapter(
 
     var buttons: MutableList<Button> = mutableListOf()
 
+    var texts: MutableList<TextInputLayout> = mutableListOf()
+
     fun buttonsGetter(): MutableList<Button> = buttons
+
+    fun textsGetter(): MutableList<TextInputLayout> = texts
 
     fun textChanged(a: EditText, position: Int, teamNameLayout: TextInputLayout): String {
 
@@ -108,13 +112,16 @@ class TeamsAdapter(
 
     override fun onBindViewHolder(holder: TeamsAdapterHolder, position: Int) {
         buttons.add(holder.buttonDelete)
+        texts.add(holder.teamNameLayout)
         if (contain.size<=2) {
             holder.buttonDelete.isClickable = false
             holder.buttonDelete.background = deleteNoActive
         }
+
         teamsNames[position] = textChanged(holder.teamName, position, holder.teamNameLayout)
         if (holder.teamNameLayout.editText?.text.toString().isEmpty() || holder.teamNameLayout.editText?.text.toString().isBlank() ) holder.teamNameLayout.error = "Имя не должно быть пустым"
         if (holder.teamNameLayout.editText?.text.toString().length>25) holder.teamNameLayout.error = "Слишком длинное имя"
+
 
     }
 

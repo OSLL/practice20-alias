@@ -56,7 +56,7 @@
             android:textSize="25dp" />
 
         <TextView
-            android:id="@+id/timerText"
+            android:id="@+id/pointsText"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
