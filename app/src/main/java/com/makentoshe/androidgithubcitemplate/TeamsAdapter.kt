@@ -20,16 +20,30 @@ class TeamsAdapter(
     val noActiveColor: ColorStateList,
     val activeColor: ColorStateList,
     val deleteActive: Drawable,
-    val deleteNoActive: Drawable
-    ) :
-    RecyclerView.Adapter<TeamsAdapter.TeamsAdapterHolder>() {
+    val deleteNoActive: Drawable,
+    var currentPosition: Int
+    ) : RecyclerView.Adapter<TeamsAdapter.TeamsAdapterHolder>() {
 
-    var contain = MutableList(teamsNames.size, { it -> false })
+    var contain = MutableList(currentPosition, { it -> false })
 
+    fun afjsf(){
+        contain.add(false)
+        currentPosition++
+        if (!contain.contains(false)) {
+            b.isClickable = true
+            b.setTextColor(activeColor)
+        } else {
+            b.isClickable = false
+            b.setTextColor(noActiveColor)
+        }
+    }
+
+    var buttons: MutableList<Button> = mutableListOf()
+
+    fun buttonsGetter(): MutableList<Button> = buttons
 
     fun textChanged(a: EditText, position: Int, teamNameLayout: TextInputLayout): String {
 
-        b.isClickable = false
 
         a.addTextChangedListener(object : TextWatcher {
 
@@ -38,8 +52,7 @@ class TeamsAdapter(
             }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                teamNameLayout.error = "Имя не должно быть пустым"
-                contain[position] = false
+
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -94,16 +107,15 @@ class TeamsAdapter(
     override fun getItemCount(): Int = teamsNames.size
 
     override fun onBindViewHolder(holder: TeamsAdapterHolder, position: Int) {
-        if (teamsNames.size <= 2) {
+        buttons.add(holder.buttonDelete)
+        if (contain.size<=2) {
             holder.buttonDelete.isClickable = false
             holder.buttonDelete.background = deleteNoActive
-        } else {
-            holder.buttonDelete.isClickable = true
-            holder.buttonDelete.background = deleteActive
         }
-
         teamsNames[position] = textChanged(holder.teamName, position, holder.teamNameLayout)
-        holder.teamNameLayout.error = "Имя не должно быть пустым"
+        if (holder.teamNameLayout.editText?.text.toString().isEmpty() || holder.teamNameLayout.editText?.text.toString().isBlank() ) holder.teamNameLayout.error = "Имя не должно быть пустым"
+        if (holder.teamNameLayout.editText?.text.toString().length>25) holder.teamNameLayout.error = "Слишком длинное имя"
+
     }
 
     fun getter(): Array<String> = teamsNames.toTypedArray()
