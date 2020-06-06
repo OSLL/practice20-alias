@@ -12,10 +12,14 @@ class Game : AppCompatActivity() {
         setContentView(R.layout.activity_game)
 
         var teams = this.intent.getStringArrayExtra("teams")
+        var settingsText:IntArray = this.intent.getIntArrayExtra("settingsText")
+        var settingsInfo:BooleanArray = this.intent.getBooleanArrayExtra("settingsInfo")
 
         val teamsAdapter = TeamsAdapterGame(this, teams)
         teamsViewGame.adapter = teamsAdapter
         teamsViewGame.layoutManager = LinearLayoutManager(this)
+
+        /*if (settingsInfo[1]) startRound.setText(settingsText[0].toString()) else startRound.setText(settingsText[1].toString())*/ //Для показа работоспособности
 
         startRound.setOnClickListener {
             val intent = Intent(this, Round::class.java)
