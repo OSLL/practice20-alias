@@ -2,6 +2,7 @@ package com.makentoshe.androidgithubcitemplate
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_teams.*
@@ -33,11 +34,22 @@ class Teams : AppCompatActivity() {
             finish()
         }
 
-        addTeamButton.setOnClickListener {
-            addTeam(currentPosition++)
-            if (currentPosition>=7) addTeamButton.isClickable=false
+        if (true) {
+            for (i in teamsAdapter.buttonsGetter()) {
+                i.background = resources.getDrawable(R.drawable.delete_button_no_active)
+                i.isClickable = false
+            }
+        } else {
+            for (i in teamsAdapter.buttonsGetter()) {
+                i.background = resources.getDrawable(R.drawable.delete_button)
+                i.isClickable = true
+            }
         }
 
+        addTeamButton.setOnClickListener {
+            if (currentPosition<7) addTeam(currentPosition++)
+            else Toast.makeText(this, "You don't have so many friends", Toast.LENGTH_LONG).show()
+        }
     }
 
     override fun finish() {
@@ -45,14 +57,24 @@ class Teams : AppCompatActivity() {
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
     }
 
-    fun addTeam(position: Int){
+    fun addTeam(position: Int) {
         teams.add(position, "New team")
         teamsAdapter.notifyItemInserted(position)
         teamsAdapter.afjsf()
-
+        if (currentPosition <= 2) {
+            for (i in teamsAdapter.buttonsGetter()) {
+                i.background = resources.getDrawable(R.drawable.delete_button_no_active)
+                i.isClickable = false
+            }
+        } else {
+            for (i in teamsAdapter.buttonsGetter()) {
+                i.background = resources.getDrawable(R.drawable.delete_button)
+                i.isClickable = true
+            }
+        }
     }
 
-    fun createRecyclerView(){
+    fun createRecyclerView() {
         teamsAdapter = TeamsAdapter(
             this,
             teams,

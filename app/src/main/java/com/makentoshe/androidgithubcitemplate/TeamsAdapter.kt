@@ -25,16 +25,25 @@ class TeamsAdapter(
     ) : RecyclerView.Adapter<TeamsAdapter.TeamsAdapterHolder>() {
 
     var contain = MutableList(currentPosition, { it -> false })
-    var stat:Boolean =false
+
     fun afjsf(){
         contain.add(false)
         currentPosition++
-        if (currentPosition>2) stat=true
+        if (!contain.contains(false)) {
+            b.isClickable = true
+            b.setTextColor(activeColor)
+        } else {
+            b.isClickable = false
+            b.setTextColor(noActiveColor)
+        }
     }
+
+    var buttons: MutableList<Button> = mutableListOf()
+
+    fun buttonsGetter(): MutableList<Button> = buttons
 
     fun textChanged(a: EditText, position: Int, teamNameLayout: TextInputLayout): String {
 
-        b.isClickable = false
 
         a.addTextChangedListener(object : TextWatcher {
 
@@ -98,16 +107,11 @@ class TeamsAdapter(
     override fun getItemCount(): Int = teamsNames.size
 
     override fun onBindViewHolder(holder: TeamsAdapterHolder, position: Int) {
-
-        if (!stat) {
-
+        buttons.add(holder.buttonDelete)
+        if (contain.size<=2) {
             holder.buttonDelete.isClickable = false
             holder.buttonDelete.background = deleteNoActive
-        } else {
-            holder.buttonDelete.isClickable = true
-            holder.buttonDelete.background = deleteActive
         }
-
         teamsNames[position] = textChanged(holder.teamName, position, holder.teamNameLayout)
         if (holder.teamNameLayout.editText?.text.toString().isEmpty() || holder.teamNameLayout.editText?.text.toString().isBlank() ) holder.teamNameLayout.error = "Имя не должно быть пустым"
         if (holder.teamNameLayout.editText?.text.toString().length>25) holder.teamNameLayout.error = "Слишком длинное имя"
