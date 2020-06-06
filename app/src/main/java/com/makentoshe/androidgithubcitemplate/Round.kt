@@ -12,7 +12,17 @@ class Round : AppCompatActivity() {
         backButton.setOnClickListener {
             finish()
         }
+
+        check.setOnClickListener{
+            knowWordsCounter.setText((knowWordsCounter.text.toString().toInt() + 1).toString())
+        }
+
+        cross.setOnClickListener{
+            skipWordsCounter.setText((skipWordsCounter.text.toString().toInt() + 1).toString())
+        }
     }
+
+
 
     override fun finish() {
         super.finish()

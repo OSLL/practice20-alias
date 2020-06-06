@@ -40,14 +40,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/continueButton"
+        android:id="@+id/continueButtonTeams"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#00000000"
-        android:clickable="true"
+        android:clickable="false"
         android:text="Далее"
         android:textAllCaps="false"
-        android:textColor="#00862E"
+        android:textColor="@color/noActiveButton"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
