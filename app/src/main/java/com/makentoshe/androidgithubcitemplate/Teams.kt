@@ -35,7 +35,9 @@ class Teams : AppCompatActivity() {
 
         addTeamButton.setOnClickListener {
             addTeam(currentPosition++)
+            if (currentPosition>=7) addTeamButton.isClickable=false
         }
+
     }
 
     override fun finish() {
@@ -46,6 +48,8 @@ class Teams : AppCompatActivity() {
     fun addTeam(position: Int){
         teams.add(position, "New team")
         teamsAdapter.notifyItemInserted(position)
+        teamsAdapter.afjsf()
+
     }
 
     fun createRecyclerView(){
