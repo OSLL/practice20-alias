@@ -33,7 +33,6 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
         continueButton.setOnClickListener {
 
             val intent = Intent(this, Levels::class.java)
-
             intent.putExtra("teams", teams)
             intent.putExtra("settingsText",settingsText)
             intent.putExtra("settingsInfo", settingsInfo)

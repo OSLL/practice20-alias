@@ -2,6 +2,7 @@ package com.makentoshe.androidgithubcitemplate
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_game.*
@@ -15,18 +16,38 @@ class Game : AppCompatActivity() {
         var settingsText:IntArray = this.intent.getIntArrayExtra("settingsText")
         var settingsInfo:BooleanArray = this.intent.getBooleanArrayExtra("settingsInfo")
 
+        var currentTeamText: String = this.intent.getStringExtra("newTeam")
+        var currentRoundText: String = this.intent.getStringExtra("newRound")
+        var counter = this.intent.getIntExtra("counter", 0)
+
+        currentTeam.setText(currentTeamText)
+        currentRound.setText(currentRoundText)
+
         val teamsAdapter = TeamsAdapterGame(this, teams)
         teamsViewGame.adapter = teamsAdapter
         teamsViewGame.layoutManager = LinearLayoutManager(this)
 
-        pointsText.setText(settingsText[0].toString())
+        if ((settingsText[0] - (settingsText[0] % 10)) / 10 == 1){
+            pointsText.setText(settingsText[0].toString() + " очков")
+        } else {
+            when (settingsText[0] % 10){
+                0 -> pointsText.setText(settingsText[0].toString() + " очков")
+                1 -> pointsText.setText(settingsText[0].toString() + " очко")
+                2, 3, 4 -> pointsText.setText(settingsText[0].toString() + " очка")
+                5, 6, 7, 8, 9 -> pointsText.setText(settingsText[0].toString() + " очков")
+            }
+        }
 
        /* if (settingsInfo[1]) startRound.setText(settingsText[0].toString()) else startRound.setText(settingsText[1].toString()) *///Для показа работоспособности
 
         startRound.setOnClickListener {
             val intent = Intent(this, Round::class.java)
             intent.putExtra("settingsText", settingsText)
+            intent.putExtra("teamsAmount", teams.size)
+            intent.putExtra("round", currentRound.text.toString())
             intent.putExtra("settingsInfo", settingsInfo)
+            intent.putExtra("teams", teams)
+            intent.putExtra("counter", counter)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_up)
         }
