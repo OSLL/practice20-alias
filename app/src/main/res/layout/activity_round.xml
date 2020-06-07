@@ -137,15 +137,16 @@
         app:layout_constraintStart_toStartOf="@+id/knowWordsImage"
         app:layout_constraintTop_toBottomOf="@id/skipWordsImage" />
 
-    <ImageView
+    <Button
         android:id="@+id/cardImage"
         android:layout_width="200dp"
         android:layout_height="320dp"
         android:layout_marginBottom="70dp"
+        android:background="@drawable/card"
+        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/card" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <ImageView
@@ -156,6 +157,20 @@
         app:layout_constraintEnd_toEndOf="@+id/skipWordsImage"
         app:layout_constraintTop_toBottomOf="@+id/skipWordsImage"
         app:srcCompat="@drawable/timer" />
+
+    <Chronometer
+        android:id="@+id/chronometer"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:countDown="true"
+        android:format="%s"
+        android:textColor="#FFFFFF"
+        android:textSize="1sp"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SmallSp" />
+
 
     <TextView
         android:id="@+id/timerCounter"
@@ -173,24 +188,24 @@
         android:id="@+id/check"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:background="@drawable/check"
         app:layout_constraintBottom_toBottomOf="@+id/cardImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.436"
         app:layout_constraintStart_toEndOf="@+id/cardImage"
         app:layout_constraintTop_toTopOf="@+id/cardImage"
-        app:layout_constraintVertical_bias="0.503"
-        android:background="@drawable/check"/>
+        app:layout_constraintVertical_bias="0.503" />
 
     <Button
         android:id="@+id/cross"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        tools:layout_editor_absoluteX="3dp"
-        tools:layout_editor_absoluteY="440dp"
+        android:background="@drawable/cross"
         app:layout_constraintBottom_toBottomOf="@+id/cardImage"
         app:layout_constraintEnd_toStartOf="@+id/cardImage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/cardImage"
-        android:background="@drawable/cross"/>
+        tools:layout_editor_absoluteX="3dp"
+        tools:layout_editor_absoluteY="440dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
