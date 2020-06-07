@@ -9,11 +9,25 @@ class Levels : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_levels)
+
+
         var teams = this.intent.getStringArrayExtra("teams")
+        var settingsText:IntArray = this.intent.getIntArrayExtra("settingsText")
+        var settingsInfo:BooleanArray = this.intent.getBooleanArrayExtra("settingsInfo")
+
+        val intentTeam: String = "1 команда"
+        val intentRound: String = "1 раунд"
+        val additional: Int = 0
+
         easyLevelIcon.setOnClickListener {
 
             val intent = Intent(this, Game::class.java)
             intent.putExtra("teams", teams)
+            intent.putExtra("settingsText", settingsText)
+            intent.putExtra("settingsInfo", settingsInfo)
+            intent.putExtra("newTeam", intentTeam)
+            intent.putExtra("newRound", intentRound)
+            intent.putExtra("counter", additional)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
@@ -22,6 +36,11 @@ class Levels : AppCompatActivity() {
 
             val intent = Intent(this, Game::class.java)
             intent.putExtra("teams", teams)
+            intent.putExtra("settingsText", settingsText)
+            intent.putExtra("settingsInfo", settingsInfo)
+            intent.putExtra("newTeam", intentTeam)
+            intent.putExtra("newRound", intentRound)
+            intent.putExtra("counter", additional)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
@@ -30,6 +49,11 @@ class Levels : AppCompatActivity() {
 
             val intent = Intent(this, Game::class.java)
             intent.putExtra("teams", teams)
+            intent.putExtra("settingsText", settingsText)
+            intent.putExtra("settingsInfo", settingsInfo)
+            intent.putExtra("newTeam", intentTeam)
+            intent.putExtra("newRound", intentRound)
+            intent.putExtra("counter", additional)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
@@ -38,6 +62,11 @@ class Levels : AppCompatActivity() {
 
             val intent = Intent(this, Game::class.java)
             intent.putExtra("teams", teams)
+            intent.putExtra("settingsText", settingsText)
+            intent.putExtra("settingsInfo", settingsInfo)
+            intent.putExtra("newTeam", intentTeam)
+            intent.putExtra("newRound", intentRound)
+            intent.putExtra("counter", additional)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
@@ -46,6 +75,11 @@ class Levels : AppCompatActivity() {
 
             val intent = Intent(this, Game::class.java)
             intent.putExtra("teams", teams)
+            intent.putExtra("settingsText", settingsText)
+            intent.putExtra("settingsInfo", settingsInfo)
+            intent.putExtra("newTeam", intentTeam)
+            intent.putExtra("newRound", intentRound)
+            intent.putExtra("counter", additional)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
@@ -54,6 +88,11 @@ class Levels : AppCompatActivity() {
 
             val intent = Intent(this, Game::class.java)
             intent.putExtra("teams", teams)
+            intent.putExtra("settingsText", settingsText)
+            intent.putExtra("settingsInfo", settingsInfo)
+            intent.putExtra("newTeam", intentTeam)
+            intent.putExtra("newRound", intentRound)
+            intent.putExtra("counter", additional)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
