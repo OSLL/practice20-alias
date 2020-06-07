@@ -36,7 +36,11 @@
             android:textSize="20sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
+
+
+        <!--       android:onClick=""-->
     <Button
+
         android:id="@+id/buttonDelete"
         android:layout_width="50dp"
         android:layout_height="50dp"

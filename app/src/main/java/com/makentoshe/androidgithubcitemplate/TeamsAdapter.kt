@@ -38,7 +38,6 @@ class TeamsAdapter(
 
     fun adderFunction(){
         contain.add(false)
-
         currentPosition++
         if (!contain.contains(false)) {
             b.isClickable = true
@@ -138,10 +137,11 @@ class TeamsAdapter(
     override fun getItemCount(): Int = teamsNames.size
 
     override fun onBindViewHolder(holder: TeamsAdapterHolder, position: Int) {
+
         buttons.add(holder.buttonDelete)
         texts.add(holder.teamNameLayout)
-        holder.teamNameLayout.editText?.setText("${position+1} team")
-        holder.teamName.setText("${position+1} team")
+//     holder.teamNameLayout.editText?.setText("${currentPosition} team")
+//        holder.teamName.setText("${currentPosition} team")
 
         if (contain.size<=2) {
             holder.buttonDelete.isClickable = false
@@ -154,6 +154,5 @@ class TeamsAdapter(
     }
 
     fun getter(): Array<String> = teamsNames.toTypedArray()
-
 
 }
