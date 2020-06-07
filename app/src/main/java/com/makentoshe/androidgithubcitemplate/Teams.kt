@@ -78,7 +78,8 @@ class Teams : AppCompatActivity() {
     fun deleteTeam(position: Int){
         teams.removeAt(position)
         teamsAdapter.notifyItemRemoved(position)
-        teamsAdapter.adderFunction()
+        teamsAdapter.texts.removeAt(position)
+        teamsAdapter.currentMinus()
         if (currentPosition <= 2) {
             for (i in teamsAdapter.buttonsGetter()) {
                 i.background = resources.getDrawable(R.drawable.delete_button_no_active)
