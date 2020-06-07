@@ -2,7 +2,6 @@ package com.makentoshe.androidgithubcitemplate
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_game.*
@@ -48,6 +47,8 @@ class Game : AppCompatActivity() {
             intent.putExtra("settingsInfo", settingsInfo)
             intent.putExtra("teams", teams)
             intent.putExtra("counter", counter)
+            intent.putExtra("currentTeam", currentTeamText)
+            intent.putExtra("currentRound", currentRoundText)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_up)
         }

@@ -2,11 +2,11 @@ package com.makentoshe.androidgithubcitemplate
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_round.*
-import android.widget.Toast
 import android.os.SystemClock
 import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_round.*
 
 class Round : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,6 +18,9 @@ class Round : AppCompatActivity() {
         var teamNums: Int = this.intent.getIntExtra("teamsAmount", 2)
         var newRound: String = this.intent.getStringExtra("round")
         var teamsExtra = this.intent.getStringArrayExtra("teams")
+
+        roundTitle.setText(this.intent.getStringExtra("currentTeam"))
+        roundText.setText(this.intent.getStringExtra("currentRound"))
 
         val teamsNums = Array<Int>(teamNums){it+1}
         var count = this.intent.getIntExtra("counter", 0)
@@ -56,6 +59,7 @@ class Round : AppCompatActivity() {
                         intent.putExtra("counter", count)
                         startActivity(intent)
                         overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
+                        finish()
                     }
 
                     elapsedMillis = SystemClock.elapsedRealtime() - chronometer.base
@@ -72,4 +76,8 @@ class Round : AppCompatActivity() {
         }
     }
 
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
+    }
 }

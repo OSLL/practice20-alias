@@ -20,12 +20,12 @@
         android:id="@+id/roundTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:text="1 команда"
         android:textColor="@color/black"
         android:textSize="30sp"
-        app:layout_constraintStart_toEndOf="@id/roundTitleIcon"
+        app:layout_constraintEnd_toStartOf="@+id/settings"
+        app:layout_constraintStart_toEndOf="@+id/backButton"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -37,16 +37,6 @@
         android:background="@drawable/menu_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/roundTitleIcon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toEndOf="@+id/backButton"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/money" />
 
     <ImageView
         android:id="@+id/knowWordsImage"
