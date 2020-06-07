@@ -3,9 +3,11 @@ package com.makentoshe.androidgithubcitemplate
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_teams.*
+import kotlinx.android.synthetic.main.diaolog_team_name.*
 
 class Teams : AppCompatActivity() {
 
@@ -45,6 +47,22 @@ class Teams : AppCompatActivity() {
         addTeamButton.setOnClickListener {
             if (currentPosition<7) addTeam(currentPosition++)
             else Toast.makeText(this, "You don't have so many friends", Toast.LENGTH_LONG).show()
+
+            val dialogBuilder = AlertDialog.Builder(this)
+            if (teamNameLayoutDialog.editText?.text.toString().isEmpty() || teamNameLayoutDialog.editText?.text.toString().isBlank() || teamNameLayoutDialog.editText?.text.toString().length>25)
+            {
+                addTeamDialog.isClickable = false
+                addTeamDialog.background = resources.getDrawable(R.drawable.add_team_no_active)
+                teamNameLayoutDialog.error = "Неправильно введено имя"
+            } else{
+                addTeamDialog.isClickable = false
+                addTeamDialog.background = resources.getDrawable(R.drawable.new_round_button)
+                teamNameLayoutDialog.isErrorEnabled = false
+                teamNameLayoutDialog.isErrorEnabled = true
+            }
+
+            dialogBuilder.setView(R.layout.diaolog_team_name)
+            dialogBuilder.create().show()
         }
 
         deleteTeamButton.setOnClickListener {
