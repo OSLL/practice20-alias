@@ -1,26 +1,35 @@
 package com.makentoshe.androidgithubcitemplate
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.Button
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.activity_teams.*
-import kotlinx.android.synthetic.main.diaolog_team_name.*
 
 class Teams : AppCompatActivity() {
 
     lateinit var teamsAdapter: TeamsAdapter
     lateinit var teams: MutableList<String>
     var currentPosition: Int = 0
+    lateinit var addTeamDialog: Dialog
+    lateinit var closeAddTeamDialog: Button
+    lateinit var tnld: TextInputLayout
+    lateinit var tnet: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teams)
 
-        teams = mutableListOf("1 team", "2 team")
-        currentPosition = 2
+        addTeamDialog = Dialog(this)
+
+        teams = mutableListOf()
+        currentPosition = 0
         createRecyclerView()
 
         continueButtonTeams.setOnClickListener {
@@ -36,38 +45,8 @@ class Teams : AppCompatActivity() {
             finish()
         }
 
-            for (i in teamsAdapter.textsGetter()) {
-                if (!i.editText?.text.toString().isEmpty() && !i.editText?.text.toString().isBlank() && !(i.editText?.text.toString().length>25)) {
-                    continueButtonTeams.isClickable=true
-                    continueButtonTeams.setTextColor(resources.getColor(R.color.activeButton))
-                }
-
-            }
-
         addTeamButton.setOnClickListener {
-            if (currentPosition<7) addTeam(currentPosition++)
-            else Toast.makeText(this, "You don't have so many friends", Toast.LENGTH_LONG).show()
-
-            val dialogBuilder = AlertDialog.Builder(this)
-            if (teamNameLayoutDialog.editText?.text.toString().isEmpty() || teamNameLayoutDialog.editText?.text.toString().isBlank() || teamNameLayoutDialog.editText?.text.toString().length>25)
-            {
-                addTeamDialog.isClickable = false
-                addTeamDialog.background = resources.getDrawable(R.drawable.add_team_no_active)
-                teamNameLayoutDialog.error = "Неправильно введено имя"
-            } else{
-                addTeamDialog.isClickable = false
-                addTeamDialog.background = resources.getDrawable(R.drawable.new_round_button)
-                teamNameLayoutDialog.isErrorEnabled = false
-                teamNameLayoutDialog.isErrorEnabled = true
-            }
-
-            dialogBuilder.setView(R.layout.diaolog_team_name)
-            dialogBuilder.create().show()
-        }
-
-        deleteTeamButton.setOnClickListener {
-            if (currentPosition>2) deleteTeam(--currentPosition)
-            else Toast.makeText(this, "You are unsociable", Toast.LENGTH_LONG).show()
+            showAddTeamDialog()
         }
     }
 
@@ -76,52 +55,27 @@ class Teams : AppCompatActivity() {
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
     }
 
-    fun addTeam(position: Int) {
-        teams.add(position, "New team")
+    fun addTeam(name: String, position: Int) {
+        teams.add(name)
         teamsAdapter.notifyItemInserted(position)
-        teamsAdapter.adderFunction()
-        if (currentPosition <= 2) {
-            for (i in teamsAdapter.buttonsGetter()) {
-                i.background = resources.getDrawable(R.drawable.delete_button_no_active)
-                i.isClickable = false
-            }
-        } else {
-            for (i in teamsAdapter.buttonsGetter()) {
-                i.background = resources.getDrawable(R.drawable.delete_button)
-                i.isClickable = true
-            }
-        }
     }
 
     fun deleteTeam(position: Int){
         teams.removeAt(position)
         teamsAdapter.notifyItemRemoved(position)
-        teamsAdapter.texts.removeAt(position)
         teamsAdapter.currentMinus()
-        if (currentPosition <= 2) {
-            for (i in teamsAdapter.buttonsGetter()) {
-                i.background = resources.getDrawable(R.drawable.delete_button_no_active)
-                i.isClickable = false
-            }
+
+        if (currentPosition>=2){
+            continueButtonTeams.isClickable = true
+            continueButtonTeams.setTextColor(resources.getColor(R.color.activeButton))
         } else {
-            for (i in teamsAdapter.buttonsGetter()) {
-                i.background = resources.getDrawable(R.drawable.delete_button)
-                i.isClickable = true
-            }
+            continueButtonTeams.isClickable = false
+            continueButtonTeams.setTextColor(resources.getColor(R.color.noActiveButton))
         }
     }
 
     fun createRecyclerView() {
-        teamsAdapter = TeamsAdapter(
-            this,
-            teams,
-            continueButtonTeams,
-            resources.getColorStateList(R.color.noActiveButton),
-            resources.getColorStateList(R.color.activeButton),
-            resources.getDrawable(R.drawable.delete_button),
-            resources.getDrawable(R.drawable.delete_button_no_active),
-            currentPosition
-        )
+        teamsAdapter = TeamsAdapter(this, teams, currentPosition)
         teamsView.adapter = teamsAdapter
         teamsView.layoutManager = LinearLayoutManager(this)
 
@@ -131,6 +85,69 @@ class Teams : AppCompatActivity() {
                 deleteTeam(position)
                 teamsAdapter.currentMinus()
             }
+        })
+    }
+
+    fun showAddTeamDialog(){
+        addTeamDialog.setContentView(R.layout.diaolog_team_name)
+        closeAddTeamDialog = addTeamDialog.findViewById(R.id.addTeamDialog)
+        tnld = addTeamDialog.findViewById(R.id.teamNameLayoutDialog)
+        tnet = addTeamDialog.findViewById(R.id.teamNameDialog)
+        addTeamDialog.show()
+        closeAddTeamDialog.setOnClickListener {
+            addTeamDialog.cancel()
+            addTeam(tnld.editText?.text.toString(), currentPosition++)
+
+            if (currentPosition>=2){
+                continueButtonTeams.isClickable = true
+                continueButtonTeams.setTextColor(resources.getColor(R.color.activeButton))
+            } else {
+                continueButtonTeams.isClickable = false
+                continueButtonTeams.setTextColor(resources.getColor(R.color.noActiveButton))
+            }
+        }
+
+        if (tnld.editText?.text.toString().isEmpty() || tnld.editText?.text.toString().isBlank() || tnld.editText?.text.toString().length>25)
+        {
+            tnld.error = "Ошибка"
+            closeAddTeamDialog.isClickable = false
+            closeAddTeamDialog.background = resources.getDrawable(R.drawable.add_team_no_active)
+        } else {
+            closeAddTeamDialog.isClickable = true
+            closeAddTeamDialog.background = resources.getDrawable(R.drawable.new_round_button)
+        }
+
+        tnet.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(p0: Editable?) {}
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (tnld.editText?.text.toString().isEmpty() || tnld.editText?.text.toString().isBlank() || tnld.editText?.text.toString().length>25)
+                {
+                    tnld.error = "Ошибка"
+                    closeAddTeamDialog.isClickable = false
+                    closeAddTeamDialog.background = resources.getDrawable(R.drawable.add_team_no_active)
+                } else {
+                    closeAddTeamDialog.isClickable = true
+                    closeAddTeamDialog.background = resources.getDrawable(R.drawable.new_round_button)
+                }
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                if (tnld.editText?.text.toString().isEmpty() || tnld.editText?.text.toString().isBlank() || tnld.editText?.text.toString().length>25)
+                {
+                    tnld.error = "Ошибка"
+                    closeAddTeamDialog.isClickable = false
+                    closeAddTeamDialog.background = resources.getDrawable(R.drawable.add_team_no_active)
+                } else {
+                    closeAddTeamDialog.isClickable = true
+                    closeAddTeamDialog.background = resources.getDrawable(R.drawable.new_round_button)
+                    tnld.isErrorEnabled = false
+                    tnld.isErrorEnabled = true
+                }
+            }
+
         })
     }
 }

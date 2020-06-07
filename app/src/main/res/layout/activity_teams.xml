@@ -58,31 +58,26 @@
         android:id="@+id/teamsView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
-        app:layout_constraintTop_toBottomOf="@+id/backButton">
+        app:layout_constraintBottom_toTopOf="@+id/addTeamButton"
+        app:layout_constraintTop_toBottomOf="@+id/backButton"
+        tools:layout_editor_absoluteX="111dp">
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <LinearLayout
-        android:id="@+id/linearLayout4"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/addTeamButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/continueButtonTeams">
-
-        <Button
-            android:id="@+id/addTeamButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Добавить команду" />
-
-        <Button
-            android:id="@+id/deleteTeamButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Удалить команду" />
-    </LinearLayout>
+        android:text="Добавить команду"
+        android:textColor="@color/white"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:textAllCaps="false"
+        android:layout_marginBottom="10dp"
+        android:textSize="20sp"
+        android:background="@drawable/new_round_button"
+        app:layout_constraintBottom_toTopOf="@+id/continueButtonTeams"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
