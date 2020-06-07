@@ -42,14 +42,15 @@ class Teams : AppCompatActivity() {
 
             }
 
-
-
         addTeamButton.setOnClickListener {
-
             if (currentPosition<7) addTeam(currentPosition++)
             else Toast.makeText(this, "You don't have so many friends", Toast.LENGTH_LONG).show()
         }
 
+        deleteTeamButton.setOnClickListener {
+            if (currentPosition>2) deleteTeam(--currentPosition)
+            else Toast.makeText(this, "You are unsociable", Toast.LENGTH_LONG).show()
+        }
     }
 
     override fun finish() {
@@ -60,7 +61,24 @@ class Teams : AppCompatActivity() {
     fun addTeam(position: Int) {
         teams.add(position, "New team")
         teamsAdapter.notifyItemInserted(position)
-        teamsAdapter.afjsf()
+        teamsAdapter.adderFunction()
+        if (currentPosition <= 2) {
+            for (i in teamsAdapter.buttonsGetter()) {
+                i.background = resources.getDrawable(R.drawable.delete_button_no_active)
+                i.isClickable = false
+            }
+        } else {
+            for (i in teamsAdapter.buttonsGetter()) {
+                i.background = resources.getDrawable(R.drawable.delete_button)
+                i.isClickable = true
+            }
+        }
+    }
+
+    fun deleteTeam(position: Int){
+        teams.removeAt(position)
+        teamsAdapter.notifyItemRemoved(position)
+        teamsAdapter.adderFunction()
         if (currentPosition <= 2) {
             for (i in teamsAdapter.buttonsGetter()) {
                 i.background = resources.getDrawable(R.drawable.delete_button_no_active)
@@ -87,5 +105,13 @@ class Teams : AppCompatActivity() {
         )
         teamsView.adapter = teamsAdapter
         teamsView.layoutManager = LinearLayoutManager(this)
+
+        teamsAdapter.setOnItemClickListener(object : TeamsAdapter.onItemClickListener{
+            override fun onDeleteClicked(position: Int) {
+                currentPosition--
+                deleteTeam(position)
+                teamsAdapter.currentMinus()
+            }
+        })
     }
 }

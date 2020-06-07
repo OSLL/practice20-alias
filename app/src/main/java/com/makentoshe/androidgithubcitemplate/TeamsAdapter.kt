@@ -24,9 +24,19 @@ class TeamsAdapter(
     var currentPosition: Int
     ) : RecyclerView.Adapter<TeamsAdapter.TeamsAdapterHolder>() {
 
+    interface onItemClickListener{
+        fun onDeleteClicked(position: Int){}
+    }
+
+    lateinit var mListener: onItemClickListener
+
+    fun setOnItemClickListener(listener: onItemClickListener){
+        mListener = listener
+    }
+
     var contain = MutableList(currentPosition, { false })
 
-    fun afjsf(){
+    fun adderFunction(){
         contain.add(false)
 
         currentPosition++
@@ -37,6 +47,10 @@ class TeamsAdapter(
             b.isClickable = false
             b.setTextColor(noActiveColor)
         }
+    }
+
+    fun currentMinus(){
+        currentPosition--
     }
 
     var buttons: MutableList<Button> = mutableListOf()
@@ -98,17 +112,27 @@ class TeamsAdapter(
     }
 
 
-    class TeamsAdapterHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+    class TeamsAdapterHolder(itemView: View, listener: onItemClickListener) : RecyclerView.ViewHolder(itemView) {
 
         val teamName = itemView.findViewById<EditText>(R.id.teamName)
         val buttonDelete = itemView.findViewById<Button>(R.id.buttonDelete)
         val teamNameLayout = itemView.findViewById<TextInputLayout>(R.id.teamNameLayout)
+
+        init {
+            buttonDelete.setOnClickListener {
+                var position = adapterPosition
+                if (position != RecyclerView.NO_POSITION)
+                    listener.onDeleteClicked(position)
+            }
+        }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeamsAdapterHolder {
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(R.layout.teams_item, parent, false)
-        return TeamsAdapterHolder(view)
+        return TeamsAdapterHolder(view, mListener)
     }
 
     override fun getItemCount(): Int = teamsNames.size
@@ -120,7 +144,6 @@ class TeamsAdapter(
         holder.teamName.setText("${position+1} team")
 
         if (contain.size<=2) {
-
             holder.buttonDelete.isClickable = false
             holder.buttonDelete.background = deleteNoActive
         }
@@ -128,8 +151,6 @@ class TeamsAdapter(
         teamsNames[position] = textChanged(holder.teamName, position, holder.teamNameLayout)
         if (holder.teamNameLayout.editText?.text.toString().isEmpty() || holder.teamNameLayout.editText?.text.toString().isBlank() ) holder.teamNameLayout.error = "Имя не должно быть пустым"
         if (holder.teamNameLayout.editText?.text.toString().length>25) holder.teamNameLayout.error = "Слишком длинное имя"
-
-
     }
 
     fun getter(): Array<String> = teamsNames.toTypedArray()
