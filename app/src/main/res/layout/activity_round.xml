@@ -20,23 +20,13 @@
         android:id="@+id/roundTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
         android:text="1 команда"
         android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/settings"
-        app:layout_constraintStart_toEndOf="@+id/backButton"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/settings"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/menu_button"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="@id/backButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/backButton" />
 
     <ImageView
         android:id="@+id/knowWordsImage"
@@ -127,12 +117,12 @@
         app:layout_constraintStart_toStartOf="@+id/knowWordsImage"
         app:layout_constraintTop_toBottomOf="@id/skipWordsImage" />
 
-    <Button
+    <ImageView
         android:id="@+id/cardImage"
         android:layout_width="200dp"
         android:layout_height="320dp"
         android:layout_marginBottom="70dp"
-        android:background="@drawable/card"
+        android:src="@drawable/card"
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -150,13 +140,13 @@
 
     <Chronometer
         android:id="@+id/chronometer"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:countDown="true"
         android:format="%s"
         android:textColor="#FFFFFF"
         android:textSize="1sp"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="SmallSp" />
@@ -197,5 +187,18 @@
         app:layout_constraintTop_toTopOf="@+id/cardImage"
         tools:layout_editor_absoluteX="3dp"
         tools:layout_editor_absoluteY="440dp" />
+
+    <TextView
+        android:id="@+id/word"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="Позвони мне, позвони"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/cardImage"
+        app:layout_constraintEnd_toEndOf="@+id/cardImage"
+        app:layout_constraintStart_toStartOf="@+id/cardImage"
+        app:layout_constraintTop_toTopOf="@+id/cardImage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
