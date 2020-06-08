@@ -23,7 +23,7 @@ class TeamsAdapterGame(var context: Context, var teamsNames: Array<String>) :
 
     override fun onBindViewHolder(holder: TeamsAdapterGameHolder, position: Int) {
         holder.teamGameName.text = teamsNames[position]
-        holder.teamGameCounter.text = position.toString()
+        holder.teamGameCounter.text = "0"
     }
 
     class TeamsAdapterGameHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
