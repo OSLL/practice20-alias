@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class TeamsAdapterGame(var context: Context, var teamsNames: Array<String>) :
+class TeamsAdapterGame(var context: Context, var teamsNames: Array<String>,var teamsScore: IntArray) :
     RecyclerView.Adapter<TeamsAdapterGame.TeamsAdapterGameHolder>() {
 
     override fun onCreateViewHolder(
@@ -23,11 +23,12 @@ class TeamsAdapterGame(var context: Context, var teamsNames: Array<String>) :
 
     override fun onBindViewHolder(holder: TeamsAdapterGameHolder, position: Int) {
         holder.teamGameName.text = teamsNames[position]
-        holder.teamGameCounter.text = "0"
+        holder.teamGameCounter.text = teamsScore[position].toString()
     }
 
     class TeamsAdapterGameHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val teamGameName = itemView.findViewById<TextView>(R.id.teamGameName)
         val teamGameCounter = itemView.findViewById<TextView>(R.id.teamGameCounter)
+
     }
 }

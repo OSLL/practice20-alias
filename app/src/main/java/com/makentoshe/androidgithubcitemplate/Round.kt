@@ -25,12 +25,17 @@ class Round : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_round)
+        var crossCounter = 0
+        var checkCounter = 0
+
 
         var settingsText: IntArray = this.intent.getIntArrayExtra("settingsText")
         var settingsInfo: BooleanArray = this.intent.getBooleanArrayExtra("settingsInfo")
         var teamNums: Int = this.intent.getIntExtra("teamsAmount", 2)
         var newRound: String = this.intent.getStringExtra("round")
         var teamsExtra = this.intent.getStringArrayExtra("teams")
+        var wordList = this.intent.getIntExtra("book", -1)
+
 
         roundTitle.setText(this.intent.getStringExtra("currentTeam"))
         roundText.setText(this.intent.getStringExtra("currentRound"))
@@ -44,13 +49,32 @@ class Round : AppCompatActivity() {
         backButton.setOnClickListener {
             finish()
         }
+        when (wordList) {
+            0 -> {
+                var file: InputStream = assets.open("Easy.txt")
 
-        var file: InputStream = assets.open("Easy.txt")
+                var bufferedReader = BufferedReader(InputStreamReader(file))
 
-        var bufferedReader = BufferedReader(InputStreamReader(file))
+                while (bufferedReader.readLine() != null) wordsNumber++
+                file.close()
+            }
+            1 -> {
+                var file: InputStream = assets.open("Middle.txt")
 
-        while (bufferedReader.readLine() != null) wordsNumber++
-        file.close()
+                var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                while (bufferedReader.readLine() != null) wordsNumber++
+                file.close()
+            }
+            2 -> {
+                var file: InputStream = assets.open("Hard.txt")
+
+                var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                while (bufferedReader.readLine() != null) wordsNumber++
+                file.close()
+            }
+        }
 
         word.setOnClickListener {
             flagForFirstTap = true
@@ -80,6 +104,9 @@ class Round : AppCompatActivity() {
                         intent.putExtra("settingsInfo", settingsInfo)
                         intent.putExtra("teams", teamsExtra)
                         intent.putExtra("counter", count)
+                        intent.putExtra("checkCounter", checkCounter)
+                        intent.putExtra("crossCounter", crossCounter)
+                        intent.putExtra("teamsScores", this.intent.getIntArrayExtra("teamsScores"))
                         startActivity(intent)
                         overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
                         finish()
@@ -88,39 +115,96 @@ class Round : AppCompatActivity() {
                     elapsedMillis = SystemClock.elapsedRealtime() - chronometer.base
                 }
             }
-            file = assets.open("Easy.txt")
+            when (wordList) {
+                0 -> {
+                    var file: InputStream = assets.open("Easy.txt")
 
-            bufferedReader = BufferedReader(InputStreamReader(file))
+                    var bufferedReader = BufferedReader(InputStreamReader(file))
 
-            word.text = newWord(file, bufferedReader)
+                    word.text = newWord(file, bufferedReader)
+                }
+                1 -> {
+                    var file: InputStream = assets.open("Middle.txt")
+
+                    var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                    word.text = newWord(file, bufferedReader)
+                }
+                2 -> {
+                    var file: InputStream = assets.open("Hard.txt")
+
+                    var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                    word.text = newWord(file, bufferedReader)
+                }
+            }
 
         }
 
         check.setOnClickListener {
-            check.isClickable=false
+            check.isClickable = false
             if (flagForFirstTap) {
                 knowWordsCounter.text = (knowWordsCounter.text.toString().toInt() + 1).toString()
-                file = assets.open("Easy.txt")
+                when (wordList) {
+                    0 -> {
+                        var file: InputStream = assets.open("Easy.txt")
 
-                bufferedReader = BufferedReader(InputStreamReader(file))
+                        var bufferedReader = BufferedReader(InputStreamReader(file))
 
-                word.text = newWord(file, bufferedReader)
+                        word.text = newWord(file, bufferedReader)
+                    }
+                    1 -> {
+                        var file: InputStream = assets.open("Middle.txt")
+
+                        var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                        word.text = newWord(file, bufferedReader)
+                    }
+                    2 -> {
+                        var file: InputStream = assets.open("Hard.txt")
+
+                        var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                        word.text = newWord(file, bufferedReader)
+                    }
+                }
+                checkCounter++
             }
-            check.isClickable=true
+            check.isClickable = true
         }
 
         cross.setOnClickListener {
-            cross.isClickable=false
+            cross.isClickable = false
             if (flagForFirstTap) {
                 skipWordsCounter.text = (skipWordsCounter.text.toString().toInt() + 1).toString()
-                file = assets.open("Easy.txt")
+                when (wordList) {
+                    0 -> {
+                        var file: InputStream = assets.open("Easy.txt")
 
-                bufferedReader = BufferedReader(InputStreamReader(file))
+                        var bufferedReader = BufferedReader(InputStreamReader(file))
 
-                word.text = newWord(file, bufferedReader)
+                        word.text = newWord(file, bufferedReader)
+                    }
+                    1 -> {
+                        var file: InputStream = assets.open("Middle.txt")
+
+                        var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                        word.text = newWord(file, bufferedReader)
+                    }
+                    2 -> {
+                        var file: InputStream = assets.open("Hard.txt")
+
+                        var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                        word.text = newWord(file, bufferedReader)
+                    }
+                }
+
+                crossCounter++
             }
+            cross.isClickable = true
         }
-        cross.isClickable=true
     }
 
     override fun finish() {
@@ -138,7 +222,7 @@ class Round : AppCompatActivity() {
         words.add(currentWordNumber)
         if (words.size == 50) {
             words.removeAll(words)
-            Log.e("Error","${words.size}")
+            Log.e("Error", "${words.size}")
         }
         for (i in 0 until currentWordNumber) bufferedReader.readLine()
         currentWord = bufferedReader.readLine()

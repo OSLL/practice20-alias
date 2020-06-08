@@ -12,23 +12,42 @@ class Game : AppCompatActivity() {
         setContentView(R.layout.activity_game)
 
         var teams = this.intent.getStringArrayExtra("teams")
-        var settingsText:IntArray = this.intent.getIntArrayExtra("settingsText")
-        var settingsInfo:BooleanArray = this.intent.getBooleanArrayExtra("settingsInfo")
+        var settingsText: IntArray = this.intent.getIntArrayExtra("settingsText")
+        var settingsInfo: BooleanArray = this.intent.getBooleanArrayExtra("settingsInfo")
+
         var currentTeamText: String = this.intent.getStringExtra("newTeam")
         var currentRoundText: String = this.intent.getStringExtra("newRound")
-        var counter = this.intent.getIntExtra("counter", 0)
-        currentTeamText=teams[counter]
+        var counter = this.intent.getIntExtra("counter", -1)
+        var crossCounter = this.intent.getIntExtra("crossCounter", 0)
+        var checkCounter = this.intent.getIntExtra("checkCounter", 0)
+        var teamsScores: IntArray = this.intent.getIntArrayExtra("teamsScores")
+        if (settingsInfo[0]) {
+            if (counter == 0) {
+                teamsScores[teams.size - 1]=teamsScores[teams.size - 1]+checkCounter-crossCounter
+            } else {
+                teamsScores[counter - 1]=teamsScores[counter - 1]+checkCounter-crossCounter
+            }
+        } else {
+            if (counter == 0) {
+                teamsScores[teams.size - 1]=teamsScores[teams.size - 1]+checkCounter
+            } else {
+                teamsScores[counter - 1]=teamsScores[counter - 1]+checkCounter
+            }
+        }
+
+
+        currentTeamText = teams[counter]
         currentTeam.setText(currentTeamText)
         currentRound.setText(currentRoundText)
 
-        val teamsAdapter = TeamsAdapterGame(this, teams)
+        val teamsAdapter = TeamsAdapterGame(this, teams,teamsScores)
         teamsViewGame.adapter = teamsAdapter
         teamsViewGame.layoutManager = LinearLayoutManager(this)
 
-        if ((settingsText[0] - (settingsText[0] % 10)) / 10 == 1){
+        if ((settingsText[0] - (settingsText[0] % 10)) / 10 == 1) {
             pointsText.setText(settingsText[0].toString() + " очков")
         } else {
-            when (settingsText[0] % 10){
+            when (settingsText[0] % 10) {
                 0 -> pointsText.setText(settingsText[0].toString() + " очков")
                 1 -> pointsText.setText(settingsText[0].toString() + " очко")
                 2, 3, 4 -> pointsText.setText(settingsText[0].toString() + " очка")
@@ -36,7 +55,7 @@ class Game : AppCompatActivity() {
             }
         }
 
-       /* if (settingsInfo[1]) startRound.setText(settingsText[0].toString()) else startRound.setText(settingsText[1].toString()) *///Для показа работоспособности
+        /* if (settingsInfo[1]) startRound.setText(settingsText[0].toString()) else startRound.setText(settingsText[1].toString()) *///Для показа работоспособности
 
         startRound.setOnClickListener {
             val intent = Intent(this, Round::class.java)
@@ -48,8 +67,11 @@ class Game : AppCompatActivity() {
             intent.putExtra("counter", counter)
             intent.putExtra("currentTeam", currentTeamText)
             intent.putExtra("currentRound", currentRoundText)
+            intent.putExtra("teamsScores", teamsScores)
+            intent.putExtra("book",this.intent.getIntExtra("book",-1))
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_up)
+
         }
     }
 
