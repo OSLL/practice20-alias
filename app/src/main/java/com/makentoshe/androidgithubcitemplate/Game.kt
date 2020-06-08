@@ -14,11 +14,10 @@ class Game : AppCompatActivity() {
         var teams = this.intent.getStringArrayExtra("teams")
         var settingsText:IntArray = this.intent.getIntArrayExtra("settingsText")
         var settingsInfo:BooleanArray = this.intent.getBooleanArrayExtra("settingsInfo")
-
         var currentTeamText: String = this.intent.getStringExtra("newTeam")
         var currentRoundText: String = this.intent.getStringExtra("newRound")
         var counter = this.intent.getIntExtra("counter", 0)
-
+        currentTeamText=teams[counter]
         currentTeam.setText(currentTeamText)
         currentRound.setText(currentRoundText)
 

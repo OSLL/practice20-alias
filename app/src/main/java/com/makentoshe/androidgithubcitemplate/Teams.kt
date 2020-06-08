@@ -122,7 +122,7 @@ class Teams : AppCompatActivity() {
             override fun afterTextChanged(p0: Editable?) {}
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (tnld.editText?.text.toString().isEmpty() || tnld.editText?.text.toString().isBlank() || tnld.editText?.text.toString().length>25)
+                if (tnld.editText?.text.toString().isEmpty() || tnld.editText?.text.toString().isBlank() || tnld.editText?.text.toString().length>20)
                 {
                     tnld.error = "Ошибка"
                     closeAddTeamDialog.isClickable = false
@@ -135,7 +135,7 @@ class Teams : AppCompatActivity() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-                if (tnld.editText?.text.toString().isEmpty() || tnld.editText?.text.toString().isBlank() || tnld.editText?.text.toString().length>25)
+                if (tnld.editText?.text.toString().isEmpty() || tnld.editText?.text.toString().isBlank() || tnld.editText?.text.toString().length>20)
                 {
                     tnld.error = "Ошибка"
                     closeAddTeamDialog.isClickable = false
