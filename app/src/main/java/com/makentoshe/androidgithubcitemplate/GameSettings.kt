@@ -45,7 +45,7 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
         wordsAmountSlider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                wordsAmountCounter.setText("$p1")
+                wordsAmountCounter.text = "$p1"
                 settingsText[0] = wordsAmountCounter.text.toString().toInt()
             }
 
@@ -58,7 +58,7 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
         roundTimeSlider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                roundTimeCounter.setText("$p1")
+                roundTimeCounter.text = "$p1"
                 settingsText[1] = roundTimeCounter.text.toString().toInt()
             }
 

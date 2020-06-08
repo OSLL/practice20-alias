@@ -27,8 +27,8 @@ class TeamsAdapterGame(var context: Context, var teamsNames: Array<String>,var t
     }
 
     class TeamsAdapterGameHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val teamGameName = itemView.findViewById<TextView>(R.id.teamGameName)
-        val teamGameCounter = itemView.findViewById<TextView>(R.id.teamGameCounter)
+        val teamGameName = itemView.findViewById<TextView>(R.id.teamGameName)!!
+        val teamGameCounter = itemView.findViewById<TextView>(R.id.teamGameCounter)!!
 
     }
 }

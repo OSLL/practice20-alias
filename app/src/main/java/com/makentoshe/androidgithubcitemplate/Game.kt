@@ -45,7 +45,7 @@ class Game : AppCompatActivity() {
         teamsViewGame.layoutManager = LinearLayoutManager(this)
 
         if ((settingsText[0] - (settingsText[0] % 10)) / 10 == 1) {
-            pointsText.setText(settingsText[0].toString() + " очков")
+            pointsText.text = settingsText[0].toString() + " очков"
         } else {
             when (settingsText[0] % 10) {
                 0 -> pointsText.setText(settingsText[0].toString() + " очков")

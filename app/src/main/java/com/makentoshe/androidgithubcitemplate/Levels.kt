@@ -14,7 +14,7 @@ class Levels : AppCompatActivity() {
         var teams = this.intent.getStringArrayExtra("teams")
         var settingsText:IntArray = this.intent.getIntArrayExtra("settingsText")
         var settingsInfo:BooleanArray = this.intent.getBooleanArrayExtra("settingsInfo")
-        var teamsScores:IntArray = IntArray(teams.size,{it->0})
+        var teamsScores:IntArray = IntArray(teams.size) {0}
 
         val intentTeam: String = "1 команда"
         val intentRound: String = "1 раунд"

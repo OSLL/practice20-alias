@@ -13,7 +13,7 @@ import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.activity_teams.*
 
 class Teams : AppCompatActivity() {
-
+    var flagForContinueButton:Boolean=false
     lateinit var teamsAdapter: TeamsAdapter
     lateinit var teams: MutableList<String>
     var currentPosition: Int = 0
@@ -33,12 +33,13 @@ class Teams : AppCompatActivity() {
         createRecyclerView()
 
         continueButtonTeams.setOnClickListener {
-            val intent = Intent(this, GameSettings::class.java)
-            teams = teamsAdapter.getter().toMutableList()
-            intent.putExtra("teams", teams.toTypedArray())
-            startActivity(intent)
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-
+            if (flagForContinueButton) {
+                val intent = Intent(this, GameSettings::class.java)
+                teams = teamsAdapter.getter().toMutableList()
+                intent.putExtra("teams", teams.toTypedArray())
+                startActivity(intent)
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+            }
         }
 
         backButton.setOnClickListener {
@@ -55,7 +56,7 @@ class Teams : AppCompatActivity() {
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
     }
 
-    fun addTeam(name: String, position: Int) {
+    private fun addTeam(name: String, position: Int) {
         teams.add(name)
         teamsAdapter.notifyItemInserted(position)
     }
@@ -68,13 +69,15 @@ class Teams : AppCompatActivity() {
         if (currentPosition>=2){
             continueButtonTeams.isClickable = true
             continueButtonTeams.setTextColor(resources.getColor(R.color.activeButton))
+            flagForContinueButton=true
         } else {
             continueButtonTeams.isClickable = false
             continueButtonTeams.setTextColor(resources.getColor(R.color.noActiveButton))
+            flagForContinueButton=false
         }
     }
 
-    fun createRecyclerView() {
+    private fun createRecyclerView() {
         teamsAdapter = TeamsAdapter(this, teams, currentPosition)
         teamsView.adapter = teamsAdapter
         teamsView.layoutManager = LinearLayoutManager(this)
@@ -88,7 +91,7 @@ class Teams : AppCompatActivity() {
         })
     }
 
-    fun showAddTeamDialog(){
+    private fun showAddTeamDialog(){
         addTeamDialog.setContentView(R.layout.diaolog_team_name)
         closeAddTeamDialog = addTeamDialog.findViewById(R.id.addTeamDialog)
         tnld = addTeamDialog.findViewById(R.id.teamNameLayoutDialog)
@@ -101,9 +104,11 @@ class Teams : AppCompatActivity() {
             if (currentPosition>=2){
                 continueButtonTeams.isClickable = true
                 continueButtonTeams.setTextColor(resources.getColor(R.color.activeButton))
+                flagForContinueButton=true
             } else {
                 continueButtonTeams.isClickable = false
                 continueButtonTeams.setTextColor(resources.getColor(R.color.noActiveButton))
+                flagForContinueButton=false
             }
         }
 

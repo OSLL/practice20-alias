@@ -37,14 +37,14 @@ class Round : AppCompatActivity() {
         var wordList = this.intent.getIntExtra("book", -1)
 
 
-        roundTitle.setText(this.intent.getStringExtra("currentTeam"))
-        roundText.setText(this.intent.getStringExtra("currentRound"))
+        roundTitle.text = this.intent.getStringExtra("currentTeam")
+        roundText.text = this.intent.getStringExtra("currentRound")
 
         val teamsNums = Array<Int>(teamNums) { it + 1 }
         var count = this.intent.getIntExtra("counter", 0)
 
-        timerCounter.setText(settingsText[1].toString())
-        chronometer.setBase((timerCounter.text.toString().toInt() * 1000).toLong())
+        timerCounter.text = settingsText[1].toString()
+        chronometer.base = (timerCounter.text.toString().toInt() * 1000).toLong()
 
         backButton.setOnClickListener {
             finish()
@@ -107,6 +107,7 @@ class Round : AppCompatActivity() {
                         intent.putExtra("checkCounter", checkCounter)
                         intent.putExtra("crossCounter", crossCounter)
                         intent.putExtra("teamsScores", this.intent.getIntArrayExtra("teamsScores"))
+                        intent.putExtra("book", wordList)
                         startActivity(intent)
                         overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
                         finish()
