@@ -43,8 +43,8 @@ class Game : AppCompatActivity() {
         /* if (settingsInfo[1]) startRound.setText(settingsText[0].toString()) else startRound.setText(settingsText[1].toString()) *///Для показа работоспособности
 
         startRound.setOnClickListener {
-            if (!true) {
-                val intent = Intent(this, Round::class.java)
+            if (teamsScores[counter] % 5 ==0 && settingsInfo[3] && teamsScores[counter]>0) {
+                val intent = Intent(this, RobberyRound::class.java)
                 intent.putExtra("settingsText", settingsText)
                 intent.putExtra("teamsAmount", teams.size)
                 intent.putExtra("round", currentRound.text.toString())
@@ -58,7 +58,7 @@ class Game : AppCompatActivity() {
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_up)
             }else{
-                val intent = Intent(this, RobberyRound::class.java)
+                val intent = Intent(this, Round::class.java)
                 intent.putExtra("settingsText", settingsText)
                 intent.putExtra("teamsAmount", teams.size)
                 intent.putExtra("round", currentRound.text.toString())

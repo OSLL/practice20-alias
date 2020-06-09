@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_robbery_round.*
-import kotlinx.android.synthetic.main.activity_round.*
 import kotlinx.android.synthetic.main.activity_round.backButton
 import kotlinx.android.synthetic.main.activity_round.chronometer
 import kotlinx.android.synthetic.main.activity_round.cross
@@ -34,15 +33,19 @@ class RobberyRound : AppCompatActivity() {
 
     lateinit var robberyRoundAdapter: RobberyRoundAdapter
 
+    lateinit var teamsExtra: Array<String>
+    lateinit var teamsScores: IntArray
+    var wordList: Int = -1
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_round)
+        setContentView(R.layout.activity_robbery_round)
 
-        var teamsExtra = this.intent.getStringArrayExtra("teams")
-        var teamsScores= this.intent.getIntArrayExtra("teamsScores")
+        teamsExtra = this.intent.getStringArrayExtra("teams")
+        teamsScores = this.intent.getIntArrayExtra("teamsScores")
 
-        Log.e("Lol","${teamsExtra[1]} ${teamsScores[1]}")
+        Log.e("Lol", "${teamsExtra[1]} ${teamsScores[1]}")
         var winnersIndex: Int = -1
         var teamNums: Int = this.intent.getIntExtra("teamsAmount", 2)
         var newRound: String = this.intent.getStringExtra("round")
@@ -50,30 +53,12 @@ class RobberyRound : AppCompatActivity() {
         roundText.text = this.intent.getStringExtra("currentRound")
         var settingsText: IntArray = this.intent.getIntArrayExtra("settingsText")
         var settingsInfo: BooleanArray = this.intent.getBooleanArrayExtra("settingsInfo")
-        var wordList = this.intent.getIntExtra("book", -1)
+        wordList = this.intent.getIntExtra("book", -1)
         val teamsNums = Array<Int>(teamNums) { it + 1 }
         var count = this.intent.getIntExtra("counter", 0)
 
         timerCounter.text = settingsText[1].toString()
         chronometer.base = (timerCounter.text.toString().toInt() * 1000).toLong()
-
-        var test1:IntArray = arrayOf(1,2,3).toIntArray()
-        var test2:Array<String> = arrayOf("Сука","Работай","ПОЖАЛУЙСТА")
-
-        fun createRecyclerView() {
-            robberyRoundAdapter = RobberyRoundAdapter(this, test2, test1)
-            robberyRoundRecycler.adapter = robberyRoundAdapter
-            robberyRoundRecycler.layoutManager = LinearLayoutManager(this)
-
-          /*  robberyRoundAdapter.setOnItemClickListener(object : RobberyRoundAdapter.onItemClickListener {
-
-                override fun onCheckClicked(position: Int) {
-                    teamsScores[position]++
-                    robberyRoundAdapter.notifyItemChanged(position)
-                }
-
-            })*/
-        }
 
         createRecyclerView()
 
@@ -147,6 +132,7 @@ class RobberyRound : AppCompatActivity() {
                             startActivity(intent)
                             max = 0
                             overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
+                            finish()
                         } else {
                             var newTeam: String = teamsNums[count].toString() + " команда"
 
@@ -199,7 +185,6 @@ class RobberyRound : AppCompatActivity() {
         cross.setOnClickListener {
             cross.isClickable = false
             if (flagForFirstTap) {
-                skipWordsCounter.text = (skipWordsCounter.text.toString().toInt() + 1).toString()
                 when (wordList) {
                     0 -> {
                         var file: InputStream = assets.open("Easy.txt")
@@ -252,4 +237,47 @@ class RobberyRound : AppCompatActivity() {
         return currentWord
     }
 
+    fun createRecyclerView() {
+        var teamsScores1: IntArray = IntArray(teamsExtra.size) { 0 }
+        robberyRoundAdapter = RobberyRoundAdapter(this, teamsExtra, teamsScores1)
+        robberyRoundRecycler.adapter = robberyRoundAdapter
+        robberyRoundRecycler.layoutManager = LinearLayoutManager(this)
+
+        robberyRoundAdapter.setOnItemClickListener(object :
+            RobberyRoundAdapter.onItemClickListener {
+
+            override fun onCheckClicked(position: Int) {
+                if (flagForFirstTap) {
+                    when (wordList) {
+                        0 -> {
+                            var file: InputStream = assets.open("Easy.txt")
+
+                            var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                            word.text = newWord(file, bufferedReader)
+                        }
+                        1 -> {
+                            var file: InputStream = assets.open("Middle.txt")
+
+                            var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                            word.text = newWord(file, bufferedReader)
+                        }
+                        2 -> {
+                            var file: InputStream = assets.open("Hard.txt")
+
+                            var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                            word.text = newWord(file, bufferedReader)
+                        }
+                    }
+                    teamsScores[position]++
+                    teamsScores1[position]++
+                    robberyRoundAdapter.notifyItemChanged(position)
+                }
+            }
+
+        })
+
+    }
 }
