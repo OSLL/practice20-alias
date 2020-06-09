@@ -25,8 +25,7 @@ class Round : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_round)
-        var crossCounter = 0
-        var checkCounter = 0
+
 
 
         var settingsText: IntArray = this.intent.getIntArrayExtra("settingsText")
@@ -35,7 +34,8 @@ class Round : AppCompatActivity() {
         var newRound: String = this.intent.getStringExtra("round")
         var teamsExtra = this.intent.getStringArrayExtra("teams")
         var wordList = this.intent.getIntExtra("book", -1)
-
+        var teamsScores: IntArray = this.intent.getIntArrayExtra("teamsScores")
+        var winnersIndex:Int=-1
 
         roundTitle.text = this.intent.getStringExtra("currentTeam")
         roundText.text = this.intent.getStringExtra("currentRound")
@@ -76,6 +76,8 @@ class Round : AppCompatActivity() {
             }
         }
 
+        var max = -100000
+
         word.setOnClickListener {
             flagForFirstTap = true
             chronometer.start()
@@ -94,23 +96,44 @@ class Round : AppCompatActivity() {
                             count = 0
                             newRound =
                                 (newRound.substringBefore(" ").toInt() + 1).toString() + " раунд"
-                        }
-                        var newTeam: String = teamsNums[count].toString() + " команда"
 
-                        val intent = Intent(this, Game::class.java)
-                        intent.putExtra("newRound", newRound)
-                        intent.putExtra("newTeam", newTeam)
-                        intent.putExtra("settingsText", settingsText)
-                        intent.putExtra("settingsInfo", settingsInfo)
-                        intent.putExtra("teams", teamsExtra)
-                        intent.putExtra("counter", count)
-                        intent.putExtra("checkCounter", checkCounter)
-                        intent.putExtra("crossCounter", crossCounter)
-                        intent.putExtra("teamsScores", this.intent.getIntArrayExtra("teamsScores"))
-                        intent.putExtra("book", wordList)
-                        startActivity(intent)
-                        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
-                        finish()
+
+                            for (i in 0 until teamsExtra.size) {
+                                if (teamsScores[i] > max) {
+                                    max = teamsScores[i]
+                                    winnersIndex = i
+                                }
+                            }
+
+                        }
+
+
+
+                            if (max>=settingsText[0]) {
+                                val intent = Intent(this, WinPage::class.java)
+                                intent.putExtra("WinTeamName",teamsExtra[winnersIndex])
+                                intent.putExtra("WinTeamScore",max)
+                                startActivity(intent)
+                                max=0
+                                overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
+                            }
+                            else {
+                                var newTeam: String = teamsNums[count].toString() + " команда"
+
+                                val intent = Intent(this, Game::class.java)
+                                intent.putExtra("newRound", newRound)
+                                intent.putExtra("newTeam", newTeam)
+                                intent.putExtra("settingsText", settingsText)
+                                intent.putExtra("settingsInfo", settingsInfo)
+                                intent.putExtra("teams", teamsExtra)
+                                intent.putExtra("counter", count)
+
+                                intent.putExtra("teamsScores", teamsScores)
+                                intent.putExtra("book", wordList)
+                                startActivity(intent)
+                                overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
+                                finish()
+                            }
                     }
 
                     elapsedMillis = SystemClock.elapsedRealtime() - chronometer.base
@@ -169,7 +192,7 @@ class Round : AppCompatActivity() {
                         word.text = newWord(file, bufferedReader)
                     }
                 }
-                checkCounter++
+                teamsScores[count]++
             }
             check.isClickable = true
         }
@@ -201,8 +224,9 @@ class Round : AppCompatActivity() {
                         word.text = newWord(file, bufferedReader)
                     }
                 }
-
-                crossCounter++
+                if (settingsInfo[0]) {
+                    teamsScores[count]--
+                }
             }
             cross.isClickable = true
         }
