@@ -12,8 +12,7 @@ class Levels : AppCompatActivity() {
 
 
         var teams = this.intent.getStringArrayExtra("teams")
-        var settingsText:IntArray = this.intent.getIntArrayExtra("settingsText")
-        var settingsInfo:BooleanArray = this.intent.getBooleanArrayExtra("settingsInfo")
+
         var teamsScores:IntArray = IntArray(teams.size) {0}
 
         val intentTeam: String = "1 команда"
@@ -24,8 +23,8 @@ class Levels : AppCompatActivity() {
 
             val intent = Intent(this, Game::class.java)
             intent.putExtra("teams", teams)
-            intent.putExtra("settingsText", settingsText)
-            intent.putExtra("settingsInfo", settingsInfo)
+            intent.putExtra("settingsText",  this.intent.getIntArrayExtra("settingsText"))
+            intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
             intent.putExtra("newTeam", intentTeam)
             intent.putExtra("newRound", intentRound)
             intent.putExtra("counter", additional)
@@ -39,8 +38,8 @@ class Levels : AppCompatActivity() {
 
             val intent = Intent(this, Game::class.java)
             intent.putExtra("teams", teams)
-            intent.putExtra("settingsText", settingsText)
-            intent.putExtra("settingsInfo", settingsInfo)
+            intent.putExtra("settingsText",  this.intent.getIntArrayExtra("settingsText"))
+            intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
             intent.putExtra("newTeam", intentTeam)
             intent.putExtra("newRound", intentRound)
             intent.putExtra("counter", additional)
@@ -54,8 +53,8 @@ class Levels : AppCompatActivity() {
 
             val intent = Intent(this, Game::class.java)
             intent.putExtra("teams", teams)
-            intent.putExtra("settingsText", settingsText)
-            intent.putExtra("settingsInfo", settingsInfo)
+            intent.putExtra("settingsText",  this.intent.getIntArrayExtra("settingsText"))
+            intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
             intent.putExtra("newTeam", intentTeam)
             intent.putExtra("newRound", intentRound)
             intent.putExtra("counter", additional)
@@ -69,8 +68,8 @@ class Levels : AppCompatActivity() {
 
             val intent = Intent(this, Game::class.java)
             intent.putExtra("teams", teams)
-            intent.putExtra("settingsText", settingsText)
-            intent.putExtra("settingsInfo", settingsInfo)
+            intent.putExtra("settingsText",  this.intent.getIntArrayExtra("settingsText"))
+            intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
             intent.putExtra("newTeam", intentTeam)
             intent.putExtra("newRound", intentRound)
             intent.putExtra("counter", additional)
@@ -84,8 +83,8 @@ class Levels : AppCompatActivity() {
 
             val intent = Intent(this, Game::class.java)
             intent.putExtra("teams", teams)
-            intent.putExtra("settingsText", settingsText)
-            intent.putExtra("settingsInfo", settingsInfo)
+            intent.putExtra("settingsText",  this.intent.getIntArrayExtra("settingsText"))
+            intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
             intent.putExtra("newTeam", intentTeam)
             intent.putExtra("newRound", intentRound)
             intent.putExtra("counter", additional)
@@ -99,8 +98,8 @@ class Levels : AppCompatActivity() {
 
             val intent = Intent(this, Game::class.java)
             intent.putExtra("teams", teams)
-            intent.putExtra("settingsText", settingsText)
-            intent.putExtra("settingsInfo", settingsInfo)
+            intent.putExtra("settingsText",  this.intent.getIntArrayExtra("settingsText"))
+            intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
             intent.putExtra("newTeam", intentTeam)
             intent.putExtra("newRound", intentRound)
             intent.putExtra("counter", additional)
@@ -111,6 +110,11 @@ class Levels : AppCompatActivity() {
         }
 
         backButton.setOnClickListener {
+            val intent = Intent(this, GameSettings::class.java)
+            intent.putExtra("teams", teams)
+            intent.putExtra("settingsText",  this.intent.getIntArrayExtra("settingsText"))
+            intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
+            startActivity(intent)
             finish()
         }
     }
