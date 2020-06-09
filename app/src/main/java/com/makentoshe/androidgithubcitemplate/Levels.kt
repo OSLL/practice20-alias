@@ -14,6 +14,7 @@ class Levels : AppCompatActivity() {
         var teams = this.intent.getStringArrayExtra("teams")
         var settingsText:IntArray = this.intent.getIntArrayExtra("settingsText")
         var settingsInfo:BooleanArray = this.intent.getBooleanArrayExtra("settingsInfo")
+        var teamsScores:IntArray = IntArray(teams.size) {0}
 
         val intentTeam: String = "1 команда"
         val intentRound: String = "1 раунд"
@@ -28,6 +29,8 @@ class Levels : AppCompatActivity() {
             intent.putExtra("newTeam", intentTeam)
             intent.putExtra("newRound", intentRound)
             intent.putExtra("counter", additional)
+            intent.putExtra("teamsScores",teamsScores)
+            intent.putExtra("book",0)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
@@ -41,6 +44,8 @@ class Levels : AppCompatActivity() {
             intent.putExtra("newTeam", intentTeam)
             intent.putExtra("newRound", intentRound)
             intent.putExtra("counter", additional)
+            intent.putExtra("teamsScores",teamsScores)
+            intent.putExtra("book",1)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
@@ -54,6 +59,8 @@ class Levels : AppCompatActivity() {
             intent.putExtra("newTeam", intentTeam)
             intent.putExtra("newRound", intentRound)
             intent.putExtra("counter", additional)
+            intent.putExtra("teamsScores",teamsScores)
+            intent.putExtra("book",2)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
@@ -67,6 +74,8 @@ class Levels : AppCompatActivity() {
             intent.putExtra("newTeam", intentTeam)
             intent.putExtra("newRound", intentRound)
             intent.putExtra("counter", additional)
+            intent.putExtra("teamsScores",teamsScores)
+            intent.putExtra("book",0)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
@@ -80,6 +89,8 @@ class Levels : AppCompatActivity() {
             intent.putExtra("newTeam", intentTeam)
             intent.putExtra("newRound", intentRound)
             intent.putExtra("counter", additional)
+            intent.putExtra("teamsScores",teamsScores)
+            intent.putExtra("book",1)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
@@ -93,6 +104,8 @@ class Levels : AppCompatActivity() {
             intent.putExtra("newTeam", intentTeam)
             intent.putExtra("newRound", intentRound)
             intent.putExtra("counter", additional)
+            intent.putExtra("teamsScores",teamsScores)
+            intent.putExtra("book",2)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
