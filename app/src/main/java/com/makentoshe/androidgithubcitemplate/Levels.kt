@@ -31,6 +31,8 @@ class Levels : AppCompatActivity() {
             intent.putExtra("counter", additional)
             intent.putExtra("teamsScores",teamsScores)
             intent.putExtra("book",0)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
@@ -46,6 +48,8 @@ class Levels : AppCompatActivity() {
             intent.putExtra("counter", additional)
             intent.putExtra("teamsScores",teamsScores)
             intent.putExtra("book",1)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
@@ -61,6 +65,8 @@ class Levels : AppCompatActivity() {
             intent.putExtra("counter", additional)
             intent.putExtra("teamsScores",teamsScores)
             intent.putExtra("book",2)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
@@ -76,6 +82,8 @@ class Levels : AppCompatActivity() {
             intent.putExtra("counter", additional)
             intent.putExtra("teamsScores",teamsScores)
             intent.putExtra("book",0)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
@@ -91,6 +99,8 @@ class Levels : AppCompatActivity() {
             intent.putExtra("counter", additional)
             intent.putExtra("teamsScores",teamsScores)
             intent.putExtra("book",1)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
@@ -106,6 +116,8 @@ class Levels : AppCompatActivity() {
             intent.putExtra("counter", additional)
             intent.putExtra("teamsScores",teamsScores)
             intent.putExtra("book",2)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
