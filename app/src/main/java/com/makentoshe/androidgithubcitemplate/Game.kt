@@ -18,22 +18,7 @@ class Game : AppCompatActivity() {
         var currentTeamText: String = this.intent.getStringExtra("newTeam")
         var currentRoundText: String = this.intent.getStringExtra("newRound")
         var counter = this.intent.getIntExtra("counter", -1)
-        var crossCounter = this.intent.getIntExtra("crossCounter", 0)
-        var checkCounter = this.intent.getIntExtra("checkCounter", 0)
         var teamsScores: IntArray = this.intent.getIntArrayExtra("teamsScores")
-        if (settingsInfo[0]) {
-            if (counter == 0) {
-                teamsScores[teams.size - 1]=teamsScores[teams.size - 1]+checkCounter-crossCounter
-            } else {
-                teamsScores[counter - 1]=teamsScores[counter - 1]+checkCounter-crossCounter
-            }
-        } else {
-            if (counter == 0) {
-                teamsScores[teams.size - 1]=teamsScores[teams.size - 1]+checkCounter
-            } else {
-                teamsScores[counter - 1]=teamsScores[counter - 1]+checkCounter
-            }
-        }
 
 
         currentTeamText = teams[counter]
@@ -48,10 +33,10 @@ class Game : AppCompatActivity() {
             pointsText.text = settingsText[0].toString() + " очков"
         } else {
             when (settingsText[0] % 10) {
-                0 -> pointsText.setText(settingsText[0].toString() + " очков")
-                1 -> pointsText.setText(settingsText[0].toString() + " очко")
-                2, 3, 4 -> pointsText.setText(settingsText[0].toString() + " очка")
-                5, 6, 7, 8, 9 -> pointsText.setText(settingsText[0].toString() + " очков")
+                0 -> pointsText.text = settingsText[0].toString() + " очков"
+                1 -> pointsText.text = settingsText[0].toString() + " очко"
+                2, 3, 4 -> pointsText.text = settingsText[0].toString() + " очка"
+                5, 6, 7, 8, 9 -> pointsText.text = settingsText[0].toString() + " очков"
             }
         }
 
