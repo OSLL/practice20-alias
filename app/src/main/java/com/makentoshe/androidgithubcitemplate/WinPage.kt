@@ -13,13 +13,23 @@ class WinPage : AppCompatActivity() {
         var winner:String=this.intent.getStringExtra("WinTeamName")
         var max:Int = this.intent.getIntExtra("WinTeamScore",-1)
         if ((max - (max % 10)) / 10 == 1) {
-            youWin.text="Команда: $winner победила набрав $max очков"
+            youWin.text="Команда: $winner"
+            youWin1.text="Победила!"
+            youWin2.text="Набрав $max очков!"
         } else {
             when (max % 10) {
-                0 -> youWin.text="Команда: $winner победила набрав $max очков"
-                1 ->  youWin.text="Команда: $winner победила набрав $max очко"
-                2, 3, 4 ->  youWin.text="Команда: $winner победила набрав $max очка"
-                5, 6, 7, 8, 9 ->  youWin.text="Команда: $winner победила набрав $max очков"
+                1 -> { youWin.text="Команда: $winner"
+                    youWin1.text="Победила!"
+                    youWin2.text="Набрав $max очко!!!"
+                }
+                2, 3, 4 ->  {youWin.text="Команда: $winner"
+                    youWin1.text="Победила!"
+                    youWin2.text="Набрав $max очка!"
+                }
+                0, 5, 6, 7, 8, 9 ->  {youWin.text="Команда: $winner "
+                    youWin1.text="Победила!"
+                    youWin2.text="Набрав $max очков!"
+                }
             }
         }
         backToMenu.setOnClickListener{
