@@ -43,20 +43,35 @@ class Game : AppCompatActivity() {
         /* if (settingsInfo[1]) startRound.setText(settingsText[0].toString()) else startRound.setText(settingsText[1].toString()) *///Для показа работоспособности
 
         startRound.setOnClickListener {
-            val intent = Intent(this, Round::class.java)
-            intent.putExtra("settingsText", settingsText)
-            intent.putExtra("teamsAmount", teams.size)
-            intent.putExtra("round", currentRound.text.toString())
-            intent.putExtra("settingsInfo", settingsInfo)
-            intent.putExtra("teams", teams)
-            intent.putExtra("counter", counter)
-            intent.putExtra("currentTeam", currentTeamText)
-            intent.putExtra("currentRound", currentRoundText)
-            intent.putExtra("teamsScores", teamsScores)
-            intent.putExtra("book",this.intent.getIntExtra("book",-1))
-            startActivity(intent)
-            overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_up)
-
+            if (!true) {
+                val intent = Intent(this, Round::class.java)
+                intent.putExtra("settingsText", settingsText)
+                intent.putExtra("teamsAmount", teams.size)
+                intent.putExtra("round", currentRound.text.toString())
+                intent.putExtra("settingsInfo", settingsInfo)
+                intent.putExtra("teams", teams)
+                intent.putExtra("counter", counter)
+                intent.putExtra("currentTeam", currentTeamText)
+                intent.putExtra("currentRound", currentRoundText)
+                intent.putExtra("teamsScores", teamsScores)
+                intent.putExtra("book", this.intent.getIntExtra("book", -1))
+                startActivity(intent)
+                overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_up)
+            }else{
+                val intent = Intent(this, RobberyRound::class.java)
+                intent.putExtra("settingsText", settingsText)
+                intent.putExtra("teamsAmount", teams.size)
+                intent.putExtra("round", currentRound.text.toString())
+                intent.putExtra("settingsInfo", settingsInfo)
+                intent.putExtra("teams", teams)
+                intent.putExtra("counter", counter)
+                intent.putExtra("currentTeam", currentTeamText)
+                intent.putExtra("currentRound", currentRoundText)
+                intent.putExtra("teamsScores", teamsScores)
+                intent.putExtra("book", this.intent.getIntExtra("book", -1))
+                startActivity(intent)
+                overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_up)
+            }
         }
     }
 
