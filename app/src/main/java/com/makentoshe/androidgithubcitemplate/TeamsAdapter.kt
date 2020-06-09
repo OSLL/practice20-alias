@@ -16,6 +16,7 @@ class TeamsAdapter(
 
     interface onItemClickListener{
         fun onDeleteClicked(position: Int){}
+        fun onEditClicked(position: Int)
     }
 
     lateinit var mListener: onItemClickListener
@@ -32,12 +33,19 @@ class TeamsAdapter(
 
         val teamName = itemView.findViewById<TextView>(R.id.teamName)
         val buttonDelete = itemView.findViewById<Button>(R.id.buttonDelete)
+        val buttonEdit = itemView.findViewById<Button>(R.id.buttonEdit)
 
         init {
             buttonDelete.setOnClickListener {
                 var position = adapterPosition
                 if (position != RecyclerView.NO_POSITION)
                     listener.onDeleteClicked(position)
+            }
+
+            buttonEdit.setOnClickListener {
+                var position = adapterPosition
+                if (position != RecyclerView.NO_POSITION)
+                    listener.onEditClicked(position)
             }
         }
 

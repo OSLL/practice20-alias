@@ -19,8 +19,8 @@ class Round : AppCompatActivity() {
         var newRound: String = this.intent.getStringExtra("round")
         var teamsExtra = this.intent.getStringArrayExtra("teams")
 
-        roundTitle.setText(this.intent.getStringExtra("currentTeam"))
-        roundText.setText(this.intent.getStringExtra("currentRound"))
+        roundTitle.text = this.intent.getStringExtra("currentTeam")
+        roundText.text = this.intent.getStringExtra("currentRound")
 
         val teamsNums = Array<Int>(teamNums){it+1}
         var count = this.intent.getIntExtra("counter", 0)
@@ -34,11 +34,11 @@ class Round : AppCompatActivity() {
 
         cardImage.setOnClickListener {
             chronometer.start()
-            cardImage.setClickable(false)
+            cardImage.isClickable = false
             chronometer.setOnChronometerTickListener {
                 var elapsedMillis: Long = SystemClock.elapsedRealtime() - chronometer.base
                 if (elapsedMillis > 1000) {
-                    timerCounter.setText((timerCounter.text.toString().toInt() - 1).toString())
+                    timerCounter.text = (timerCounter.text.toString().toInt() - 1).toString()
                     if (timerCounter.text.toString().toInt() == 0){
                         chronometer.stop()
                         Toast.makeText(applicationContext, "Время вышло!", Toast.LENGTH_SHORT).show()
@@ -68,7 +68,7 @@ class Round : AppCompatActivity() {
         }
 
         check.setOnClickListener{
-            knowWordsCounter.setText((knowWordsCounter.text.toString().toInt() + 1).toString())
+            knowWordsCounter.text = (knowWordsCounter.text.toString().toInt() + 1).toString()
         }
 
         cross.setOnClickListener{
