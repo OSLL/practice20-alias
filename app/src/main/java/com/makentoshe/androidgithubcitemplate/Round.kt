@@ -115,11 +115,10 @@ class Round : AppCompatActivity() {
                             intent.putExtra("WinTeamScore",max)
                             startActivity(intent)
                             max=0
-                            overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
+                            finish()
                         }
                         else {
                             var newTeam: String = teamsNums[count].toString() + " команда"
-
                             val intent = Intent(this, Game::class.java)
                             intent.putExtra("newRound", newRound)
                             intent.putExtra("newTeam", newTeam)
@@ -127,7 +126,6 @@ class Round : AppCompatActivity() {
                             intent.putExtra("settingsInfo", settingsInfo)
                             intent.putExtra("teams", teamsExtra)
                             intent.putExtra("counter", count)
-
                             intent.putExtra("teamsScores", teamsScores)
                             intent.putExtra("book", wordList)
                             startActivity(intent)
