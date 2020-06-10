@@ -193,6 +193,7 @@ class Round : AppCompatActivity() {
                     }
                 }
                 teamsScores[count]++
+
             }
             check.isClickable = true
         }
