@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,10 +23,12 @@ import java.io.InputStreamReader
 class RobberyRound : AppCompatActivity() {
 
     var wordsNumber: Int = 0
+    var tasksNumber: Int = 0
 
     var currentWord = ""
 
     var currentWordNumber: Int = 0
+    var currentTaskNumber: Int = 0
 
     var words: MutableList<Int> = mutableListOf()
 
@@ -61,6 +64,9 @@ class RobberyRound : AppCompatActivity() {
         chronometer.base = (timerCounter.text.toString().toInt() * 1000).toLong()
 
         createRecyclerView()
+
+        if (!settingsInfo[2])
+            taskRobberyText.visibility = View.GONE
 
         backButton.setOnClickListener {
             finish()
@@ -98,6 +104,21 @@ class RobberyRound : AppCompatActivity() {
             flagForFirstTap = true
             chronometer.start()
             word.isClickable = false
+            if (settingsInfo[2]) {
+                var fileTaskRobbery: InputStream = assets.open("Tasks.txt")
+                var bufferedReaderTask = BufferedReader(InputStreamReader(fileTaskRobbery))
+                while (bufferedReaderTask.readLine() != null) tasksNumber++
+                fileTaskRobbery.close()
+                fileTaskRobbery = assets.open("Tasks.txt")
+                bufferedReaderTask = BufferedReader(InputStreamReader(fileTaskRobbery))
+                currentTaskNumber = (0 until tasksNumber).random()
+                for (i in 0 until currentTaskNumber) bufferedReaderTask.readLine()
+                val currentTask: String = bufferedReaderTask.readLine()
+                fileTaskRobbery.close()
+                taskRobberyText.text = currentTask
+            } else {
+                taskRobberyText.visibility = View.GONE
+            }
             chronometer.setOnChronometerTickListener {
                 var elapsedMillis: Long = SystemClock.elapsedRealtime() - chronometer.base
                 if (elapsedMillis > 1000) {
