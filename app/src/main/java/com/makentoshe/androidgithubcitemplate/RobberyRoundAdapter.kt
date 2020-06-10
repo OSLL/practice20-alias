@@ -12,6 +12,8 @@ class RobberyRoundAdapter(var context: Context,
                           var teamsNames: Array<String>,
                           var teamsScore: IntArray) :
     RecyclerView.Adapter<RobberyRoundAdapter.RobberyRoundAdapterHolder>() {
+    var wordCounterText:MutableList<TextView> = mutableListOf()
+
     interface onItemClickListener{
         fun onCheckClicked(position: Int)
     }
@@ -47,6 +49,9 @@ class RobberyRoundAdapter(var context: Context,
     override fun onBindViewHolder(holder: RobberyRoundAdapterHolder, position: Int) {
         holder.teamRobbery.text = teamsNames[position]
         holder.counterRobbery.text = teamsScore[position].toString()
+        wordCounterText.add(holder.counterRobbery)
     }
+
+    fun wordsCounterGetter() :Array<TextView> = wordCounterText.toTypedArray()
 
 }

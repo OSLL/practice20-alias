@@ -25,10 +25,13 @@ class Round : AppCompatActivity() {
 
     private var flagForFirstTap: Boolean = false
 
+    var flagForLastWord: Boolean = false
+
+    var flagForLastWordCheckCross: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_round)
-
 
 
         var settingsText: IntArray = this.intent.getIntArrayExtra("settingsText")
@@ -38,7 +41,7 @@ class Round : AppCompatActivity() {
         var teamsExtra = this.intent.getStringArrayExtra("teams")
         var wordList = this.intent.getIntExtra("book", -1)
         var teamsScores: IntArray = this.intent.getIntArrayExtra("teamsScores")
-        var winnersIndex:Int=-1
+        var winnersIndex: Int = -1
 
         roundTitle.text = this.intent.getStringExtra("currentTeam")
         roundText.text = this.intent.getStringExtra("currentRound")
@@ -107,41 +110,25 @@ class Round : AppCompatActivity() {
             chronometer.setOnChronometerTickListener {
                 var elapsedMillis: Long = SystemClock.elapsedRealtime() - chronometer.base
                 if (elapsedMillis > 1000) {
-                    timerCounter.setText((timerCounter.text.toString().toInt() - 1).toString())
+                    timerCounter.text = (timerCounter.text.toString().toInt() - 1).toString()
                     if (timerCounter.text.toString().toInt() == 0) {
                         chronometer.stop()
                         Toast.makeText(applicationContext, "Время вышло!", Toast.LENGTH_SHORT)
                             .show()
                         count += 1
-                        Log.d("TAG", "$count")
-                        if (count == teamNums) {
-                            count = 0
-                            newRound =
-                                (newRound.substringBefore(" ").toInt() + 1).toString() + " раунд"
 
-
-                            for (i in 0 until teamsExtra.size) {
-                                if (teamsScores[i] > max) {
-                                    max = teamsScores[i]
-                                    winnersIndex = i
-                                }
+                        flagForLastWord = true
+                        if (settingsInfo[1]) {
+                            if (count == teamNums) {
+                                count = 0
+                                newRound =
+                                    (newRound.substringBefore(" ").toInt() + 1).toString() + " раунд"
                             }
 
-                        }
-
-
-
-                        if (max>=settingsText[0]) {
-                            val intent = Intent(this, WinPage::class.java)
-                            intent.putExtra("WinTeamName",teamsExtra[winnersIndex])
-                            intent.putExtra("WinTeamScore",max)
-                            startActivity(intent)
-                            max=0
-                            finish()
-                        }
-                        else {
                             var newTeam: String = teamsNums[count].toString() + " команда"
-                            val intent = Intent(this, Game::class.java)
+                            val intent = Intent(this, LastWord::class.java)
+                            intent.putExtra("teamsAmount", teamNums)
+                            intent.putExtra("currentWord", word.text)
                             intent.putExtra("newRound", newRound)
                             intent.putExtra("newTeam", newTeam)
                             intent.putExtra("settingsText", settingsText)
@@ -150,11 +137,17 @@ class Round : AppCompatActivity() {
                             intent.putExtra("counter", count)
                             intent.putExtra("teamsScores", teamsScores)
                             intent.putExtra("book", wordList)
+                            intent.putExtra("currentTeam", roundTitle.text.toString())
+                            intent.putExtra("currentRound", roundText.text.toString())
                             startActivity(intent)
                             overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
                             finish()
                         }
+
                     }
+
+
+
 
                     elapsedMillis = SystemClock.elapsedRealtime() - chronometer.base
                 }
@@ -183,44 +176,144 @@ class Round : AppCompatActivity() {
                 }
             }
 
-        }
 
-        check.setOnClickListener {
-            check.isClickable = false
-            if (flagForFirstTap) {
-                knowWordsCounter.text = (knowWordsCounter.text.toString().toInt() + 1).toString()
-                when (wordList) {
-                    0 -> {
-                        var file: InputStream = assets.open("Easy.txt")
 
-                        var bufferedReader = BufferedReader(InputStreamReader(file))
+            check.setOnClickListener {
+                check.isClickable = false
+                if (flagForFirstTap) {
+                    if (flagForLastWord) {
+                        if (count == teamNums) {
+                            count = 0
+                            newRound =
+                                (newRound.substringBefore(" ").toInt() + 1).toString() + " раунд"
 
-                        word.text = newWord(file, bufferedReader)
+
+                            for (i in teamsExtra.indices) {
+                                if (teamsScores[i] > max) {
+                                    max = teamsScores[i]
+                                    winnersIndex = i
+                                }
+                            }
+
+                        }
+
+                            if (count == 0) {
+                                teamsScores[teamNums]++
+                            } else {
+                                teamsScores[count - 1]++
+                            }
+
+
+
+                        if (max >= settingsText[0]) {
+                            val intent = Intent(this, WinPage::class.java)
+                            intent.putExtra("WinTeamName", teamsExtra[winnersIndex])
+                            intent.putExtra("WinTeamScore", max)
+                            startActivity(intent)
+                            max = 0
+                            finish()
+                        } else {
+                            var newTeam: String = teamsNums[count].toString() + " команда"
+                            val intent = Intent(this, Game::class.java)
+                            intent.putExtra("newRound", newRound)
+                            intent.putExtra("newTeam", newTeam)
+                            intent.putExtra("settingsText", settingsText)
+                            intent.putExtra("settingsInfo", settingsInfo)
+                            intent.putExtra("teams", teamsExtra)
+                            intent.putExtra("counter", count)
+                            intent.putExtra("teamsScores", teamsScores)
+                            intent.putExtra("book", wordList)
+                            startActivity(intent)
+                            overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
+                            finish()
+
+                        }
                     }
-                    1 -> {
-                        var file: InputStream = assets.open("Middle.txt")
+                    knowWordsCounter.text =
+                        (knowWordsCounter.text.toString().toInt() + 1).toString()
+                    when (wordList) {
+                        0 -> {
+                            var file: InputStream = assets.open("Easy.txt")
 
-                        var bufferedReader = BufferedReader(InputStreamReader(file))
+                            var bufferedReader = BufferedReader(InputStreamReader(file))
 
-                        word.text = newWord(file, bufferedReader)
+                            word.text = newWord(file, bufferedReader)
+                        }
+                        1 -> {
+                            var file: InputStream = assets.open("Middle.txt")
+
+                            var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                            word.text = newWord(file, bufferedReader)
+                        }
+                        2 -> {
+                            var file: InputStream = assets.open("Hard.txt")
+
+                            var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                            word.text = newWord(file, bufferedReader)
+                        }
                     }
-                    2 -> {
-                        var file: InputStream = assets.open("Hard.txt")
+                    teamsScores[count]++
 
-                        var bufferedReader = BufferedReader(InputStreamReader(file))
-
-                        word.text = newWord(file, bufferedReader)
-                    }
                 }
-                teamsScores[count]++
-
+                check.isClickable = true
             }
-            check.isClickable = true
         }
 
         cross.setOnClickListener {
             cross.isClickable = false
             if (flagForFirstTap) {
+                if (flagForLastWord)
+                {
+                    if (count == teamNums) {
+                        count = 0
+                        newRound =
+                            (newRound.substringBefore(" ")
+                                .toInt() + 1).toString() + " раунд"
+
+
+                        for (i in teamsExtra.indices) {
+                            if (teamsScores[i] > max) {
+                                max = teamsScores[i]
+                                winnersIndex = i
+                            }
+                        }
+
+                    }
+
+                    if (settingsInfo[0]) {
+                        if (count==0)
+                        {
+                            teamsScores[teamNums]--
+                        } else {
+                            teamsScores[count-1]--
+                        }
+                    }
+
+                    if (max >= settingsText[0]) {
+                        val intent = Intent(this, WinPage::class.java)
+                        intent.putExtra("WinTeamName", teamsExtra[winnersIndex])
+                        intent.putExtra("WinTeamScore", max)
+                        startActivity(intent)
+                        max = 0
+                        finish()
+                    } else {
+                        var newTeam: String = teamsNums[count].toString() + " команда"
+                        val intent = Intent(this, Game::class.java)
+                        intent.putExtra("newRound", newRound)
+                        intent.putExtra("newTeam", newTeam)
+                        intent.putExtra("settingsText", settingsText)
+                        intent.putExtra("settingsInfo", settingsInfo)
+                        intent.putExtra("teams", teamsExtra)
+                        intent.putExtra("counter", count)
+                        intent.putExtra("teamsScores", teamsScores)
+                        intent.putExtra("book", wordList)
+                        startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
+                        finish()
+                    }
+                }
                 skipWordsCounter.text = (skipWordsCounter.text.toString().toInt() + 1).toString()
                 when (wordList) {
                     0 -> {

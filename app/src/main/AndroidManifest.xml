@@ -9,8 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RobberyRound"></activity>
-        <activity android:name=".Statistics"></activity>
+        <activity android:name=".LastWord"></activity>
+        <activity android:name=".RobberyRound" />
+        <activity android:name=".Statistics" />
         <activity android:name=".WinPage" />
         <activity android:name=".Rules" />
         <activity android:name=".Round" />

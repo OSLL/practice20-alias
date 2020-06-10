@@ -33,6 +33,7 @@ class RobberyRound : AppCompatActivity() {
     var words: MutableList<Int> = mutableListOf()
 
     var flagForFirstTap: Boolean = false
+    var flagForLastWord:Boolean=false
 
     lateinit var robberyRoundAdapter: RobberyRoundAdapter
 
@@ -59,11 +60,114 @@ class RobberyRound : AppCompatActivity() {
         wordList = this.intent.getIntExtra("book", -1)
         val teamsNums = Array<Int>(teamNums) { it + 1 }
         var count = this.intent.getIntExtra("counter", 0)
+        var max = -100000
 
         timerCounter.text = settingsText[1].toString()
         chronometer.base = (timerCounter.text.toString().toInt() * 1000).toLong()
 
+
+
+
+
+        fun createRecyclerView() {
+            var teamsScores1: IntArray = IntArray(teamsExtra.size) { 0 }
+            robberyRoundAdapter = RobberyRoundAdapter(this, teamsExtra, teamsScores1)
+            robberyRoundRecycler.adapter = robberyRoundAdapter
+            robberyRoundRecycler.layoutManager = LinearLayoutManager(this)
+
+            robberyRoundAdapter.setOnItemClickListener(object :
+                RobberyRoundAdapter.onItemClickListener {
+
+                override fun onCheckClicked(position: Int) {
+                    if (flagForFirstTap) {
+                        if (flagForLastWord) {
+                            if (count == teamNums) {
+                                count = 0
+                                newRound =
+                                    (newRound.substringBefore(" ").toInt() + 1).toString() + " раунд"
+
+
+                                for (i in teamsExtra.indices) {
+                                    if (teamsScores[i] > max) {
+                                        max = teamsScores[i]
+                                        winnersIndex = i
+                                    }
+                                }
+
+                            }
+
+
+                            if (count == 0) {
+                                teamsScores[teamNums-1]++
+                            } else {
+                                teamsScores[count - 1]++
+                            }
+
+
+
+                            if (max >= settingsText[0]) {
+                                val intent = Intent(this@RobberyRound, WinPage::class.java)
+                                intent.putExtra("WinTeamName", teamsExtra[winnersIndex])
+                                intent.putExtra("WinTeamScore", max)
+                                startActivity(intent)
+                                max = 0
+                                finish()
+                            } else {
+                                var newTeam: String = teamsNums[count].toString() + " команда"
+                                val intent = Intent(this@RobberyRound, Game::class.java)
+                                intent.putExtra("newRound", newRound)
+                                intent.putExtra("newTeam", newTeam)
+                                intent.putExtra("settingsText", settingsText)
+                                intent.putExtra("settingsInfo", settingsInfo)
+                                intent.putExtra("teams", teamsExtra)
+                                intent.putExtra("counter", count)
+                                intent.putExtra("teamsScores", teamsScores)
+                                intent.putExtra("book", wordList)
+                                startActivity(intent)
+                                overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
+                                finish()
+
+                            }
+                        }
+                        when (wordList) {
+                            0 -> {
+                                var file: InputStream = assets.open("Easy.txt")
+
+                                var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                                word.text = newWord(file, bufferedReader)
+                            }
+                            1 -> {
+                                var file: InputStream = assets.open("Middle.txt")
+
+                                var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                                word.text = newWord(file, bufferedReader)
+                            }
+                            2 -> {
+                                var file: InputStream = assets.open("Hard.txt")
+
+                                var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                                word.text = newWord(file, bufferedReader)
+                            }
+                        }
+                        teamsScores[position]++
+                        teamsScores1[position]++
+                        robberyRoundAdapter.notifyItemChanged(position)
+                    }
+                }
+
+            })
+
+        }
         createRecyclerView()
+
+
+
+
+
+
 
         if (!settingsInfo[2])
             taskRobberyText.visibility = View.GONE
@@ -98,8 +202,6 @@ class RobberyRound : AppCompatActivity() {
             }
         }
 
-        var max = -100000
-
         word.setOnClickListener {
             flagForFirstTap = true
             chronometer.start()
@@ -128,48 +230,7 @@ class RobberyRound : AppCompatActivity() {
                         Toast.makeText(applicationContext, "Время вышло!", Toast.LENGTH_SHORT)
                             .show()
                         count += 1
-                        Log.d("TAG", "$count")
-                        if (count == teamNums) {
-                            count = 0
-                            newRound =
-                                (newRound.substringBefore(" ").toInt() + 1).toString() + " раунд"
-
-
-                            for (i in 0 until teamsExtra.size) {
-                                if (teamsScores[i] > max) {
-                                    max = teamsScores[i]
-                                    winnersIndex = i
-                                }
-                            }
-
-                        }
-
-
-
-                        if (max >= settingsText[0]) {
-                            val intent = Intent(this, WinPage::class.java)
-                            intent.putExtra("WinTeamName", teamsExtra[winnersIndex])
-                            intent.putExtra("WinTeamScore", max)
-                            startActivity(intent)
-                            max = 0
-                            overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
-                            finish()
-                        } else {
-                            var newTeam: String = teamsNums[count].toString() + " команда"
-
-                            val intent = Intent(this, Game::class.java)
-                            intent.putExtra("newRound", newRound)
-                            intent.putExtra("newTeam", newTeam)
-                            intent.putExtra("settingsText", settingsText)
-                            intent.putExtra("settingsInfo", settingsInfo)
-                            intent.putExtra("teams", teamsExtra)
-                            intent.putExtra("counter", count)
-                            intent.putExtra("teamsScores", teamsScores)
-                            intent.putExtra("book", wordList)
-                            startActivity(intent)
-                            overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
-                            finish()
-                        }
+                        flagForLastWord=true
                     }
 
                     elapsedMillis = SystemClock.elapsedRealtime() - chronometer.base
@@ -206,6 +267,47 @@ class RobberyRound : AppCompatActivity() {
         cross.setOnClickListener {
             cross.isClickable = false
             if (flagForFirstTap) {
+                if (flagForLastWord)
+                {
+                    if (count == teamNums) {
+                        count = 0
+                        newRound =
+                            (newRound.substringBefore(" ")
+                                .toInt() + 1).toString() + " раунд"
+
+
+                        for (i in teamsExtra.indices) {
+                            if (teamsScores[i] > max) {
+                                max = teamsScores[i]
+                                winnersIndex = i
+                            }
+                        }
+
+                    }
+
+                    if (max >= settingsText[0]) {
+                        val intent = Intent(this, WinPage::class.java)
+                        intent.putExtra("WinTeamName", teamsExtra[winnersIndex])
+                        intent.putExtra("WinTeamScore", max)
+                        startActivity(intent)
+                        max = 0
+                        finish()
+                    } else {
+                        var newTeam: String = teamsNums[count].toString() + " команда"
+                        val intent = Intent(this, Game::class.java)
+                        intent.putExtra("newRound", newRound)
+                        intent.putExtra("newTeam", newTeam)
+                        intent.putExtra("settingsText", settingsText)
+                        intent.putExtra("settingsInfo", settingsInfo)
+                        intent.putExtra("teams", teamsExtra)
+                        intent.putExtra("counter", count)
+                        intent.putExtra("teamsScores", teamsScores)
+                        intent.putExtra("book", wordList)
+                        startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
+                        finish()
+                    }
+                }
                 when (wordList) {
                     0 -> {
                         var file: InputStream = assets.open("Easy.txt")
@@ -229,9 +331,11 @@ class RobberyRound : AppCompatActivity() {
                         word.text = newWord(file, bufferedReader)
                     }
                 }
+
             }
             cross.isClickable = true
         }
+
     }
 
     override fun finish() {
@@ -258,47 +362,5 @@ class RobberyRound : AppCompatActivity() {
         return currentWord
     }
 
-    fun createRecyclerView() {
-        var teamsScores1: IntArray = IntArray(teamsExtra.size) { 0 }
-        robberyRoundAdapter = RobberyRoundAdapter(this, teamsExtra, teamsScores1)
-        robberyRoundRecycler.adapter = robberyRoundAdapter
-        robberyRoundRecycler.layoutManager = LinearLayoutManager(this)
 
-        robberyRoundAdapter.setOnItemClickListener(object :
-            RobberyRoundAdapter.onItemClickListener {
-
-            override fun onCheckClicked(position: Int) {
-                if (flagForFirstTap) {
-                    when (wordList) {
-                        0 -> {
-                            var file: InputStream = assets.open("Easy.txt")
-
-                            var bufferedReader = BufferedReader(InputStreamReader(file))
-
-                            word.text = newWord(file, bufferedReader)
-                        }
-                        1 -> {
-                            var file: InputStream = assets.open("Middle.txt")
-
-                            var bufferedReader = BufferedReader(InputStreamReader(file))
-
-                            word.text = newWord(file, bufferedReader)
-                        }
-                        2 -> {
-                            var file: InputStream = assets.open("Hard.txt")
-
-                            var bufferedReader = BufferedReader(InputStreamReader(file))
-
-                            word.text = newWord(file, bufferedReader)
-                        }
-                    }
-                    teamsScores[position]++
-                    teamsScores1[position]++
-                    robberyRoundAdapter.notifyItemChanged(position)
-                }
-            }
-
-        })
-
-    }
 }
