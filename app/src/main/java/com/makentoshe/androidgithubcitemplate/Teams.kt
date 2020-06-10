@@ -28,14 +28,16 @@ class Teams : AppCompatActivity() {
 
         addTeamDialog = Dialog(this)
 
-        teams = mutableListOf()
-        currentPosition = 0
+        teams =this.intent.getStringArrayExtra("teams").toMutableList()
+        currentPosition = teams.size
         createRecyclerView()
 
         continueButtonTeams.setOnClickListener {
             val intent = Intent(this, GameSettings::class.java)
             teams = teamsAdapter.getter().toMutableList()
             intent.putExtra("teams", teams.toTypedArray())
+            intent.putExtra("settingsText",this.intent.getIntArrayExtra("settingsText"))
+            intent.putExtra("settingsInfo",this.intent.getBooleanArrayExtra("settingsInfo" ))
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
 
@@ -47,6 +49,13 @@ class Teams : AppCompatActivity() {
 
         addTeamButton.setOnClickListener {
             showAddTeamDialog()
+        }
+        if (currentPosition >= 2) {
+            continueButtonTeams.isClickable = true
+            continueButtonTeams.setTextColor(resources.getColor(R.color.activeButton))
+        } else {
+            continueButtonTeams.isClickable = false
+            continueButtonTeams.setTextColor(resources.getColor(R.color.noActiveButton))
         }
     }
 

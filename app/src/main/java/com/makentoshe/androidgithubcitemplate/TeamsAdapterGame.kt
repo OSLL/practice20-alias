@@ -7,13 +7,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class TeamsAdapterGame(var context: Context, var teamsNames: Array<String>,var teamsScore: IntArray) :
+class TeamsAdapterGame(
+    var context: Context,
+    var teamsNames: Array<String>,
+    var teamsScore: IntArray
+) :
     RecyclerView.Adapter<TeamsAdapterGame.TeamsAdapterGameHolder>() {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): TeamsAdapterGame.TeamsAdapterGameHolder {
+    ): TeamsAdapterGameHolder {
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(R.layout.team_game_item, parent, false)
         return TeamsAdapterGameHolder(view)

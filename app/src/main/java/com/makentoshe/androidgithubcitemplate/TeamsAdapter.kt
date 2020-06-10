@@ -31,9 +31,9 @@ class TeamsAdapter(
 
     class TeamsAdapterHolder(itemView: View, listener: onItemClickListener) : RecyclerView.ViewHolder(itemView) {
 
-        val teamName = itemView.findViewById<TextView>(R.id.teamName)
-        val buttonDelete = itemView.findViewById<Button>(R.id.buttonDelete)
-        val buttonEdit = itemView.findViewById<Button>(R.id.buttonEdit)
+        val teamName = itemView.findViewById<TextView>(R.id.teamName)!!
+        private val buttonDelete = itemView.findViewById<Button>(R.id.buttonDelete)!!
+        private val buttonEdit = itemView.findViewById<Button>(R.id.buttonEdit)!!
 
         init {
             buttonDelete.setOnClickListener {
@@ -61,7 +61,7 @@ class TeamsAdapter(
 
     override fun onBindViewHolder(holder: TeamsAdapterHolder, position: Int) {
 
-        holder.teamName.setText("${teamsNames[position]}")
+        holder.teamName.text = "${teamsNames[position]}"
     }
 
     fun getter(): Array<String> = teamsNames.toTypedArray()

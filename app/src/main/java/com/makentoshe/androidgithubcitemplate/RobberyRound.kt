@@ -6,12 +6,21 @@ import android.os.SystemClock
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_round.*
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.activity_robbery_round.*
+import kotlinx.android.synthetic.main.activity_round.backButton
+import kotlinx.android.synthetic.main.activity_round.chronometer
+import kotlinx.android.synthetic.main.activity_round.cross
+import kotlinx.android.synthetic.main.activity_round.roundText
+import kotlinx.android.synthetic.main.activity_round.roundTitle
+import kotlinx.android.synthetic.main.activity_round.timerCounter
+import kotlinx.android.synthetic.main.activity_round.word
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 
-class Round : AppCompatActivity() {
+class RobberyRound : AppCompatActivity() {
+
     var wordsNumber: Int = 0
 
     var currentWord = ""
@@ -22,29 +31,36 @@ class Round : AppCompatActivity() {
 
     var flagForFirstTap: Boolean = false
 
+    lateinit var robberyRoundAdapter: RobberyRoundAdapter
+
+    lateinit var teamsExtra: Array<String>
+    lateinit var teamsScores: IntArray
+    var wordList: Int = -1
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_round)
+        setContentView(R.layout.activity_robbery_round)
 
+        teamsExtra = this.intent.getStringArrayExtra("teams")
+        teamsScores = this.intent.getIntArrayExtra("teamsScores")
 
-
-        var settingsText: IntArray = this.intent.getIntArrayExtra("settingsText")
-        var settingsInfo: BooleanArray = this.intent.getBooleanArrayExtra("settingsInfo")
+        Log.e("Lol", "${teamsExtra[1]} ${teamsScores[1]}")
+        var winnersIndex: Int = -1
         var teamNums: Int = this.intent.getIntExtra("teamsAmount", 2)
         var newRound: String = this.intent.getStringExtra("round")
-        var teamsExtra = this.intent.getStringArrayExtra("teams")
-        var wordList = this.intent.getIntExtra("book", -1)
-        var teamsScores: IntArray = this.intent.getIntArrayExtra("teamsScores")
-        var winnersIndex:Int=-1
-
         roundTitle.text = this.intent.getStringExtra("currentTeam")
         roundText.text = this.intent.getStringExtra("currentRound")
-
+        var settingsText: IntArray = this.intent.getIntArrayExtra("settingsText")
+        var settingsInfo: BooleanArray = this.intent.getBooleanArrayExtra("settingsInfo")
+        wordList = this.intent.getIntExtra("book", -1)
         val teamsNums = Array<Int>(teamNums) { it + 1 }
         var count = this.intent.getIntExtra("counter", 0)
 
         timerCounter.text = settingsText[1].toString()
         chronometer.base = (timerCounter.text.toString().toInt() * 1000).toLong()
+
+        createRecyclerView()
 
         backButton.setOnClickListener {
             finish()
@@ -109,15 +125,15 @@ class Round : AppCompatActivity() {
 
 
 
-                        if (max>=settingsText[0]) {
+                        if (max >= settingsText[0]) {
                             val intent = Intent(this, WinPage::class.java)
-                            intent.putExtra("WinTeamName",teamsExtra[winnersIndex])
-                            intent.putExtra("WinTeamScore",max)
+                            intent.putExtra("WinTeamName", teamsExtra[winnersIndex])
+                            intent.putExtra("WinTeamScore", max)
                             startActivity(intent)
-                            max=0
+                            max = 0
                             overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
-                        }
-                        else {
+                            finish()
+                        } else {
                             var newTeam: String = teamsNums[count].toString() + " команда"
 
                             val intent = Intent(this, Game::class.java)
@@ -127,7 +143,6 @@ class Round : AppCompatActivity() {
                             intent.putExtra("settingsInfo", settingsInfo)
                             intent.putExtra("teams", teamsExtra)
                             intent.putExtra("counter", count)
-
                             intent.putExtra("teamsScores", teamsScores)
                             intent.putExtra("book", wordList)
                             startActivity(intent)
@@ -139,6 +154,7 @@ class Round : AppCompatActivity() {
                     elapsedMillis = SystemClock.elapsedRealtime() - chronometer.base
                 }
             }
+
             when (wordList) {
                 0 -> {
                     var file: InputStream = assets.open("Easy.txt")
@@ -165,43 +181,10 @@ class Round : AppCompatActivity() {
 
         }
 
-        check.setOnClickListener {
-            check.isClickable = false
-            if (flagForFirstTap) {
-                knowWordsCounter.text = (knowWordsCounter.text.toString().toInt() + 1).toString()
-                when (wordList) {
-                    0 -> {
-                        var file: InputStream = assets.open("Easy.txt")
-
-                        var bufferedReader = BufferedReader(InputStreamReader(file))
-
-                        word.text = newWord(file, bufferedReader)
-                    }
-                    1 -> {
-                        var file: InputStream = assets.open("Middle.txt")
-
-                        var bufferedReader = BufferedReader(InputStreamReader(file))
-
-                        word.text = newWord(file, bufferedReader)
-                    }
-                    2 -> {
-                        var file: InputStream = assets.open("Hard.txt")
-
-                        var bufferedReader = BufferedReader(InputStreamReader(file))
-
-                        word.text = newWord(file, bufferedReader)
-                    }
-                }
-                teamsScores[count]++
-
-            }
-            check.isClickable = true
-        }
 
         cross.setOnClickListener {
             cross.isClickable = false
             if (flagForFirstTap) {
-                skipWordsCounter.text = (skipWordsCounter.text.toString().toInt() + 1).toString()
                 when (wordList) {
                     0 -> {
                         var file: InputStream = assets.open("Easy.txt")
@@ -224,9 +207,6 @@ class Round : AppCompatActivity() {
 
                         word.text = newWord(file, bufferedReader)
                     }
-                }
-                if (settingsInfo[0]) {
-                    teamsScores[count]--
                 }
             }
             cross.isClickable = true
@@ -255,5 +235,49 @@ class Round : AppCompatActivity() {
 
         file.close()
         return currentWord
+    }
+
+    fun createRecyclerView() {
+        var teamsScores1: IntArray = IntArray(teamsExtra.size) { 0 }
+        robberyRoundAdapter = RobberyRoundAdapter(this, teamsExtra, teamsScores1)
+        robberyRoundRecycler.adapter = robberyRoundAdapter
+        robberyRoundRecycler.layoutManager = LinearLayoutManager(this)
+
+        robberyRoundAdapter.setOnItemClickListener(object :
+            RobberyRoundAdapter.onItemClickListener {
+
+            override fun onCheckClicked(position: Int) {
+                if (flagForFirstTap) {
+                    when (wordList) {
+                        0 -> {
+                            var file: InputStream = assets.open("Easy.txt")
+
+                            var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                            word.text = newWord(file, bufferedReader)
+                        }
+                        1 -> {
+                            var file: InputStream = assets.open("Middle.txt")
+
+                            var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                            word.text = newWord(file, bufferedReader)
+                        }
+                        2 -> {
+                            var file: InputStream = assets.open("Hard.txt")
+
+                            var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                            word.text = newWord(file, bufferedReader)
+                        }
+                    }
+                    teamsScores[position]++
+                    teamsScores1[position]++
+                    robberyRoundAdapter.notifyItemChanged(position)
+                }
+            }
+
+        })
+
     }
 }

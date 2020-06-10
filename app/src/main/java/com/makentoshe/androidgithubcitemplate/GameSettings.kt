@@ -15,17 +15,22 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
 
 
         var teams = this.intent.getStringArrayExtra("teams")
-        var settingsText: IntArray = arrayOf(10, 30).toIntArray()
+        var settingsText = this.intent.getIntArrayExtra("settingsText")
+        var settingsInfo =this.intent.getBooleanArrayExtra("settingsInfo" )
 
-
-
-        var settingsInfo: BooleanArray = Array<Boolean>(4,{false}).toBooleanArray()
+        fineSwitcher.isChecked = settingsInfo[0]
 
         fineSwitcher.setOnCheckedChangeListener { buttonView, isChecked -> if (isChecked) settingsInfo[0]=true else settingsInfo[0]=false}
 
+        generalLastWordSwitcher.isChecked = settingsInfo[1]
+
         generalLastWordSwitcher.setOnCheckedChangeListener { buttonView, isChecked -> if (isChecked) settingsInfo[1]=true else settingsInfo[1]=false}
 
+        taskSwitcher.isChecked = settingsInfo[2]
+
         taskSwitcher.setOnCheckedChangeListener { buttonView, isChecked -> if (isChecked) settingsInfo[2]=true else settingsInfo[2]=false}
+
+        robberySwitcher.isChecked = settingsInfo[3]
 
         robberySwitcher.setOnCheckedChangeListener { buttonView, isChecked -> if (isChecked) settingsInfo[3]=true else settingsInfo[3]=false}
 
@@ -42,6 +47,7 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
         }
 
 
+
         wordsAmountSlider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
@@ -49,11 +55,14 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
                 settingsText[0] = wordsAmountCounter.text.toString().toInt()
             }
 
-            override fun onStartTrackingTouch(p0: SeekBar?) {}
+            override fun onStartTrackingTouch(p0: SeekBar?) {
+
+            }
 
             override fun onStopTrackingTouch(p0: SeekBar?) {}
         })
 
+        wordsAmountSlider.progress=settingsText[0]
 
         roundTimeSlider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 
@@ -67,8 +76,14 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(p0: SeekBar?) {}
         })
 
+        roundTimeSlider.progress=settingsText[1]
 
         backButton.setOnClickListener {
+            val intent = Intent(this, Teams::class.java)
+            intent.putExtra("teams", teams)
+            intent.putExtra("settingsText",settingsText)
+            intent.putExtra("settingsInfo", settingsInfo)
+            startActivity(intent)
             finish()
         }
 
