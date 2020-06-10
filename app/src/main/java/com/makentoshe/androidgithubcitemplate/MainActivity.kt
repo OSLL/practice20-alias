@@ -35,7 +35,4 @@ class MainActivity : AppCompatActivity() {
             overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_up)
         }
     }
-    override fun finish() {
-        System.exit(0)
-    }
 }
