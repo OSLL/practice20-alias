@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_round.*
@@ -12,15 +13,17 @@ import java.io.InputStream
 import java.io.InputStreamReader
 
 class Round : AppCompatActivity() {
-    var wordsNumber: Int = 0
+    private var wordsNumber: Int = 0
+    private var tasksNumber: Int = 0
 
-    var currentWord = ""
+    private var currentWord = ""
 
-    var currentWordNumber: Int = 0
+    private var currentWordNumber: Int = 0
+    private var currentTaskNumber: Int = 0
 
-    var words: MutableList<Int> = mutableListOf()
+    private var words: MutableList<Int> = mutableListOf()
 
-    var flagForFirstTap: Boolean = false
+    private var flagForFirstTap: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +43,7 @@ class Round : AppCompatActivity() {
         roundTitle.text = this.intent.getStringExtra("currentTeam")
         roundText.text = this.intent.getStringExtra("currentRound")
 
-        val teamsNums = Array<Int>(teamNums) { it + 1 }
+        val teamsNums = Array(teamNums) { it + 1 }
         var count = this.intent.getIntExtra("counter", 0)
 
         timerCounter.text = settingsText[1].toString()
@@ -49,6 +52,10 @@ class Round : AppCompatActivity() {
         backButton.setOnClickListener {
             finish()
         }
+
+        if (!settingsInfo[2])
+            taskText.visibility = View.GONE
+
         when (wordList) {
             0 -> {
                 var file: InputStream = assets.open("Easy.txt")
@@ -82,6 +89,21 @@ class Round : AppCompatActivity() {
             flagForFirstTap = true
             chronometer.start()
             word.isClickable = false
+            if (settingsInfo[2]) {
+                var fileTask: InputStream = assets.open("Tasks.txt")
+                var bufferedReaderTask = BufferedReader(InputStreamReader(fileTask))
+                while (bufferedReaderTask.readLine() != null) tasksNumber++
+                fileTask.close()
+                currentTaskNumber = (0 until tasksNumber).random()
+                fileTask = assets.open("Tasks.txt")
+                bufferedReaderTask = BufferedReader(InputStreamReader(fileTask))
+                for (i in 0 until currentTaskNumber) bufferedReaderTask.readLine()
+                val currentTask: String = bufferedReaderTask.readLine()
+                fileTask.close()
+                taskText.text = currentTask
+            } else {
+                taskText.visibility = View.GONE
+            }
             chronometer.setOnChronometerTickListener {
                 var elapsedMillis: Long = SystemClock.elapsedRealtime() - chronometer.base
                 if (elapsedMillis > 1000) {
