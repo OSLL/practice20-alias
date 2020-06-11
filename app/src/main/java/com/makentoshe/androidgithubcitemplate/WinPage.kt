@@ -9,11 +9,20 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_win_page.*
 
 class WinPage : AppCompatActivity() {
+
+    lateinit var list: Array<MutableList<String>>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_win_page)
 
-        var winner: String = this.intent.getStringExtra("WinTeamName")
+        var teamsExtra = this.intent.getStringArrayExtra("teams")!!
+
+        list = Array(teamsExtra.size) { MutableList(0) { "0.0" } }
+        for (i in teamsExtra.indices)
+            list[i] = this.intent.getStringArrayExtra("list$i")!!.toMutableList()
+
+        var winner: String = this.intent.getStringExtra("WinTeamName")!!
         var max: Int = this.intent.getIntExtra("WinTeamScore", -1)
         if ((max - (max % 10)) / 10 == 1) {
             youWin.text = "Команда: $winner"
@@ -40,8 +49,20 @@ class WinPage : AppCompatActivity() {
         }
 
         backToMenu.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
             finish()
         }
+
+        toStatistics.setOnClickListener {
+            val intent = Intent(this, Statistics::class.java)
+            for (i in teamsExtra.indices)
+                intent.putExtra("list$i", list[i].toTypedArray())
+            intent.putExtra("teams", teamsExtra)
+            startActivity(intent)
+            finish()
+        }
+
         var backgroundAnimation: Animation = RotateAnimation(
             0.0f,
             360.0f,
@@ -54,11 +75,5 @@ class WinPage : AppCompatActivity() {
         backgroundAnimation.repeatCount = Animation.INFINITE
         backgroundAnimation.interpolator = LinearInterpolator()
         winPageBackground.startAnimation(backgroundAnimation)
-    }
-
-    override fun finish() {
-        super.finish()
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
     }
 }

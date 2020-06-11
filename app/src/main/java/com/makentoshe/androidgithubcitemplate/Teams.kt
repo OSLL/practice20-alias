@@ -21,6 +21,7 @@ class Teams : AppCompatActivity() {
     lateinit var closeAddTeamDialog: Button
     lateinit var tnld: TextInputLayout
     lateinit var tnet: EditText
+    lateinit var list: Array<MutableList<String>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,16 +29,21 @@ class Teams : AppCompatActivity() {
 
         addTeamDialog = Dialog(this)
 
-        teams =this.intent.getStringArrayExtra("teams").toMutableList()
+        teams = this.intent.getStringArrayExtra("teams").toMutableList()
+        for (i in teams.indices)
+            list[i] = this.intent.getStringArrayExtra("list$i").toMutableList()
         currentPosition = teams.size
         createRecyclerView()
 
         continueButtonTeams.setOnClickListener {
+            list = Array(teams.size) { MutableList(0) { "0.0" } }
             val intent = Intent(this, GameSettings::class.java)
             teams = teamsAdapter.getter().toMutableList()
             intent.putExtra("teams", teams.toTypedArray())
-            intent.putExtra("settingsText",this.intent.getIntArrayExtra("settingsText"))
-            intent.putExtra("settingsInfo",this.intent.getBooleanArrayExtra("settingsInfo" ))
+            intent.putExtra("settingsText", this.intent.getIntArrayExtra("settingsText"))
+            intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
+            for (i in list.indices)
+                intent.putExtra("list$i", list[i].toTypedArray())
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
 

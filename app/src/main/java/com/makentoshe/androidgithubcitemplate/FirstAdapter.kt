@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class FirstAdapter(
     var context: Context,
-    var teamsScores: MutableList<MutableList<Int>>,
+    var teamsScores: Array<MutableList<String>>,
     var teamsNames: MutableList<String>) : RecyclerView.Adapter<FirstAdapter.FirstAdapterHolder>() {
 
     class FirstAdapterHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -28,12 +28,9 @@ class FirstAdapter(
 
     override fun onBindViewHolder(holder: FirstAdapter.FirstAdapterHolder, position: Int) {
 
-        val plusPoints = teamsScores[position][0]
-        val minusPoints = teamsScores[position][1]
-
         holder.teamNameFirst.text = teamsNames[position]
 
-        var secondAdapter = SecondAdapter(context, plusPoints, minusPoints, position + 1)
+        var secondAdapter = SecondAdapter(context, teamsScores[position])
         holder.secondRecycler.adapter = secondAdapter
         holder.secondRecycler.layoutManager = LinearLayoutManager(context)
 

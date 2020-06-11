@@ -12,6 +12,8 @@ import kotlinx.android.synthetic.main.activity_round.roundTitle
 
 class LastWord : AppCompatActivity() {
 
+    lateinit var list: Array<MutableList<String>>
+
     var wordsNumber: Int = 0
 
     var currentWord = ""
@@ -30,7 +32,7 @@ class LastWord : AppCompatActivity() {
     var settingsText: IntArray = intArrayOf()
     var settingsInfo: BooleanArray = booleanArrayOf()
     var word1: String = "0"
-   var  teamsNums: Array<Int> = arrayOf()
+    var teamsNums: Array<Int> = arrayOf()
     var count = 0
     var max = -100000
     var winnersIndex: Int = -1
@@ -39,25 +41,27 @@ class LastWord : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_last_word)
 
-         teamNums = this.intent.getIntExtra("teamsAmount", 2)
-         newRound  = this.intent.getStringExtra("newRound")
-         settingsText  = this.intent.getIntArrayExtra("settingsText")
-         settingsInfo = this.intent.getBooleanArrayExtra("settingsInfo")
-         word1 = this.intent.getStringExtra("currentWord")
-         teamsNums = Array<Int>(teamNums) { it + 1 }
-         count = this.intent.getIntExtra("counter", 0)
+        teamNums = this.intent.getIntExtra("teamsAmount", 2)
+        newRound = this.intent.getStringExtra("newRound")!!
+        settingsText = this.intent.getIntArrayExtra("settingsText")!!
+        settingsInfo = this.intent.getBooleanArrayExtra("settingsInfo")!!
+        word1 = this.intent.getStringExtra("currentWord")!!
+        teamsNums = Array<Int>(teamNums) { it + 1 }
+        count = this.intent.getIntExtra("counter", 0)
 
-        word.text=word1
+        word.text = word1
 
-        teamsExtra = this.intent.getStringArrayExtra("teams")
-        teamsScores = this.intent.getIntArrayExtra("teamsScores")
+        teamsExtra = this.intent.getStringArrayExtra("teams")!!
+        teamsScores = this.intent.getIntArrayExtra("teamsScores")!!
 
         roundTitle.text = this.intent.getStringExtra("currentTeam")
         roundText.text = this.intent.getStringExtra("currentRound")
 
         wordList = this.intent.getIntExtra("book", -1)
 
-
+        list = Array(teamsExtra.size) { MutableList(0) { "0.0" } }
+        for (i in teamsExtra.indices)
+            list[i] = this.intent.getStringArrayExtra("list$i")!!.toMutableList()
 
 
 
@@ -78,49 +82,54 @@ class LastWord : AppCompatActivity() {
 
                     teamsScores[position]++
                     teamsScores1[position]++
+                    list[position][roundText.text.toString().dropLast(6).toInt() - 1] =
+                        "${((list[position][roundText.text.toString().dropLast(6)
+                            .toInt() - 1].substringBefore('.')
+                            .toInt()) + 1)}.${list[position][roundText.text.toString()
+                            .dropLast(6).toInt() - 1].substringAfter('.').toInt()}"
                     robberyRoundAdapter.notifyItemChanged(position)
-                        if (count == 0) {
+                    if (count == 0) {
 
-                            for (i in teamsExtra.indices) {
-                                if (teamsScores[i] > max) {
-                                    max = teamsScores[i]
-                                    winnersIndex = i
-                                }
+                        for (i in teamsExtra.indices) {
+                            if (teamsScores[i] > max) {
+                                max = teamsScores[i]
+                                winnersIndex = i
                             }
-
                         }
-
-                        if (max >= settingsText[0]) {
-                            val intent = Intent(this@LastWord, WinPage::class.java)
-                            intent.putExtra("WinTeamName", teamsExtra[winnersIndex])
-                            intent.putExtra("WinTeamScore", max)
-                            startActivity(intent)
-                            max = 0
-                            finish()
-                        } else {
-                            var newTeam: String = teamsNums[count].toString() + " команда"
-
-                            val intent = Intent(this@LastWord, Game::class.java)
-                            intent.putExtra("newRound", newRound)
-                            intent.putExtra("newTeam", newTeam)
-                            intent.putExtra("settingsText", settingsText)
-                            intent.putExtra("settingsInfo", settingsInfo)
-                            intent.putExtra("teams", teamsExtra)
-                            intent.putExtra("counter", count)
-                            intent.putExtra("teamsScores", teamsScores)
-                            intent.putExtra("book", wordList)
-                            startActivity(intent)
-                            overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
-                            finish()
-
-                        }
-
 
                     }
 
+                    if (max >= settingsText[0]) {
+                        val intent = Intent(this@LastWord, WinPage::class.java)
+                        intent.putExtra("WinTeamName", teamsExtra[winnersIndex])
+                        intent.putExtra("WinTeamScore", max)
+                        intent.putExtra("teams", teamsExtra)
+                        for (i in teamsExtra.indices)
+                            intent.putExtra("list$i", list[i].toTypedArray())
+                        startActivity(intent)
+                        max = 0
+                        finish()
+                    } else {
+                        var newTeam: String = teamsNums[count].toString() + " команда"
 
+                        val intent = Intent(this@LastWord, Game::class.java)
+                        intent.putExtra("newRound", newRound)
+                        intent.putExtra("newTeam", newTeam)
+                        intent.putExtra("settingsText", settingsText)
+                        intent.putExtra("settingsInfo", settingsInfo)
+                        intent.putExtra("teams", teamsExtra)
+                        intent.putExtra("counter", count)
+                        intent.putExtra("teamsScores", teamsScores)
+                        intent.putExtra("book", wordList)
+                        for (i in teamsExtra.indices)
+                            intent.putExtra("list$i", list[i].toTypedArray())
+                        startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
+                        finish()
+
+                    }
+                }
             })
-
         }
         createRecyclerView()
 
@@ -145,6 +154,9 @@ class LastWord : AppCompatActivity() {
                 val intent = Intent(this, WinPage::class.java)
                 intent.putExtra("WinTeamName", teamsExtra[winnersIndex])
                 intent.putExtra("WinTeamScore", max)
+                intent.putExtra("teams", teamsExtra)
+                for (i in teamsExtra.indices)
+                    intent.putExtra("list$i", list[i].toTypedArray())
                 startActivity(intent)
                 max = 0
                 finish()
@@ -159,6 +171,8 @@ class LastWord : AppCompatActivity() {
                 intent.putExtra("counter", count)
                 intent.putExtra("teamsScores", teamsScores)
                 intent.putExtra("book", wordList)
+                for (i in teamsExtra.indices)
+                    intent.putExtra("list$i", list[i].toTypedArray())
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
                 finish()
@@ -170,7 +184,6 @@ class LastWord : AppCompatActivity() {
         super.finish()
         overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
     }
-
 
 
 }
