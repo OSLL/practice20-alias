@@ -96,9 +96,11 @@ class Round : AppCompatActivity() {
                 if(isPlaying){
                     //background -> playButton
                     chronometer.stop()
+                    isPlaying = false
                 }else{
                     //background -> pauseButton
                     chronometer.start()
+                    isPlaying = true
                 }
             }
             word.isClickable = false
