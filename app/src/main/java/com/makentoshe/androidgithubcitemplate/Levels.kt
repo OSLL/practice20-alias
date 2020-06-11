@@ -6,30 +6,37 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_levels.*
 
 class Levels : AppCompatActivity() {
+
+    lateinit var list: Array<MutableList<String>>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_levels)
 
-
         var teams = this.intent.getStringArrayExtra("teams")
+        list = Array(teams.size) { MutableList(0) { "0.0" } }
 
-        var teamsScores:IntArray = IntArray(teams.size) {0}
+        for (i in teams.indices)
+            list[i] = this.intent.getStringArrayExtra("list$i").toMutableList()
+
+        var teamsScores: IntArray = IntArray(teams.size) { 0 }
 
         val intentTeam: String = "1 команда"
         val intentRound: String = "1 раунд"
         val additional: Int = 0
 
         easyLevelIcon.setOnClickListener {
-
             val intent = Intent(this, Game::class.java)
             intent.putExtra("teams", teams)
-            intent.putExtra("settingsText",  this.intent.getIntArrayExtra("settingsText"))
+            intent.putExtra("settingsText", this.intent.getIntArrayExtra("settingsText"))
             intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
             intent.putExtra("newTeam", intentTeam)
             intent.putExtra("newRound", intentRound)
             intent.putExtra("counter", additional)
-            intent.putExtra("teamsScores",teamsScores)
-            intent.putExtra("book",0)
+            intent.putExtra("teamsScores", teamsScores)
+            intent.putExtra("book", 0)
+            for (i in teams.indices)
+                intent.putExtra("list$i", list[i].toTypedArray())
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
@@ -40,13 +47,15 @@ class Levels : AppCompatActivity() {
 
             val intent = Intent(this, Game::class.java)
             intent.putExtra("teams", teams)
-            intent.putExtra("settingsText",  this.intent.getIntArrayExtra("settingsText"))
+            intent.putExtra("settingsText", this.intent.getIntArrayExtra("settingsText"))
             intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
             intent.putExtra("newTeam", intentTeam)
             intent.putExtra("newRound", intentRound)
             intent.putExtra("counter", additional)
-            intent.putExtra("teamsScores",teamsScores)
-            intent.putExtra("book",1)
+            intent.putExtra("teamsScores", teamsScores)
+            intent.putExtra("book", 1)
+            for (i in teams.indices)
+                intent.putExtra("list$i", list[i].toTypedArray())
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
@@ -57,13 +66,15 @@ class Levels : AppCompatActivity() {
 
             val intent = Intent(this, Game::class.java)
             intent.putExtra("teams", teams)
-            intent.putExtra("settingsText",  this.intent.getIntArrayExtra("settingsText"))
+            intent.putExtra("settingsText", this.intent.getIntArrayExtra("settingsText"))
             intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
             intent.putExtra("newTeam", intentTeam)
             intent.putExtra("newRound", intentRound)
             intent.putExtra("counter", additional)
-            intent.putExtra("teamsScores",teamsScores)
-            intent.putExtra("book",2)
+            intent.putExtra("teamsScores", teamsScores)
+            intent.putExtra("book", 2)
+            for (i in teams.indices)
+                intent.putExtra("list$i", list[i].toTypedArray())
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
@@ -74,13 +85,15 @@ class Levels : AppCompatActivity() {
 
             val intent = Intent(this, Game::class.java)
             intent.putExtra("teams", teams)
-            intent.putExtra("settingsText",  this.intent.getIntArrayExtra("settingsText"))
+            intent.putExtra("settingsText", this.intent.getIntArrayExtra("settingsText"))
             intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
             intent.putExtra("newTeam", intentTeam)
             intent.putExtra("newRound", intentRound)
             intent.putExtra("counter", additional)
-            intent.putExtra("teamsScores",teamsScores)
-            intent.putExtra("book",0)
+            intent.putExtra("teamsScores", teamsScores)
+            intent.putExtra("book", 0)
+            for (i in teams.indices)
+                intent.putExtra("list$i", list[i].toTypedArray())
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
@@ -91,13 +104,15 @@ class Levels : AppCompatActivity() {
 
             val intent = Intent(this, Game::class.java)
             intent.putExtra("teams", teams)
-            intent.putExtra("settingsText",  this.intent.getIntArrayExtra("settingsText"))
+            intent.putExtra("settingsText", this.intent.getIntArrayExtra("settingsText"))
             intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
             intent.putExtra("newTeam", intentTeam)
             intent.putExtra("newRound", intentRound)
             intent.putExtra("counter", additional)
-            intent.putExtra("teamsScores",teamsScores)
-            intent.putExtra("book",1)
+            intent.putExtra("teamsScores", teamsScores)
+            intent.putExtra("book", 1)
+            for (i in teams.indices)
+                intent.putExtra("list$i", list[i].toTypedArray())
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
@@ -108,13 +123,15 @@ class Levels : AppCompatActivity() {
 
             val intent = Intent(this, Game::class.java)
             intent.putExtra("teams", teams)
-            intent.putExtra("settingsText",  this.intent.getIntArrayExtra("settingsText"))
+            intent.putExtra("settingsText", this.intent.getIntArrayExtra("settingsText"))
             intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
             intent.putExtra("newTeam", intentTeam)
             intent.putExtra("newRound", intentRound)
             intent.putExtra("counter", additional)
-            intent.putExtra("teamsScores",teamsScores)
-            intent.putExtra("book",2)
+            intent.putExtra("teamsScores", teamsScores)
+            intent.putExtra("book", 2)
+            for (i in teams.indices)
+                intent.putExtra("list$i", list[i].toTypedArray())
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
@@ -124,8 +141,10 @@ class Levels : AppCompatActivity() {
         backButton.setOnClickListener {
             val intent = Intent(this, GameSettings::class.java)
             intent.putExtra("teams", teams)
-            intent.putExtra("settingsText",  this.intent.getIntArrayExtra("settingsText"))
+            intent.putExtra("settingsText", this.intent.getIntArrayExtra("settingsText"))
             intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
+            for (i in teams.indices)
+                intent.putExtra("list$i", list[i].toTypedArray())
             startActivity(intent)
             finish()
         }

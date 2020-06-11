@@ -9,9 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class SecondAdapter(
     var context: Context,
-    var plusPonits: Int,
-    var minusPonits: Int,
-    var roundNumber: Int) : RecyclerView.Adapter<SecondAdapter.SecondAdapterHolder>() {
+    var roundInfo: MutableList<String>) : RecyclerView.Adapter<SecondAdapter.SecondAdapterHolder>() {
 
     class SecondAdapterHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val knowSecond = itemView.findViewById<TextView>(R.id.knowSecond)
@@ -25,11 +23,11 @@ class SecondAdapter(
         return SecondAdapter.SecondAdapterHolder(view)
     }
 
-    override fun getItemCount(): Int = 2
+    override fun getItemCount(): Int = roundInfo.size
 
     override fun onBindViewHolder(holder: SecondAdapter.SecondAdapterHolder, position: Int) {
-        holder.roundNameSecond.text = "${roundNumber} раунд"
-        holder.knowSecond.text = plusPonits.toString()
-        holder.skipSecond.text = minusPonits.toString()
+        holder.roundNameSecond.text = "${position+1} раунд"
+        holder.knowSecond.text = roundInfo[position].substringBefore('.')
+        holder.skipSecond.text = roundInfo[position].substringAfter('.')
     }
 }
