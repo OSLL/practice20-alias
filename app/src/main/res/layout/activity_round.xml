@@ -133,8 +133,8 @@
         android:id="@+id/timerImage"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/skipWordsImage"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/pauseButton"
         app:layout_constraintTop_toBottomOf="@+id/skipWordsImage"
         app:srcCompat="@drawable/timer" />
 
@@ -213,5 +213,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardImage" />
+
+    <Button
+        android:id="@+id/pauseButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="@+id/timerImage"
+        app:layout_constraintEnd_toEndOf="@+id/skipWordsImage"
+        app:layout_constraintTop_toTopOf="@+id/timerImage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

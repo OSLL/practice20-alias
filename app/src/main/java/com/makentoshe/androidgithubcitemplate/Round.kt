@@ -91,6 +91,16 @@ class Round : AppCompatActivity() {
         word.setOnClickListener {
             flagForFirstTap = true
             chronometer.start()
+            var isPlaying = true
+            pauseButton.setOnClickListener{
+                if(isPlaying){
+                    //background -> playButton
+                    chronometer.stop()
+                }else{
+                    //background -> pauseButton
+                    chronometer.start()
+                }
+            }
             word.isClickable = false
             if (settingsInfo[2]) {
                 var fileTask: InputStream = assets.open("Tasks.txt")
