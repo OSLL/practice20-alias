@@ -21,13 +21,13 @@ class Teams : AppCompatActivity() {
     lateinit var closeAddTeamDialog: Button
     lateinit var tnld: TextInputLayout
     lateinit var tnet: EditText
-    var existingTeams: MutableList<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teams)
 
         addTeamDialog = Dialog(this)
+
         teams = this.intent.getStringArrayExtra("teams").toMutableList()
         currentPosition = teams.size
         createRecyclerView()
@@ -105,82 +105,129 @@ class Teams : AppCompatActivity() {
                 tnld.editText?.setText(teams[position])
                 closeAddTeamDialog.setOnClickListener {
                     addTeamDialog.cancel()
-                    teams[position] = tnld.editText?.text.toString()
+                    teams[position] = tnld.editText?.text.toString().trim(' ')
                     teamsAdapter.notifyItemChanged(position)
-                    existingTeams.add(tnld.editText?.text.toString())
                 }
                 tnet.addTextChangedListener(object : TextWatcher {
 
                     override fun afterTextChanged(p0: Editable?) {}
 
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                        if (tnld.editText?.text.toString()
-                                .isEmpty() || tnld.editText?.text.toString()
+                        if (tnld.editText?.text.toString().isEmpty() || tnld.editText?.text.toString()
                                 .isBlank()
                         ) {
-                            tnld.error = "Название не должно быть пустым"
+                            tnld.error = "Название не может быть пустым"
                             closeAddTeamDialog.isClickable = false
                             closeAddTeamDialog.background =
                                 resources.getDrawable(R.drawable.add_team_no_active)
                         } else {
-                            closeAddTeamDialog.isClickable = true
-                            closeAddTeamDialog.background =
-                                resources.getDrawable(R.drawable.new_round_button)
-                        }
-                        if (tnld.editText?.text.toString().length > 20
-                        ) {
-                            tnld.error = "Название не должно быть длиннее 20 символов"
-                            closeAddTeamDialog.isClickable = false
-                            closeAddTeamDialog.background =
-                                resources.getDrawable(R.drawable.add_team_no_active)
-                        } else {
-                            closeAddTeamDialog.isClickable = true
-                            closeAddTeamDialog.background =
-                                resources.getDrawable(R.drawable.new_round_button)
+                            if (tnld.editText?.text.toString().length > 20) {
+                                var counterEnd: Int = 0
+                                var counterStart: Int = 0
+                                while (tnld.editText?.text.toString()[tnld.editText?.text.toString().length - 1 - counterEnd] == ' ') {
+                                    counterEnd++
+                                }
+                                while (tnld.editText?.text.toString()[counterStart] == ' ') counterStart++
+
+                                if (counterEnd >= 1 || counterStart >=1) {
+                                   if (counterEnd >= 5 || counterStart >=2) {
+                                        tnld.error =
+                                            "Молодец, ты нашёл пасхалку,a теперь убери пробелы"
+                                        closeAddTeamDialog.isClickable = false
+                                        closeAddTeamDialog.background =
+                                            resources.getDrawable(R.drawable.add_team_no_active)
+                                    }
+                                    else
+                                    {
+                                        tnld.error ="Уберите свои пробелы"
+                                        closeAddTeamDialog.isClickable = false
+                                        closeAddTeamDialog.background =
+                                            resources.getDrawable(R.drawable.add_team_no_active)
+
+                                    }
+                                } else {
+                                    tnld.error = "Слишком длинное название"
+                                    closeAddTeamDialog.isClickable = false
+                                    closeAddTeamDialog.background =
+                                        resources.getDrawable(R.drawable.add_team_no_active)
+                                }
+                            } else {
+                                if (teams.contains(tnld.editText?.text.toString().trim(' '))) {
+                                    tnld.error = "Такое название уже есть"
+                                    closeAddTeamDialog.isClickable = false
+                                    closeAddTeamDialog.background =
+                                        resources.getDrawable(R.drawable.add_team_no_active)
+                                } else {
+                                    closeAddTeamDialog.isClickable = true
+                                    closeAddTeamDialog.background =
+                                        resources.getDrawable(R.drawable.new_round_button)
+                                    tnld.isErrorEnabled = false
+                                    tnld.isErrorEnabled = true
+                                }
+
+                            }
+
                         }
                     }
 
                     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-                        if (tnld.editText?.text.toString()
-                                .isEmpty() || tnld.editText?.text.toString()
+                        if (tnld.editText?.text.toString().isEmpty() || tnld.editText?.text.toString()
                                 .isBlank()
                         ) {
-                            tnld.error = "Название не должно быть пустым"
+                            tnld.error = "Название не может быть пустым"
                             closeAddTeamDialog.isClickable = false
                             closeAddTeamDialog.background =
                                 resources.getDrawable(R.drawable.add_team_no_active)
                         } else {
-                            closeAddTeamDialog.isClickable = true
-                            closeAddTeamDialog.background =
-                                resources.getDrawable(R.drawable.new_round_button)
-                            tnld.isErrorEnabled = false
-                            tnld.isErrorEnabled = true
+                            if (tnld.editText?.text.toString().length > 20) {
+                                var counterEnd: Int = 0
+                                var counterStart: Int = 0
+                                while (tnld.editText?.text.toString()[tnld.editText?.text.toString().length - 1 - counterEnd] == ' ') {
+                                    counterEnd++
+                                }
+                                while (tnld.editText?.text.toString()[counterStart] == ' ') counterStart++
+
+                                if (counterEnd >= 1 || counterStart >=1) {
+                                     if (counterEnd >= 5 || counterStart >=2) {
+                                         tnld.error =
+                                             "Молодец, ты нашёл пасхалку,a теперь убери пробелы"
+                                         closeAddTeamDialog.isClickable = false
+                                         closeAddTeamDialog.background =
+                                             resources.getDrawable(R.drawable.add_team_no_active)
+                                     }
+                                     else
+                                     {
+                                         tnld.error ="Уберите свои пробелы"
+                                         closeAddTeamDialog.isClickable = false
+                                         closeAddTeamDialog.background =
+                                             resources.getDrawable(R.drawable.add_team_no_active)
+
+                                     }
+                                } else {
+                                    tnld.error = "Слишком длинное название"
+                                    closeAddTeamDialog.isClickable = false
+                                    closeAddTeamDialog.background =
+                                        resources.getDrawable(R.drawable.add_team_no_active)
+                                }
+                            } else {
+                                if (teams.contains(tnld.editText?.text.toString().trim(' '))) {
+                                    tnld.error = "Такое название уже есть"
+                                    closeAddTeamDialog.isClickable = false
+                                    closeAddTeamDialog.background =
+                                        resources.getDrawable(R.drawable.add_team_no_active)
+                                } else {
+                                    closeAddTeamDialog.isClickable = true
+                                    closeAddTeamDialog.background =
+                                        resources.getDrawable(R.drawable.new_round_button)
+                                    tnld.isErrorEnabled = false
+                                    tnld.isErrorEnabled = true
+                                }
+
+                            }
+
                         }
-                        if (tnld.editText?.text.toString().length > 20) {
-                            tnld.error = "Название не должно быть длиннее 20 символов"
-                            closeAddTeamDialog.isClickable = false
-                            closeAddTeamDialog.background =
-                                resources.getDrawable(R.drawable.add_team_no_active)
-                        } else {
-                            closeAddTeamDialog.isClickable = true
-                            closeAddTeamDialog.background =
-                                resources.getDrawable(R.drawable.new_round_button)
-                            tnld.isErrorEnabled = false
-                            tnld.isErrorEnabled = true
-                        }
-                        if (existingTeams.contains(tnld.editText?.text.toString())) {
-                            tnld.error = "Названия команд должны отличаться"
-                            closeAddTeamDialog.isClickable = false
-                            closeAddTeamDialog.background =
-                                resources.getDrawable(R.drawable.add_team_no_active)
-                        } else {
-                            closeAddTeamDialog.isClickable = true
-                            closeAddTeamDialog.background =
-                                resources.getDrawable(R.drawable.new_round_button)
-                            tnld.isErrorEnabled = false
-                            tnld.isErrorEnabled = true
-                        }
+
                     }
 
                 })
@@ -196,7 +243,7 @@ class Teams : AppCompatActivity() {
         addTeamDialog.show()
         closeAddTeamDialog.setOnClickListener {
             addTeamDialog.cancel()
-            addTeam(tnld.editText?.text.toString(), currentPosition++)
+            addTeam(tnld.editText?.text.toString().trim(' '), currentPosition++)
 
             if (currentPosition >= 2) {
                 continueButtonTeams.isClickable = true
@@ -210,23 +257,58 @@ class Teams : AppCompatActivity() {
         if (tnld.editText?.text.toString().isEmpty() || tnld.editText?.text.toString()
                 .isBlank()
         ) {
-            tnld.error = "Название не должно быть пустым"
+            tnld.error = "Название не может быть пустым"
             closeAddTeamDialog.isClickable = false
-            closeAddTeamDialog.background = resources.getDrawable(R.drawable.add_team_no_active)
+            closeAddTeamDialog.background =
+                resources.getDrawable(R.drawable.add_team_no_active)
         } else {
-            closeAddTeamDialog.isClickable = true
-            closeAddTeamDialog.background = resources.getDrawable(R.drawable.new_round_button)
+            if (tnld.editText?.text.toString().length > 20) {
+                var counterEnd: Int = 0
+                var counterStart: Int = 0
+                while (tnld.editText?.text.toString()[tnld.editText?.text.toString().length - 1 - counterEnd] == ' ') {
+                    counterEnd++
+                }
+                while (tnld.editText?.text.toString()[counterStart] == ' ') counterStart++
+
+                if (counterEnd >= 1 || counterStart >=1) {
+                     if (counterEnd >= 5 || counterStart >=2) {
+                         tnld.error =
+                             "Молодец, ты нашёл пасхалку,a теперь убери пробелы"
+                         closeAddTeamDialog.isClickable = false
+                         closeAddTeamDialog.background =
+                             resources.getDrawable(R.drawable.add_team_no_active)
+                     }
+                     else
+                     {
+                         tnld.error ="Уберите свои пробелы"
+                         closeAddTeamDialog.isClickable = false
+                         closeAddTeamDialog.background =
+                             resources.getDrawable(R.drawable.add_team_no_active)
+
+                     }
+                } else {
+                    tnld.error = "Слишком длинное название"
+                    closeAddTeamDialog.isClickable = false
+                    closeAddTeamDialog.background =
+                        resources.getDrawable(R.drawable.add_team_no_active)
+                }
+            } else {
+                if (teams.contains(tnld.editText?.text.toString().trim(' '))) {
+                    tnld.error = "Такое название уже есть"
+                    closeAddTeamDialog.isClickable = false
+                    closeAddTeamDialog.background =
+                        resources.getDrawable(R.drawable.add_team_no_active)
+                } else {
+                    closeAddTeamDialog.isClickable = true
+                    closeAddTeamDialog.background =
+                        resources.getDrawable(R.drawable.new_round_button)
+                    tnld.isErrorEnabled = false
+                    tnld.isErrorEnabled = true
+                }
+
+            }
+
         }
-//        if (tnld.editText?.text.toString().isEmpty() || tnld.editText?.text.toString()
-//                .isBlank() || tnld.editText?.text.toString().length > 20
-//        ) {
-//            tnld.error = "Название не должно быть длиннее 20 символов"                           ??????????????????????????????????????
-//            closeAddTeamDialog.isClickable = false                                               ??????????????????????????????????????
-//            closeAddTeamDialog.background = resources.getDrawable(R.drawable.add_team_no_active) ??????????????????????????????????????
-//        } else {
-//            closeAddTeamDialog.isClickable = true
-//            closeAddTeamDialog.background = resources.getDrawable(R.drawable.new_round_button)
-//        }
 
         tnet.addTextChangedListener(object : TextWatcher {
 
@@ -236,25 +318,57 @@ class Teams : AppCompatActivity() {
                 if (tnld.editText?.text.toString().isEmpty() || tnld.editText?.text.toString()
                         .isBlank()
                 ) {
-                    tnld.error = "Название не должно быть пустым"
+                    tnld.error = "Название не может быть пустым"
                     closeAddTeamDialog.isClickable = false
                     closeAddTeamDialog.background =
                         resources.getDrawable(R.drawable.add_team_no_active)
                 } else {
-                    closeAddTeamDialog.isClickable = true
-                    closeAddTeamDialog.background =
-                        resources.getDrawable(R.drawable.new_round_button)
-                }
-                if (tnld.editText?.text.toString().length > 20)
-                {
-                    tnld.error = "Название не должно быть длиннее 20 символов"
-                    closeAddTeamDialog.isClickable = false
-                    closeAddTeamDialog.background =
-                        resources.getDrawable(R.drawable.add_team_no_active)
-                } else {
-                    closeAddTeamDialog.isClickable = true
-                    closeAddTeamDialog.background =
-                        resources.getDrawable(R.drawable.new_round_button)
+                    if (tnld.editText?.text.toString().length > 20) {
+                        var counterEnd: Int = 0
+                        var counterStart: Int = 0
+                        while (tnld.editText?.text.toString()[tnld.editText?.text.toString().length - 1 - counterEnd] == ' ') {
+                            counterEnd++
+                        }
+                        while (tnld.editText?.text.toString()[counterStart] == ' ') counterStart++
+
+                        if (counterEnd >= 1 || counterStart >=1) {
+                             if (counterEnd >= 5 || counterStart >=2) {
+                                 tnld.error =
+                                     "Молодец, ты нашёл пасхалку,a теперь убери пробелы"
+                                 closeAddTeamDialog.isClickable = false
+                                 closeAddTeamDialog.background =
+                                     resources.getDrawable(R.drawable.add_team_no_active)
+                             }
+                             else
+                             {
+                                 tnld.error ="Уберите свои пробелы"
+                                 closeAddTeamDialog.isClickable = false
+                                 closeAddTeamDialog.background =
+                                     resources.getDrawable(R.drawable.add_team_no_active)
+
+                             }
+                        } else {
+                            tnld.error = "Слишком длинное название"
+                            closeAddTeamDialog.isClickable = false
+                            closeAddTeamDialog.background =
+                                resources.getDrawable(R.drawable.add_team_no_active)
+                        }
+                    } else {
+                        if (teams.contains(tnld.editText?.text.toString().trim(' '))) {
+                            tnld.error = "Такое название уже есть"
+                            closeAddTeamDialog.isClickable = false
+                            closeAddTeamDialog.background =
+                                resources.getDrawable(R.drawable.add_team_no_active)
+                        } else {
+                            closeAddTeamDialog.isClickable = true
+                            closeAddTeamDialog.background =
+                                resources.getDrawable(R.drawable.new_round_button)
+                            tnld.isErrorEnabled = false
+                            tnld.isErrorEnabled = true
+                        }
+
+                    }
+
                 }
             }
 
@@ -263,41 +377,57 @@ class Teams : AppCompatActivity() {
                 if (tnld.editText?.text.toString().isEmpty() || tnld.editText?.text.toString()
                         .isBlank()
                 ) {
-                    tnld.error = "Название не должно быть пустым"
+                    tnld.error = "Название не может быть пустым"
                     closeAddTeamDialog.isClickable = false
                     closeAddTeamDialog.background =
                         resources.getDrawable(R.drawable.add_team_no_active)
                 } else {
-                    closeAddTeamDialog.isClickable = true
-                    closeAddTeamDialog.background =
-                        resources.getDrawable(R.drawable.new_round_button)
-                    tnld.isErrorEnabled = false
-                    tnld.isErrorEnabled = true
-                }
-                if (tnld.editText?.text.toString().length > 20)
-                {
-                    tnld.error = "Название не должно быть длиннее 20 символов"
-                    closeAddTeamDialog.isClickable = false
-                    closeAddTeamDialog.background =
-                        resources.getDrawable(R.drawable.add_team_no_active)
-                } else {
-                    closeAddTeamDialog.isClickable = true
-                    closeAddTeamDialog.background =
-                        resources.getDrawable(R.drawable.new_round_button)
-                    tnld.isErrorEnabled = false
-                    tnld.isErrorEnabled = true
-                }
-                if (existingTeams.contains(tnld.editText?.text.toString())) {
-                    tnld.error = "Названия команд должны отличаться"
-                    closeAddTeamDialog.isClickable = false
-                    closeAddTeamDialog.background =
-                        resources.getDrawable(R.drawable.add_team_no_active)
-                } else {
-                    closeAddTeamDialog.isClickable = true
-                    closeAddTeamDialog.background =
-                        resources.getDrawable(R.drawable.new_round_button)
-                    tnld.isErrorEnabled = false
-                    tnld.isErrorEnabled = true
+                    if (tnld.editText?.text.toString().length > 20) {
+                        var counterEnd: Int = 0
+                        var counterStart: Int = 0
+                        while (tnld.editText?.text.toString()[tnld.editText?.text.toString().length - 1 - counterEnd] == ' ') {
+                            counterEnd++
+                        }
+                        while (tnld.editText?.text.toString()[counterStart] == ' ') counterStart++
+
+                        if (counterEnd >= 1 || counterStart >=1) {
+                             if (counterEnd >= 5 || counterStart >=2) {
+                                 tnld.error =
+                                     "Молодец, ты нашёл пасхалку,a теперь убери пробелы"
+                                 closeAddTeamDialog.isClickable = false
+                                 closeAddTeamDialog.background =
+                                     resources.getDrawable(R.drawable.add_team_no_active)
+                             }
+                             else
+                             {
+                                 tnld.error ="Уберите свои пробелы"
+                                 closeAddTeamDialog.isClickable = false
+                                 closeAddTeamDialog.background =
+                                     resources.getDrawable(R.drawable.add_team_no_active)
+
+                             }
+                        } else {
+                            tnld.error = "Слишком длинное название"
+                            closeAddTeamDialog.isClickable = false
+                            closeAddTeamDialog.background =
+                                resources.getDrawable(R.drawable.add_team_no_active)
+                        }
+                    } else {
+                        if (teams.contains(tnld.editText?.text.toString().trim(' '))) {
+                            tnld.error = "Такое название уже есть"
+                            closeAddTeamDialog.isClickable = false
+                            closeAddTeamDialog.background =
+                                resources.getDrawable(R.drawable.add_team_no_active)
+                        } else {
+                            closeAddTeamDialog.isClickable = true
+                            closeAddTeamDialog.background =
+                                resources.getDrawable(R.drawable.new_round_button)
+                            tnld.isErrorEnabled = false
+                            tnld.isErrorEnabled = true
+                        }
+
+                    }
+
                 }
             }
 

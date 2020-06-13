@@ -67,7 +67,7 @@ class LastWord : AppCompatActivity() {
 
 
         fun createRecyclerView() {
-            var teamsScores1 = IntArray(teamsExtra.size) { 0 }
+            var teamsScores1 = IntArray(teamsExtra.size) { 0 } 
             robberyRoundAdapter = RobberyRoundAdapter(this, teamsExtra, teamsScores1)
             robberyRoundRecycler.adapter = robberyRoundAdapter
             robberyRoundRecycler.layoutManager = LinearLayoutManager(this)

@@ -102,7 +102,7 @@ class Round : AppCompatActivity() {
             flagForFirstTap = true
             chronometer.start()
             var isPlaying = true
-            pauseButton.setOnClickListener{
+           /* pauseButton.setOnClickListener{
                 if(isPlaying){
                     //background -> playButton
                     chronometer.stop()
@@ -112,7 +112,7 @@ class Round : AppCompatActivity() {
                     chronometer.start()
                     isPlaying = true
                 }
-            }
+            }*/
             word.isClickable = false
             if (settingsInfo[2]) {
                 var fileTask: InputStream = assets.open("Tasks.txt")
