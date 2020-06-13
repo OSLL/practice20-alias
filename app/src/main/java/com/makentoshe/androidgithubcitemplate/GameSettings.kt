@@ -8,6 +8,8 @@ import kotlinx.android.synthetic.main.activity_game_settings.*
 
 class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
 
+    lateinit var list: Array<MutableList<String>>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_settings)
@@ -15,8 +17,12 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
 
 
         var teams = this.intent.getStringArrayExtra("teams")
+        list = Array(teams.size) { MutableList(0) { "0.0" } }
         var settingsText = this.intent.getIntArrayExtra("settingsText")
         var settingsInfo =this.intent.getBooleanArrayExtra("settingsInfo" )
+
+        for (i in teams.indices)
+            list[i] = this.intent.getStringArrayExtra("list$i").toMutableList()
 
         fineSwitcher.isChecked = settingsInfo[0]
 
@@ -41,8 +47,9 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
             intent.putExtra("teams", teams)
             intent.putExtra("settingsText",settingsText)
             intent.putExtra("settingsInfo", settingsInfo)
+            for (i in teams.indices)
+                intent.putExtra("list$i", list[i].toTypedArray())
             startActivity(intent)
-
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 
@@ -83,6 +90,8 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
             intent.putExtra("teams", teams)
             intent.putExtra("settingsText",settingsText)
             intent.putExtra("settingsInfo", settingsInfo)
+            for (i in teams.indices)
+                intent.putExtra("list$i", list[i].toTypedArray())
             startActivity(intent)
             finish()
         }

@@ -133,7 +133,7 @@
         android:id="@+id/timerImage"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="@+id/skipWordsImage"
         app:layout_constraintTop_toBottomOf="@+id/skipWordsImage"
         app:srcCompat="@drawable/timer" />

@@ -7,25 +7,31 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_game.*
 
 class Game : AppCompatActivity() {
+
+    lateinit var list: Array<MutableList<String>>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
         var teams = this.intent.getStringArrayExtra("teams")
-        var settingsText: IntArray = this.intent.getIntArrayExtra("settingsText")
-        var settingsInfo: BooleanArray = this.intent.getBooleanArrayExtra("settingsInfo")
-
-        var currentTeamText: String = this.intent.getStringExtra("newTeam")
-        var currentRoundText: String = this.intent.getStringExtra("newRound")
+        var settingsText: IntArray = this.intent.getIntArrayExtra("settingsText")!!
+        var settingsInfo: BooleanArray = this.intent.getBooleanArrayExtra("settingsInfo")!!
+        var currentTeamText: String = this.intent.getStringExtra("newTeam")!!
+        var currentRoundText: String = this.intent.getStringExtra("newRound")!!
         var counter = this.intent.getIntExtra("counter", -1)
-        var teamsScores: IntArray = this.intent.getIntArrayExtra("teamsScores")
+        var teamsScores: IntArray = this.intent.getIntArrayExtra("teamsScores")!!
+        var m: Array<Float>
 
+        list = Array(teams.size) { MutableList(0) { "0.0" } }
+        for (i in teams.indices)
+            list[i] = this.intent.getStringArrayExtra("list$i").toMutableList()
 
         currentTeamText = teams[counter]
-        currentTeam.setText(currentTeamText)
-        currentRound.setText(currentRoundText)
+        currentTeam.text = currentTeamText
+        currentRound.text = currentRoundText
 
-        val teamsAdapter = TeamsAdapterGame(this, teams,teamsScores)
+        val teamsAdapter = TeamsAdapterGame(this, teams, teamsScores)
         teamsViewGame.adapter = teamsAdapter
         teamsViewGame.layoutManager = LinearLayoutManager(this)
 
@@ -43,7 +49,7 @@ class Game : AppCompatActivity() {
         /* if (settingsInfo[1]) startRound.setText(settingsText[0].toString()) else startRound.setText(settingsText[1].toString()) *///Для показа работоспособности
 
         startRound.setOnClickListener {
-            if (teamsScores[counter] % 5 ==0 && settingsInfo[3] && teamsScores[counter]>0) {
+            if (teamsScores[counter] % 5 == 0 && settingsInfo[3] && teamsScores[counter] > 0) {
                 val intent = Intent(this, RobberyRound::class.java)
                 intent.putExtra("settingsText", settingsText)
                 intent.putExtra("teamsAmount", teams.size)
@@ -55,9 +61,11 @@ class Game : AppCompatActivity() {
                 intent.putExtra("currentRound", currentRoundText)
                 intent.putExtra("teamsScores", teamsScores)
                 intent.putExtra("book", this.intent.getIntExtra("book", -1))
+                for (i in teams.indices)
+                    intent.putExtra("list$i", list[i].toTypedArray())
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_up)
-            }else{
+            } else {
                 val intent = Intent(this, Round::class.java)
                 intent.putExtra("settingsText", settingsText)
                 intent.putExtra("teamsAmount", teams.size)
@@ -69,6 +77,8 @@ class Game : AppCompatActivity() {
                 intent.putExtra("currentRound", currentRoundText)
                 intent.putExtra("teamsScores", teamsScores)
                 intent.putExtra("book", this.intent.getIntExtra("book", -1))
+                for (i in teams.indices)
+                    intent.putExtra("list$i", list[i].toTypedArray())
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_up)
             }

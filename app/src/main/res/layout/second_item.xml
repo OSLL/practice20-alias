@@ -15,45 +15,55 @@
         android:text="Раунд"
         android:textColor="@color/black"
         android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/knowSkip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="5dp"
-        android:text="Отгадали/Пропустили"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/roundNameSecond"
-        app:layout_constraintTop_toBottomOf="@+id/roundNameSecond" />
 
     <TextView
         android:id="@+id/knowSecond"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
         android:text="0"
         android:textColor="@color/green"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/knowSkip"
-        app:layout_constraintEnd_toStartOf="@id/skipSecond"
-        app:layout_constraintTop_toTopOf="@+id/knowSkip" />
+        app:layout_constraintBottom_toBottomOf="@id/knowImage"
+        app:layout_constraintLeft_toLeftOf="@id/knowImage"
+        app:layout_constraintRight_toRightOf="@id/knowImage"
+        app:layout_constraintTop_toTopOf="@id/knowImage" />
 
     <TextView
         android:id="@+id/skipSecond"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
         android:text="0"
         android:textColor="@color/mainColor"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/knowSkip"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/skipImage"
+        app:layout_constraintLeft_toLeftOf="@id/skipImage"
+        app:layout_constraintRight_toRightOf="@id/skipImage"
+        app:layout_constraintTop_toTopOf="@id/skipImage" />
+
+    <ImageView
+        android:id="@+id/skipImage"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="31dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/roundNameSecond"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/knowSkip" />
+        app:layout_constraintTop_toTopOf="@+id/roundNameSecond"
+        app:srcCompat="@drawable/easy_level_button" />
+
+    <ImageView
+        android:id="@+id/knowImage"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="21dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/skipImage"
+        app:layout_constraintEnd_toStartOf="@+id/skipImage"
+        app:layout_constraintTop_toTopOf="@+id/skipImage"
+        app:srcCompat="@drawable/easy_level_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -22,6 +22,8 @@ import java.io.InputStreamReader
 
 class RobberyRound : AppCompatActivity() {
 
+    lateinit var list: Array<MutableList<String>>
+
     var wordsNumber: Int = 0
     var tasksNumber: Int = 0
 
@@ -33,7 +35,7 @@ class RobberyRound : AppCompatActivity() {
     var words: MutableList<Int> = mutableListOf()
 
     var flagForFirstTap: Boolean = false
-    var flagForLastWord:Boolean=false
+    var flagForLastWord: Boolean = false
 
     lateinit var robberyRoundAdapter: RobberyRoundAdapter
 
@@ -46,17 +48,17 @@ class RobberyRound : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_robbery_round)
 
-        teamsExtra = this.intent.getStringArrayExtra("teams")
-        teamsScores = this.intent.getIntArrayExtra("teamsScores")
+        teamsExtra = this.intent.getStringArrayExtra("teams")!!
+        teamsScores = this.intent.getIntArrayExtra("teamsScores")!!
 
         Log.e("Lol", "${teamsExtra[1]} ${teamsScores[1]}")
         var winnersIndex: Int = -1
         var teamNums: Int = this.intent.getIntExtra("teamsAmount", 2)
-        var newRound: String = this.intent.getStringExtra("round")
+        var newRound: String = this.intent.getStringExtra("round")!!
         roundTitle.text = this.intent.getStringExtra("currentTeam")
         roundText.text = this.intent.getStringExtra("currentRound")
-        var settingsText: IntArray = this.intent.getIntArrayExtra("settingsText")
-        var settingsInfo: BooleanArray = this.intent.getBooleanArrayExtra("settingsInfo")
+        var settingsText: IntArray = this.intent.getIntArrayExtra("settingsText")!!
+        var settingsInfo: BooleanArray = this.intent.getBooleanArrayExtra("settingsInfo")!!
         wordList = this.intent.getIntExtra("book", -1)
         val teamsNums = Array<Int>(teamNums) { it + 1 }
         var count = this.intent.getIntExtra("counter", 0)
@@ -65,9 +67,12 @@ class RobberyRound : AppCompatActivity() {
         timerCounter.text = settingsText[1].toString()
         chronometer.base = (timerCounter.text.toString().toInt() * 1000).toLong()
 
+        list = Array(teamsExtra.size) { MutableList(0) { "0.0" } }
+        for (i in teamsExtra.indices)
+            list[i] = this.intent.getStringArrayExtra("list$i")!!.toMutableList()
 
-
-
+        if (count == 0)
+            for (i in list) i.add("0.0")
 
         fun createRecyclerView() {
             var teamsScores1: IntArray = IntArray(teamsExtra.size) { 0 }
@@ -84,7 +89,8 @@ class RobberyRound : AppCompatActivity() {
                             if (count == teamNums) {
                                 count = 0
                                 newRound =
-                                    (newRound.substringBefore(" ").toInt() + 1).toString() + " раунд"
+                                    (newRound.substringBefore(" ")
+                                        .toInt() + 1).toString() + " раунд"
 
 
                                 for (i in teamsExtra.indices) {
@@ -98,7 +104,7 @@ class RobberyRound : AppCompatActivity() {
 
 
                             if (count == 0) {
-                                teamsScores[teamNums-1]++
+                                teamsScores[teamNums - 1]++
                             } else {
                                 teamsScores[count - 1]++
                             }
@@ -109,6 +115,9 @@ class RobberyRound : AppCompatActivity() {
                                 val intent = Intent(this@RobberyRound, WinPage::class.java)
                                 intent.putExtra("WinTeamName", teamsExtra[winnersIndex])
                                 intent.putExtra("WinTeamScore", max)
+                                intent.putExtra("teams", teamsExtra)
+                                for (i in teamsExtra.indices)
+                                    intent.putExtra("list$i", list[i].toTypedArray())
                                 startActivity(intent)
                                 max = 0
                                 finish()
@@ -123,6 +132,8 @@ class RobberyRound : AppCompatActivity() {
                                 intent.putExtra("counter", count)
                                 intent.putExtra("teamsScores", teamsScores)
                                 intent.putExtra("book", wordList)
+                                for (i in teamsExtra.indices)
+                                    intent.putExtra("list$i", list[i].toTypedArray())
                                 startActivity(intent)
                                 overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
                                 finish()
@@ -154,6 +165,11 @@ class RobberyRound : AppCompatActivity() {
                         }
                         teamsScores[position]++
                         teamsScores1[position]++
+                        list[position][roundText.text.toString().dropLast(6).toInt() - 1] =
+                            "${((list[position][roundText.text.toString().dropLast(6)
+                                .toInt() - 1].substringBefore('.')
+                                .toInt()) + 1)}.${list[position][roundText.text.toString()
+                                .dropLast(6).toInt() - 1].substringAfter('.')}"
                         robberyRoundAdapter.notifyItemChanged(position)
                     }
                 }
@@ -230,7 +246,7 @@ class RobberyRound : AppCompatActivity() {
                         Toast.makeText(applicationContext, "Время вышло!", Toast.LENGTH_SHORT)
                             .show()
                         count += 1
-                        flagForLastWord=true
+                        flagForLastWord = true
                     }
 
                     elapsedMillis = SystemClock.elapsedRealtime() - chronometer.base
@@ -267,8 +283,7 @@ class RobberyRound : AppCompatActivity() {
         cross.setOnClickListener {
             cross.isClickable = false
             if (flagForFirstTap) {
-                if (flagForLastWord)
-                {
+                if (flagForLastWord) {
                     if (count == teamNums) {
                         count = 0
                         newRound =
@@ -289,6 +304,9 @@ class RobberyRound : AppCompatActivity() {
                         val intent = Intent(this, WinPage::class.java)
                         intent.putExtra("WinTeamName", teamsExtra[winnersIndex])
                         intent.putExtra("WinTeamScore", max)
+                        intent.putExtra("teams", teamsExtra)
+                        for (i in teamsExtra.indices)
+                            intent.putExtra("list$i", list[i].toTypedArray())
                         startActivity(intent)
                         max = 0
                         finish()
@@ -303,6 +321,8 @@ class RobberyRound : AppCompatActivity() {
                         intent.putExtra("counter", count)
                         intent.putExtra("teamsScores", teamsScores)
                         intent.putExtra("book", wordList)
+                        for (i in teamsExtra.indices)
+                            intent.putExtra("list$i", list[i].toTypedArray())
                         startActivity(intent)
                         overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
                         finish()
