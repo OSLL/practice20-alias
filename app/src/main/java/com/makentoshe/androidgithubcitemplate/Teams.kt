@@ -21,14 +21,14 @@ class Teams : AppCompatActivity() {
     lateinit var closeAddTeamDialog: Button
     lateinit var tnld: TextInputLayout
     lateinit var tnet: EditText
+    var existingTeams: MutableList<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teams)
 
         addTeamDialog = Dialog(this)
-
-        teams =this.intent.getStringArrayExtra("teams").toMutableList()
+        teams = this.intent.getStringArrayExtra("teams").toMutableList()
         currentPosition = teams.size
         createRecyclerView()
 
@@ -36,8 +36,8 @@ class Teams : AppCompatActivity() {
             val intent = Intent(this, GameSettings::class.java)
             teams = teamsAdapter.getter().toMutableList()
             intent.putExtra("teams", teams.toTypedArray())
-            intent.putExtra("settingsText",this.intent.getIntArrayExtra("settingsText"))
-            intent.putExtra("settingsInfo",this.intent.getBooleanArrayExtra("settingsInfo" ))
+            intent.putExtra("settingsText", this.intent.getIntArrayExtra("settingsText"))
+            intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
 
@@ -107,6 +107,7 @@ class Teams : AppCompatActivity() {
                     addTeamDialog.cancel()
                     teams[position] = tnld.editText?.text.toString()
                     teamsAdapter.notifyItemChanged(position)
+                    existingTeams.add(tnld.editText?.text.toString())
                 }
                 tnet.addTextChangedListener(object : TextWatcher {
 
@@ -115,9 +116,20 @@ class Teams : AppCompatActivity() {
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                         if (tnld.editText?.text.toString()
                                 .isEmpty() || tnld.editText?.text.toString()
-                                .isBlank() || tnld.editText?.text.toString().length > 20
+                                .isBlank()
                         ) {
-                            tnld.error = "Ошибка"
+                            tnld.error = "Название не должно быть пустым"
+                            closeAddTeamDialog.isClickable = false
+                            closeAddTeamDialog.background =
+                                resources.getDrawable(R.drawable.add_team_no_active)
+                        } else {
+                            closeAddTeamDialog.isClickable = true
+                            closeAddTeamDialog.background =
+                                resources.getDrawable(R.drawable.new_round_button)
+                        }
+                        if (tnld.editText?.text.toString().length > 20
+                        ) {
+                            tnld.error = "Название не должно быть длиннее 20 символов"
                             closeAddTeamDialog.isClickable = false
                             closeAddTeamDialog.background =
                                 resources.getDrawable(R.drawable.add_team_no_active)
@@ -132,9 +144,33 @@ class Teams : AppCompatActivity() {
 
                         if (tnld.editText?.text.toString()
                                 .isEmpty() || tnld.editText?.text.toString()
-                                .isBlank() || tnld.editText?.text.toString().length > 20
+                                .isBlank()
                         ) {
-                            tnld.error = "Ошибка"
+                            tnld.error = "Название не должно быть пустым"
+                            closeAddTeamDialog.isClickable = false
+                            closeAddTeamDialog.background =
+                                resources.getDrawable(R.drawable.add_team_no_active)
+                        } else {
+                            closeAddTeamDialog.isClickable = true
+                            closeAddTeamDialog.background =
+                                resources.getDrawable(R.drawable.new_round_button)
+                            tnld.isErrorEnabled = false
+                            tnld.isErrorEnabled = true
+                        }
+                        if (tnld.editText?.text.toString().length > 20) {
+                            tnld.error = "Название не должно быть длиннее 20 символов"
+                            closeAddTeamDialog.isClickable = false
+                            closeAddTeamDialog.background =
+                                resources.getDrawable(R.drawable.add_team_no_active)
+                        } else {
+                            closeAddTeamDialog.isClickable = true
+                            closeAddTeamDialog.background =
+                                resources.getDrawable(R.drawable.new_round_button)
+                            tnld.isErrorEnabled = false
+                            tnld.isErrorEnabled = true
+                        }
+                        if (existingTeams.contains(tnld.editText?.text.toString())) {
+                            tnld.error = "Названия команд должны отличаться"
                             closeAddTeamDialog.isClickable = false
                             closeAddTeamDialog.background =
                                 resources.getDrawable(R.drawable.add_team_no_active)
@@ -172,15 +208,25 @@ class Teams : AppCompatActivity() {
         }
 
         if (tnld.editText?.text.toString().isEmpty() || tnld.editText?.text.toString()
-                .isBlank() || tnld.editText?.text.toString().length > 25
+                .isBlank()
         ) {
-            tnld.error = "Ошибка"
+            tnld.error = "Название не должно быть пустым"
             closeAddTeamDialog.isClickable = false
             closeAddTeamDialog.background = resources.getDrawable(R.drawable.add_team_no_active)
         } else {
             closeAddTeamDialog.isClickable = true
             closeAddTeamDialog.background = resources.getDrawable(R.drawable.new_round_button)
         }
+//        if (tnld.editText?.text.toString().isEmpty() || tnld.editText?.text.toString()
+//                .isBlank() || tnld.editText?.text.toString().length > 20
+//        ) {
+//            tnld.error = "Название не должно быть длиннее 20 символов"                           ??????????????????????????????????????
+//            closeAddTeamDialog.isClickable = false                                               ??????????????????????????????????????
+//            closeAddTeamDialog.background = resources.getDrawable(R.drawable.add_team_no_active) ??????????????????????????????????????
+//        } else {
+//            closeAddTeamDialog.isClickable = true
+//            closeAddTeamDialog.background = resources.getDrawable(R.drawable.new_round_button)
+//        }
 
         tnet.addTextChangedListener(object : TextWatcher {
 
@@ -188,9 +234,20 @@ class Teams : AppCompatActivity() {
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (tnld.editText?.text.toString().isEmpty() || tnld.editText?.text.toString()
-                        .isBlank() || tnld.editText?.text.toString().length > 20
+                        .isBlank()
                 ) {
-                    tnld.error = "Ошибка"
+                    tnld.error = "Название не должно быть пустым"
+                    closeAddTeamDialog.isClickable = false
+                    closeAddTeamDialog.background =
+                        resources.getDrawable(R.drawable.add_team_no_active)
+                } else {
+                    closeAddTeamDialog.isClickable = true
+                    closeAddTeamDialog.background =
+                        resources.getDrawable(R.drawable.new_round_button)
+                }
+                if (tnld.editText?.text.toString().length > 20)
+                {
+                    tnld.error = "Название не должно быть длиннее 20 символов"
                     closeAddTeamDialog.isClickable = false
                     closeAddTeamDialog.background =
                         resources.getDrawable(R.drawable.add_team_no_active)
@@ -204,9 +261,34 @@ class Teams : AppCompatActivity() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
                 if (tnld.editText?.text.toString().isEmpty() || tnld.editText?.text.toString()
-                        .isBlank() || tnld.editText?.text.toString().length > 20
+                        .isBlank()
                 ) {
-                    tnld.error = "Ошибка"
+                    tnld.error = "Название не должно быть пустым"
+                    closeAddTeamDialog.isClickable = false
+                    closeAddTeamDialog.background =
+                        resources.getDrawable(R.drawable.add_team_no_active)
+                } else {
+                    closeAddTeamDialog.isClickable = true
+                    closeAddTeamDialog.background =
+                        resources.getDrawable(R.drawable.new_round_button)
+                    tnld.isErrorEnabled = false
+                    tnld.isErrorEnabled = true
+                }
+                if (tnld.editText?.text.toString().length > 20)
+                {
+                    tnld.error = "Название не должно быть длиннее 20 символов"
+                    closeAddTeamDialog.isClickable = false
+                    closeAddTeamDialog.background =
+                        resources.getDrawable(R.drawable.add_team_no_active)
+                } else {
+                    closeAddTeamDialog.isClickable = true
+                    closeAddTeamDialog.background =
+                        resources.getDrawable(R.drawable.new_round_button)
+                    tnld.isErrorEnabled = false
+                    tnld.isErrorEnabled = true
+                }
+                if (existingTeams.contains(tnld.editText?.text.toString())) {
+                    tnld.error = "Названия команд должны отличаться"
                     closeAddTeamDialog.isClickable = false
                     closeAddTeamDialog.background =
                         resources.getDrawable(R.drawable.add_team_no_active)
