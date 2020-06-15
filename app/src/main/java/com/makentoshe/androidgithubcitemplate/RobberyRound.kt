@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_robbery_round.*
+import kotlinx.android.synthetic.main.activity_robbery_round.pauseButton
+import kotlinx.android.synthetic.main.activity_round.*
 import kotlinx.android.synthetic.main.activity_round.backButton
 import kotlinx.android.synthetic.main.activity_round.chronometer
 import kotlinx.android.synthetic.main.activity_round.cross
@@ -63,6 +65,7 @@ class RobberyRound : AppCompatActivity() {
         val teamsNums = Array<Int>(teamNums) { it + 1 }
         var count = this.intent.getIntExtra("counter", 0)
         var max = -100000
+        var isPlaying = false
 
         timerCounter.text = settingsText[1].toString()
         chronometer.base = (timerCounter.text.toString().toInt() * 1000).toLong()
@@ -118,6 +121,8 @@ class RobberyRound : AppCompatActivity() {
                                 intent.putExtra("teams", teamsExtra)
                                 for (i in teamsExtra.indices)
                                     intent.putExtra("list$i", list[i].toTypedArray())
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                                 startActivity(intent)
                                 max = 0
                                 finish()
@@ -218,10 +223,24 @@ class RobberyRound : AppCompatActivity() {
             }
         }
 
+
+        pauseButton.setOnClickListener {
+            if (isPlaying) {
+                pauseButton.background = resources.getDrawable(R.drawable.medium_level_button)
+                chronometer.stop()
+                isPlaying = false
+            } else {
+                pauseButton.background = resources.getDrawable(R.drawable.hard_level_button)
+                chronometer.start()
+                isPlaying = true
+            }
+        }
+
         word.setOnClickListener {
             flagForFirstTap = true
             chronometer.start()
             word.isClickable = false
+            isPlaying = true
             if (settingsInfo[2]) {
                 var fileTaskRobbery: InputStream = assets.open("Tasks.txt")
                 var bufferedReaderTask = BufferedReader(InputStreamReader(fileTaskRobbery))
@@ -307,6 +326,8 @@ class RobberyRound : AppCompatActivity() {
                         intent.putExtra("teams", teamsExtra)
                         for (i in teamsExtra.indices)
                             intent.putExtra("list$i", list[i].toTypedArray())
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         startActivity(intent)
                         max = 0
                         finish()

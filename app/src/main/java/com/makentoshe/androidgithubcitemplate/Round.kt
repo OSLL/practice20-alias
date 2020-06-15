@@ -44,6 +44,7 @@ class Round : AppCompatActivity() {
         var teamsExtra = this.intent.getStringArrayExtra("teams")
         var wordList = this.intent.getIntExtra("book", -1)
         var teamsScores: IntArray = this.intent.getIntArrayExtra("teamsScores")!!
+        var isPlaying = false
         var winnersIndex: Int = -1
 
         list = Array(teamsExtra.size) { MutableList(0) { "0.0" } }
@@ -75,7 +76,10 @@ class Round : AppCompatActivity() {
 
                 var bufferedReader = BufferedReader(InputStreamReader(file))
 
-                while (bufferedReader.readLine() != null) wordsNumber++
+                while (bufferedReader.readLine() != null) {
+                    wordsNumber++
+                    Log.e("Sas", wordsNumber.toString())
+                }
                 file.close()
             }
             1 -> {
@@ -83,7 +87,10 @@ class Round : AppCompatActivity() {
 
                 var bufferedReader = BufferedReader(InputStreamReader(file))
 
-                while (bufferedReader.readLine() != null) wordsNumber++
+                while (bufferedReader.readLine() != null) {
+                    wordsNumber++
+                    Log.e("Sas", wordsNumber.toString())
+                }
                 file.close()
             }
             2 -> {
@@ -91,28 +98,38 @@ class Round : AppCompatActivity() {
 
                 var bufferedReader = BufferedReader(InputStreamReader(file))
 
-                while (bufferedReader.readLine() != null) wordsNumber++
+                while (bufferedReader.readLine() != null) {
+                    wordsNumber++
+                    Log.e("Sas", wordsNumber.toString())
+                }
                 file.close()
             }
         }
 
         var max = -100000
 
+        pauseButton.setOnClickListener {
+            if (isPlaying) {
+                pauseButton.background = resources.getDrawable(R.drawable.medium_level_button)
+                check.isClickable = false
+                cross.isClickable = false
+                word.text = "Пауза"
+                chronometer.stop()
+                isPlaying = false
+            } else {
+                pauseButton.background = resources.getDrawable(R.drawable.hard_level_button)
+                check.isClickable = true
+                cross.isClickable = true
+                word.text = currentWord
+                chronometer.start()
+                isPlaying = true
+            }
+        }
+
         word.setOnClickListener {
             flagForFirstTap = true
             chronometer.start()
-            var isPlaying = true
-           /* pauseButton.setOnClickListener{
-                if(isPlaying){
-                    //background -> playButton
-                    chronometer.stop()
-                    isPlaying = false
-                }else{
-                    //background -> pauseButton
-                    chronometer.start()
-                    isPlaying = true
-                }
-            }*/
+            isPlaying = true
             word.isClickable = false
             if (settingsInfo[2]) {
                 var fileTask: InputStream = assets.open("Tasks.txt")
@@ -145,7 +162,8 @@ class Round : AppCompatActivity() {
                             if (count == teamNums) {
                                 count = 0
                                 newRound =
-                                    (newRound.substringBefore(" ").toInt() + 1).toString() + " раунд"
+                                    (newRound.substringBefore(" ")
+                                        .toInt() + 1).toString() + " раунд"
                             }
                             var newTeam: String = teamsNums[count].toString() + " команда"
                             val intent = Intent(this, LastWord::class.java)
@@ -221,11 +239,11 @@ class Round : AppCompatActivity() {
 
                         }
 
-                            if (count == 0) {
-                                teamsScores[teamNums]++
-                            } else {
-                                teamsScores[count - 1]++
-                            }
+                        if (count == 0) {
+                            teamsScores[teamNums]++
+                        } else {
+                            teamsScores[count - 1]++
+                        }
 
 
 
@@ -234,6 +252,8 @@ class Round : AppCompatActivity() {
                             intent.putExtra("WinTeamName", teamsExtra[winnersIndex])
                             intent.putExtra("teams", teamsExtra)
                             intent.putExtra("WinTeamScore", max)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             for (i in teamsExtra.indices)
                                 intent.putExtra("list$i", list[i].toTypedArray())
                             startActivity(intent)
@@ -297,8 +317,7 @@ class Round : AppCompatActivity() {
         cross.setOnClickListener {
             cross.isClickable = false
             if (flagForFirstTap) {
-                if (flagForLastWord)
-                {
+                if (flagForLastWord) {
                     if (count == teamNums) {
                         count = 0
                         newRound =
@@ -316,11 +335,10 @@ class Round : AppCompatActivity() {
                     }
 
                     if (settingsInfo[0]) {
-                        if (count==0)
-                        {
+                        if (count == 0) {
                             teamsScores[teamNums]--
                         } else {
-                            teamsScores[count-1]--
+                            teamsScores[count - 1]--
                         }
                     }
 
@@ -329,6 +347,8 @@ class Round : AppCompatActivity() {
                         intent.putExtra("WinTeamName", teamsExtra[winnersIndex])
                         intent.putExtra("teams", teamsExtra)
                         intent.putExtra("WinTeamScore", max)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         for (i in teamsExtra.indices)
                             intent.putExtra("list$i", list[i].toTypedArray())
                         startActivity(intent)
@@ -385,7 +405,7 @@ class Round : AppCompatActivity() {
                 "${((list[count][roundText.text.toString().dropLast(6)
                     .toInt() - 1].substringBefore('.')
                     .toInt()))}.${list[count][roundText.text.toString()
-                    .dropLast(6).toInt() - 1].substringAfter('.').toInt()+1}"
+                    .dropLast(6).toInt() - 1].substringAfter('.').toInt() + 1}"
         }
     }
 

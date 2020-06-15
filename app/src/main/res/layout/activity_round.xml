@@ -214,4 +214,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardImage" />
 
+    <Button
+        android:id="@+id/pauseButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/hard_level_button"
+        app:layout_constraintBottom_toBottomOf="@+id/roundText"
+        app:layout_constraintEnd_toStartOf="@+id/timerImage"
+        app:layout_constraintStart_toEndOf="@+id/roundText"
+        app:layout_constraintTop_toTopOf="@+id/roundText" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
