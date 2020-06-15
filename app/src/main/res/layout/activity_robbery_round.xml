@@ -121,7 +121,8 @@
         android:id="@+id/robberyRoundRecycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/cardImage"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/lastWordRobbery"
         app:layout_constraintTop_toBottomOf="@+id/timerImage"
         tools:layout_editor_absoluteX="1dp" />
 
@@ -146,5 +147,16 @@
         app:layout_constraintEnd_toStartOf="@+id/timerImage"
         app:layout_constraintStart_toEndOf="@+id/roundText"
         app:layout_constraintTop_toTopOf="@+id/roundText" />
+
+    <TextView
+        android:id="@+id/lastWordRobbery"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Последнее слово"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/cardImage"
+        app:layout_constraintEnd_toEndOf="@+id/cardImage"
+        app:layout_constraintStart_toStartOf="@+id/cardImage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

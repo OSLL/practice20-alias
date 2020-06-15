@@ -45,10 +45,13 @@ class RobberyRound : AppCompatActivity() {
     lateinit var teamsScores: IntArray
     var wordList: Int = -1
 
+    var flagForPause: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_robbery_round)
+
+        lastWord.visibility= View.INVISIBLE
 
         teamsExtra = this.intent.getStringArrayExtra("teams")!!
         teamsScores = this.intent.getIntArrayExtra("teamsScores")!!
@@ -225,19 +228,50 @@ class RobberyRound : AppCompatActivity() {
 
 
         pauseButton.setOnClickListener {
-            if (isPlaying) {
-                pauseButton.background = resources.getDrawable(R.drawable.medium_level_button)
-                chronometer.stop()
-                isPlaying = false
-            } else {
-                pauseButton.background = resources.getDrawable(R.drawable.hard_level_button)
-                chronometer.start()
-                isPlaying = true
-            }
+            if (flagForPause){
+                if (isPlaying) {
+                    pauseButton.background = resources.getDrawable(R.drawable.medium_level_button)
+                    check.isClickable = false
+                    cross.isClickable = false
+                    word.text = "Пауза"
+                    chronometer.stop()
+                    isPlaying = false
+                } else {
+                    pauseButton.background = resources.getDrawable(R.drawable.hard_level_button)
+                    check.isClickable = true
+                    cross.isClickable = true
+                    when (wordList) {
+                        0 -> {
+                            var file: InputStream = assets.open("Easy.txt")
+
+                            var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                            word.text = newWord(file, bufferedReader)
+                        }
+                        1 -> {
+                            var file: InputStream = assets.open("Middle.txt")
+
+                            var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                            word.text = newWord(file, bufferedReader)
+                        }
+                        2 -> {
+                            var file: InputStream = assets.open("Hard.txt")
+
+                            var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                            word.text = newWord(file, bufferedReader)
+                        }
+                    }
+                    chronometer.start()
+                    isPlaying = true
+                }
+        }
         }
 
         word.setOnClickListener {
             flagForFirstTap = true
+            flagForPause=true
             chronometer.start()
             word.isClickable = false
             isPlaying = true
@@ -259,13 +293,14 @@ class RobberyRound : AppCompatActivity() {
             chronometer.setOnChronometerTickListener {
                 var elapsedMillis: Long = SystemClock.elapsedRealtime() - chronometer.base
                 if (elapsedMillis > 1000) {
-                    timerCounter.setText((timerCounter.text.toString().toInt() - 1).toString())
-                    if (timerCounter.text.toString().toInt() == 0) {
+                    timerCounter.text = (timerCounter.text.toString().toInt() - 1).toString()
+                    if (timerCounter.text.toString().toInt() <= 0) {
                         chronometer.stop()
                         Toast.makeText(applicationContext, "Время вышло!", Toast.LENGTH_SHORT)
                             .show()
                         count += 1
                         flagForLastWord = true
+                        lastWord.visibility= View.VISIBLE
                     }
 
                     elapsedMillis = SystemClock.elapsedRealtime() - chronometer.base

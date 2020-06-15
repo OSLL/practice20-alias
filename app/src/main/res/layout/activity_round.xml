@@ -224,4 +224,16 @@
         app:layout_constraintStart_toEndOf="@+id/roundText"
         app:layout_constraintTop_toTopOf="@+id/roundText" />
 
+    <TextView
+        android:id="@+id/lastWord"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Последнее слово"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/cardImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pauseButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

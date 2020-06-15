@@ -30,12 +30,13 @@ class Round : AppCompatActivity() {
 
     var flagForLastWord: Boolean = false
 
-    var flagForLastWordCheckCross: Boolean = false
+    var flagForPause: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_round)
 
+        lastWord.visibility= View.INVISIBLE
 
         var settingsText: IntArray = this.intent.getIntArrayExtra("settingsText")!!
         var settingsInfo: BooleanArray = this.intent.getBooleanArrayExtra("settingsInfo")!!
@@ -109,25 +110,50 @@ class Round : AppCompatActivity() {
         var max = -100000
 
         pauseButton.setOnClickListener {
-            if (isPlaying) {
-                pauseButton.background = resources.getDrawable(R.drawable.medium_level_button)
-                check.isClickable = false
-                cross.isClickable = false
-                word.text = "Пауза"
-                chronometer.stop()
-                isPlaying = false
-            } else {
-                pauseButton.background = resources.getDrawable(R.drawable.hard_level_button)
-                check.isClickable = true
-                cross.isClickable = true
-                word.text = currentWord
-                chronometer.start()
-                isPlaying = true
+            if (flagForPause) {
+                if (isPlaying) {
+                    pauseButton.background = resources.getDrawable(R.drawable.medium_level_button)
+                    check.isClickable = false
+                    cross.isClickable = false
+                    word.text = "Пауза"
+                    chronometer.stop()
+                    isPlaying = false
+                } else {
+                    pauseButton.background = resources.getDrawable(R.drawable.hard_level_button)
+                    check.isClickable = true
+                    cross.isClickable = true
+                    when (wordList) {
+                        0 -> {
+                            var file: InputStream = assets.open("Easy.txt")
+
+                            var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                            word.text = newWord(file, bufferedReader)
+                        }
+                        1 -> {
+                            var file: InputStream = assets.open("Middle.txt")
+
+                            var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                            word.text = newWord(file, bufferedReader)
+                        }
+                        2 -> {
+                            var file: InputStream = assets.open("Hard.txt")
+
+                            var bufferedReader = BufferedReader(InputStreamReader(file))
+
+                            word.text = newWord(file, bufferedReader)
+                        }
+                    }
+                    chronometer.start()
+                    isPlaying = true
+                }
             }
         }
 
         word.setOnClickListener {
             flagForFirstTap = true
+            flagForPause=true
             chronometer.start()
             isPlaying = true
             word.isClickable = false
@@ -151,7 +177,7 @@ class Round : AppCompatActivity() {
                 var elapsedMillis: Long = SystemClock.elapsedRealtime() - chronometer.base
                 if (elapsedMillis > 1000) {
                     timerCounter.text = (timerCounter.text.toString().toInt() - 1).toString()
-                    if (timerCounter.text.toString().toInt() == 0) {
+                    if (timerCounter.text.toString().toInt() <= 0) {
                         chronometer.stop()
                         Toast.makeText(applicationContext, "Время вышло!", Toast.LENGTH_SHORT)
                             .show()
@@ -185,6 +211,7 @@ class Round : AppCompatActivity() {
                             overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
                             finish()
                         }
+                        lastWord.visibility= View.VISIBLE
 
                     }
 
@@ -194,6 +221,14 @@ class Round : AppCompatActivity() {
                     elapsedMillis = SystemClock.elapsedRealtime() - chronometer.base
                 }
             }
+
+            var file: InputStream = assets.open("Easy.txt")
+
+            var bufferedReader = BufferedReader(InputStreamReader(file))
+
+            word.text = newWord(file, bufferedReader)
+
+            /*
             when (wordList) {
                 0 -> {
                     var file: InputStream = assets.open("Easy.txt")
@@ -216,7 +251,7 @@ class Round : AppCompatActivity() {
 
                     word.text = newWord(file, bufferedReader)
                 }
-            }
+            }*/
 
 
 
@@ -240,7 +275,7 @@ class Round : AppCompatActivity() {
                         }
 
                         if (count == 0) {
-                            teamsScores[teamNums]++
+                            teamsScores[teamNums-1]++
                         } else {
                             teamsScores[count - 1]++
                         }
@@ -336,7 +371,7 @@ class Round : AppCompatActivity() {
 
                     if (settingsInfo[0]) {
                         if (count == 0) {
-                            teamsScores[teamNums]--
+                            teamsScores[teamNums-1]--
                         } else {
                             teamsScores[count - 1]--
                         }
@@ -418,18 +453,16 @@ class Round : AppCompatActivity() {
 
         currentWordNumber = (0 until wordsNumber).random()
         while (words.contains(currentWordNumber)) {
-            if (currentWordNumber == 49) currentWordNumber = 0
+            if (currentWordNumber == wordsNumber-1) currentWordNumber = 0
             currentWordNumber++
         }
         words.add(currentWordNumber)
-        if (words.size == 50) {
+        if (words.size == wordsNumber) {
             words.removeAll(words)
-            Log.e("Error", "${words.size}")
+            Log.e("Error", "${wordsNumber}")
         }
-        for (i in 0 until currentWordNumber) bufferedReader.readLine()
+        for (i in 1 until currentWordNumber) bufferedReader.readLine()
         currentWord = bufferedReader.readLine()
-
-        file.close()
         return currentWord
     }
 }
