@@ -18,8 +18,10 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
 
         val appPrefs: SharedPreferences = getSharedPreferences("AppNightMode", 0)
         var isNightModeOn = appPrefs.getBoolean("NightMode", false)
+    //    var Lol = appPrefs.getStringSet("Test",arrayOf("a","a").toMutableSet())!!.toTypedArray()
         var prefsEditor: SharedPreferences.Editor = appPrefs.edit()
 
+      //  Log.e("Test","${Lol[0]}")
 
         if (isNightModeOn)
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)

@@ -45,7 +45,7 @@ class Teams : AppCompatActivity() {
             if (isNightModeOn) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 prefsEditor.putBoolean("NightMode", isNightModeOn)
-//                prefsEditor.putStringSet("wlehgda", arrayOf("1", "2").toMutableSet().toTypedArray().toMutableSet())
+            //    prefsEditor.putStringSet("Test", arrayOf("1", "2").toMutableSet())
                 prefsEditor.apply()
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
