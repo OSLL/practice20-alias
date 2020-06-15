@@ -2,6 +2,7 @@ package com.makentoshe.androidgithubcitemplate
 
 import android.app.Dialog
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +10,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.activity_teams.*
@@ -27,6 +29,29 @@ class Teams : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teams)
+
+        val appPrefs: SharedPreferences = getSharedPreferences("AppNightMode", 0)
+        var isNightModeOn = appPrefs.getBoolean("NightMode", false)
+        var prefsEditor: SharedPreferences.Editor = appPrefs.edit()
+
+
+        if (isNightModeOn)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        else
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+        settings.setOnClickListener {
+            isNightModeOn = !isNightModeOn
+            if (isNightModeOn) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                prefsEditor.putBoolean("NightMode", isNightModeOn)
+                prefsEditor.apply()
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                prefsEditor.putBoolean("NightMode", isNightModeOn)
+                prefsEditor.apply()
+            }
+        }
 
         addTeamDialog = Dialog(this)
 
@@ -124,7 +149,8 @@ class Teams : AppCompatActivity() {
                     override fun afterTextChanged(p0: Editable?) {}
 
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                        if (tnld.editText?.text.toString().isEmpty() || tnld.editText?.text.toString()
+                        if (tnld.editText?.text.toString()
+                                .isEmpty() || tnld.editText?.text.toString()
                                 .isBlank()
                         ) {
                             tnld.error = "Название не может быть пустым"
@@ -140,17 +166,15 @@ class Teams : AppCompatActivity() {
                                 }
                                 while (tnld.editText?.text.toString()[counterStart] == ' ') counterStart++
 
-                                if (counterEnd >= 1 || counterStart >=1) {
-                                   if (counterEnd >= 5 || counterStart >=2) {
+                                if (counterEnd >= 1 || counterStart >= 1) {
+                                    if (counterEnd >= 5 || counterStart >= 2) {
                                         tnld.error =
                                             "Молодец, ты нашёл пасхалку,a теперь убери пробелы"
                                         closeAddTeamDialog.isClickable = false
                                         closeAddTeamDialog.background =
                                             resources.getDrawable(R.drawable.add_team_no_active)
-                                    }
-                                    else
-                                    {
-                                        tnld.error ="Уберите свои пробелы"
+                                    } else {
+                                        tnld.error = "Уберите свои пробелы"
                                         closeAddTeamDialog.isClickable = false
                                         closeAddTeamDialog.background =
                                             resources.getDrawable(R.drawable.add_team_no_active)
@@ -183,7 +207,8 @@ class Teams : AppCompatActivity() {
 
                     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-                        if (tnld.editText?.text.toString().isEmpty() || tnld.editText?.text.toString()
+                        if (tnld.editText?.text.toString()
+                                .isEmpty() || tnld.editText?.text.toString()
                                 .isBlank()
                         ) {
                             tnld.error = "Название не может быть пустым"
@@ -199,22 +224,20 @@ class Teams : AppCompatActivity() {
                                 }
                                 while (tnld.editText?.text.toString()[counterStart] == ' ') counterStart++
 
-                                if (counterEnd >= 1 || counterStart >=1) {
-                                     if (counterEnd >= 5 || counterStart >=2) {
-                                         tnld.error =
-                                             "Молодец, ты нашёл пасхалку,a теперь убери пробелы"
-                                         closeAddTeamDialog.isClickable = false
-                                         closeAddTeamDialog.background =
-                                             resources.getDrawable(R.drawable.add_team_no_active)
-                                     }
-                                     else
-                                     {
-                                         tnld.error ="Уберите свои пробелы"
-                                         closeAddTeamDialog.isClickable = false
-                                         closeAddTeamDialog.background =
-                                             resources.getDrawable(R.drawable.add_team_no_active)
+                                if (counterEnd >= 1 || counterStart >= 1) {
+                                    if (counterEnd >= 5 || counterStart >= 2) {
+                                        tnld.error =
+                                            "Молодец, ты нашёл пасхалку,a теперь убери пробелы"
+                                        closeAddTeamDialog.isClickable = false
+                                        closeAddTeamDialog.background =
+                                            resources.getDrawable(R.drawable.add_team_no_active)
+                                    } else {
+                                        tnld.error = "Уберите свои пробелы"
+                                        closeAddTeamDialog.isClickable = false
+                                        closeAddTeamDialog.background =
+                                            resources.getDrawable(R.drawable.add_team_no_active)
 
-                                     }
+                                    }
                                 } else {
                                     tnld.error = "Слишком длинное название"
                                     closeAddTeamDialog.isClickable = false
@@ -281,22 +304,20 @@ class Teams : AppCompatActivity() {
                 }
                 while (tnld.editText?.text.toString()[counterStart] == ' ') counterStart++
 
-                if (counterEnd >= 1 || counterStart >=1) {
-                     if (counterEnd >= 5 || counterStart >=2) {
-                         tnld.error =
-                             "Молодец, ты нашёл пасхалку,a теперь убери пробелы"
-                         closeAddTeamDialog.isClickable = false
-                         closeAddTeamDialog.background =
-                             resources.getDrawable(R.drawable.add_team_no_active)
-                     }
-                     else
-                     {
-                         tnld.error ="Уберите свои пробелы"
-                         closeAddTeamDialog.isClickable = false
-                         closeAddTeamDialog.background =
-                             resources.getDrawable(R.drawable.add_team_no_active)
+                if (counterEnd >= 1 || counterStart >= 1) {
+                    if (counterEnd >= 5 || counterStart >= 2) {
+                        tnld.error =
+                            "Молодец, ты нашёл пасхалку,a теперь убери пробелы"
+                        closeAddTeamDialog.isClickable = false
+                        closeAddTeamDialog.background =
+                            resources.getDrawable(R.drawable.add_team_no_active)
+                    } else {
+                        tnld.error = "Уберите свои пробелы"
+                        closeAddTeamDialog.isClickable = false
+                        closeAddTeamDialog.background =
+                            resources.getDrawable(R.drawable.add_team_no_active)
 
-                     }
+                    }
                 } else {
                     tnld.error = "Слишком длинное название"
                     closeAddTeamDialog.isClickable = false
@@ -342,22 +363,20 @@ class Teams : AppCompatActivity() {
                         }
                         while (tnld.editText?.text.toString()[counterStart] == ' ') counterStart++
 
-                        if (counterEnd >= 1 || counterStart >=1) {
-                             if (counterEnd >= 5 || counterStart >=2) {
-                                 tnld.error =
-                                     "Молодец, ты нашёл пасхалку,a теперь убери пробелы"
-                                 closeAddTeamDialog.isClickable = false
-                                 closeAddTeamDialog.background =
-                                     resources.getDrawable(R.drawable.add_team_no_active)
-                             }
-                             else
-                             {
-                                 tnld.error ="Уберите свои пробелы"
-                                 closeAddTeamDialog.isClickable = false
-                                 closeAddTeamDialog.background =
-                                     resources.getDrawable(R.drawable.add_team_no_active)
+                        if (counterEnd >= 1 || counterStart >= 1) {
+                            if (counterEnd >= 5 || counterStart >= 2) {
+                                tnld.error =
+                                    "Молодец, ты нашёл пасхалку,a теперь убери пробелы"
+                                closeAddTeamDialog.isClickable = false
+                                closeAddTeamDialog.background =
+                                    resources.getDrawable(R.drawable.add_team_no_active)
+                            } else {
+                                tnld.error = "Уберите свои пробелы"
+                                closeAddTeamDialog.isClickable = false
+                                closeAddTeamDialog.background =
+                                    resources.getDrawable(R.drawable.add_team_no_active)
 
-                             }
+                            }
                         } else {
                             tnld.error = "Слишком длинное название"
                             closeAddTeamDialog.isClickable = false
@@ -401,22 +420,20 @@ class Teams : AppCompatActivity() {
                         }
                         while (tnld.editText?.text.toString()[counterStart] == ' ') counterStart++
 
-                        if (counterEnd >= 1 || counterStart >=1) {
-                             if (counterEnd >= 5 || counterStart >=2) {
-                                 tnld.error =
-                                     "Молодец, ты нашёл пасхалку,a теперь убери пробелы"
-                                 closeAddTeamDialog.isClickable = false
-                                 closeAddTeamDialog.background =
-                                     resources.getDrawable(R.drawable.add_team_no_active)
-                             }
-                             else
-                             {
-                                 tnld.error ="Уберите свои пробелы"
-                                 closeAddTeamDialog.isClickable = false
-                                 closeAddTeamDialog.background =
-                                     resources.getDrawable(R.drawable.add_team_no_active)
+                        if (counterEnd >= 1 || counterStart >= 1) {
+                            if (counterEnd >= 5 || counterStart >= 2) {
+                                tnld.error =
+                                    "Молодец, ты нашёл пасхалку,a теперь убери пробелы"
+                                closeAddTeamDialog.isClickable = false
+                                closeAddTeamDialog.background =
+                                    resources.getDrawable(R.drawable.add_team_no_active)
+                            } else {
+                                tnld.error = "Уберите свои пробелы"
+                                closeAddTeamDialog.isClickable = false
+                                closeAddTeamDialog.background =
+                                    resources.getDrawable(R.drawable.add_team_no_active)
 
-                             }
+                            }
                         } else {
                             tnld.error = "Слишком длинное название"
                             closeAddTeamDialog.isClickable = false

@@ -1,12 +1,14 @@
 package com.makentoshe.androidgithubcitemplate
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_robbery_round.*
 import kotlinx.android.synthetic.main.activity_robbery_round.pauseButton
@@ -18,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_round.roundText
 import kotlinx.android.synthetic.main.activity_round.roundTitle
 import kotlinx.android.synthetic.main.activity_round.timerCounter
 import kotlinx.android.synthetic.main.activity_round.word
+import kotlinx.android.synthetic.main.activity_teams.*
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -50,6 +53,29 @@ class RobberyRound : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_robbery_round)
+
+        val appPrefs: SharedPreferences = getSharedPreferences("AppNightMode", 0)
+        var isNightModeOn = appPrefs.getBoolean("NightMode", false)
+        var prefsEditor: SharedPreferences.Editor = appPrefs.edit()
+
+
+        if (isNightModeOn)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        else
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+        settings.setOnClickListener {
+            isNightModeOn = !isNightModeOn
+            if (isNightModeOn) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                prefsEditor.putBoolean("NightMode", isNightModeOn)
+                prefsEditor.apply()
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                prefsEditor.putBoolean("NightMode", isNightModeOn)
+                prefsEditor.apply()
+            }
+        }
 
         lastWord.visibility= View.INVISIBLE
 

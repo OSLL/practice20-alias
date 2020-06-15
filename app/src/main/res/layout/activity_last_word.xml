@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Round">
+    tools:context=".Round"
+    android:background="@color/background">
 
     <Button
         android:id="@+id/backButton"
@@ -87,7 +88,7 @@
         android:clickable="true"
         android:gravity="center"
         android:text="Позвони мне, позвони"
-        android:textColor="@color/white"
+        android:textColor="@android:color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/cardImage"
         app:layout_constraintEnd_toEndOf="@+id/cardImage"

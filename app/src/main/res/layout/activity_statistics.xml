@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Statistics">
+    tools:context=".Statistics"
+    android:background="@color/background">
 
     <Button
         android:id="@+id/backButton"
@@ -47,7 +48,7 @@
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
         android:text="На главную страницу"
-        android:textColor="@color/white"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

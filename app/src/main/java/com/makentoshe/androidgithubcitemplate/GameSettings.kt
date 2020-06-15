@@ -1,9 +1,11 @@
 package com.makentoshe.androidgithubcitemplate
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import kotlinx.android.synthetic.main.activity_game_settings.*
 
 class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
@@ -14,7 +16,28 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_settings)
 
+        val appPrefs: SharedPreferences = getSharedPreferences("AppNightMode", 0)
+        var isNightModeOn = appPrefs.getBoolean("NightMode", false)
+        var prefsEditor: SharedPreferences.Editor = appPrefs.edit()
 
+
+        if (isNightModeOn)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        else
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+        settings.setOnClickListener {
+            isNightModeOn = !isNightModeOn
+            if (isNightModeOn) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                prefsEditor.putBoolean("NightMode", isNightModeOn)
+                prefsEditor.apply()
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                prefsEditor.putBoolean("NightMode", isNightModeOn)
+                prefsEditor.apply()
+            }
+        }
 
         var teams = this.intent.getStringArrayExtra("teams")
         list = Array(teams.size) { MutableList(0) { "0.0" } }

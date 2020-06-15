@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Levels">
+    tools:context=".Levels"
+    android:background="@color/background">
 
     <Button
         android:id="@+id/backButton"
@@ -73,6 +74,7 @@
                 android:paddingStart="30dp"
                 android:text="Лёгкий"
                 android:textAllCaps="false"
+                android:textColor="@color/black"
                 android:textSize="40dp" />
 
         </LinearLayout>
@@ -101,6 +103,7 @@
                 android:paddingStart="30dp"
                 android:text="Средний"
                 android:textAllCaps="false"
+                android:textColor="@color/black"
                 android:textSize="40dp" />
 
         </LinearLayout>
@@ -129,6 +132,7 @@
                 android:paddingStart="30dp"
                 android:text="Сложный"
                 android:textAllCaps="false"
+                android:textColor="@color/black"
                 android:textSize="40dp" />
         </LinearLayout>
     </LinearLayout>
