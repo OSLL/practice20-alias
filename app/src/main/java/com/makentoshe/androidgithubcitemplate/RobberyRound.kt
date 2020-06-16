@@ -79,24 +79,31 @@ class RobberyRound : AppCompatActivity() {
 
         lastWord.visibility= View.INVISIBLE
 
-        teamsExtra = this.intent.getStringArrayExtra("teams")!!
+        val teamNums = appPrefs.getInt("teamsAmount", 0)
+
+        teamsExtra = Array(teamNums) {""}
+        for (i in teamsExtra.indices)
+            teamsExtra[i] = appPrefs.getString("team$i", "").toString()
         teamsScores = this.intent.getIntArrayExtra("teamsScores")!!
 
         Log.e("Lol", "${teamsExtra[1]} ${teamsScores[1]}")
         var winnersIndex: Int = -1
-        var teamNums: Int = this.intent.getIntExtra("teamsAmount", 2)
+
         var newRound: String = this.intent.getStringExtra("round")!!
         roundTitle.text = this.intent.getStringExtra("currentTeam")
         roundText.text = this.intent.getStringExtra("currentRound")
-        var settingsText: IntArray = this.intent.getIntArrayExtra("settingsText")!!
-        var settingsInfo: BooleanArray = this.intent.getBooleanArrayExtra("settingsInfo")!!
         wordList = this.intent.getIntExtra("book", -1)
         val teamsNums = Array<Int>(teamNums) { it + 1 }
         var count = this.intent.getIntExtra("counter", 0)
         var max = -100000
         var isPlaying = false
+        val fineChanger = appPrefs.getBoolean("fineChanger", false)
+        val generalLast = appPrefs.getBoolean("generalLast", false)
+        val tasks = appPrefs.getBoolean("tasks", false)
+        val roundLength = appPrefs.getString("roundLength", "10")
+        val wordsForWin = appPrefs.getString("wordsForWin", "10")
 
-        timerCounter.text = settingsText[1].toString()
+        timerCounter.text = roundLength
         chronometer.base = (timerCounter.text.toString().toInt() * 1000).toLong()
 
         list = Array(teamsExtra.size) { MutableList(0) { "0.0" } }
@@ -143,7 +150,7 @@ class RobberyRound : AppCompatActivity() {
 
 
 
-                            if (max >= settingsText[0]) {
+                            if (max >= wordsForWin.toString().toInt()) {
                                 val intent = Intent(this@RobberyRound, WinPage::class.java)
                                 intent.putExtra("WinTeamName", teamsExtra[winnersIndex])
                                 intent.putExtra("WinTeamScore", max)
@@ -160,8 +167,6 @@ class RobberyRound : AppCompatActivity() {
                                 val intent = Intent(this@RobberyRound, Game::class.java)
                                 intent.putExtra("newRound", newRound)
                                 intent.putExtra("newTeam", newTeam)
-                                intent.putExtra("settingsText", settingsText)
-                                intent.putExtra("settingsInfo", settingsInfo)
                                 intent.putExtra("teams", teamsExtra)
                                 intent.putExtra("counter", count)
                                 intent.putExtra("teamsScores", teamsScores)
@@ -219,7 +224,7 @@ class RobberyRound : AppCompatActivity() {
 
 
 
-        if (!settingsInfo[2])
+        if (!tasks)
             taskRobberyText.visibility = View.GONE
 
         backButton.setOnClickListener {
@@ -301,7 +306,7 @@ class RobberyRound : AppCompatActivity() {
             chronometer.start()
             word.isClickable = false
             isPlaying = true
-            if (settingsInfo[2]) {
+            if (tasks) {
                 var fileTaskRobbery: InputStream = assets.open("Tasks.txt")
                 var bufferedReaderTask = BufferedReader(InputStreamReader(fileTaskRobbery))
                 while (bufferedReaderTask.readLine() != null) tasksNumber++
@@ -380,7 +385,7 @@ class RobberyRound : AppCompatActivity() {
 
                     }
 
-                    if (max >= settingsText[0]) {
+                    if (max >= wordsForWin.toString().toInt()) {
                         val intent = Intent(this, WinPage::class.java)
                         intent.putExtra("WinTeamName", teamsExtra[winnersIndex])
                         intent.putExtra("WinTeamScore", max)
@@ -397,8 +402,6 @@ class RobberyRound : AppCompatActivity() {
                         val intent = Intent(this, Game::class.java)
                         intent.putExtra("newRound", newRound)
                         intent.putExtra("newTeam", newTeam)
-                        intent.putExtra("settingsText", settingsText)
-                        intent.putExtra("settingsInfo", settingsInfo)
                         intent.putExtra("teams", teamsExtra)
                         intent.putExtra("counter", count)
                         intent.putExtra("teamsScores", teamsScores)

@@ -41,6 +41,7 @@ class Game : AppCompatActivity() {
 
         val teamsAmount  = appPrefs.getInt("teamsAmount", 0)
         teams = Array(teamsAmount){"Название команды"}
+        list = Array(teamsAmount){ MutableList(0){"0.0"} }
         for (i in 0 until teamsAmount)
             list[i] = this.intent.getStringArrayExtra("list$i")!!.toMutableList()
 
@@ -56,10 +57,8 @@ class Game : AppCompatActivity() {
         var currentTeamText: String = this.intent.getStringExtra("newTeam")!!
         val currentRoundText: String = this.intent.getStringExtra("newRound")!!
         var counter = this.intent.getIntExtra("counter", -1)
-        var teamsScores = IntArray(teams.size){0}
+        var teamsScores = this.intent.getIntArrayExtra("teamsScores")
         var m: Array<Float>
-
-        list = Array(teams.size) { MutableList(0) { "0.0" } }
 
         currentTeamText = teams[counter]
         currentTeam.text = currentTeamText

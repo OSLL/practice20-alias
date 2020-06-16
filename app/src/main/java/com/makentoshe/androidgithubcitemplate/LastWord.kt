@@ -67,23 +67,23 @@ class LastWord : AppCompatActivity() {
             }
         }
 
-        teamNums = this.intent.getIntExtra("teamsAmount", 2)
+        teamNums = appPrefs.getInt("teamsAmount", 0)
         newRound = this.intent.getStringExtra("newRound")!!
-        settingsText = this.intent.getIntArrayExtra("settingsText")!!
-        settingsInfo = this.intent.getBooleanArrayExtra("settingsInfo")!!
         word1 = this.intent.getStringExtra("currentWord")!!
         teamsNums = Array<Int>(teamNums) { it + 1 }
         count = this.intent.getIntExtra("counter", 0)
 
         word.text = word1
 
-        teamsExtra = this.intent.getStringArrayExtra("teams")!!
+        teamsExtra = Array(teamNums) {""}
+        for (i in teamsExtra.indices)
+            teamsExtra[i] = appPrefs.getString("team$i", "").toString()
         teamsScores = this.intent.getIntArrayExtra("teamsScores")!!
 
         roundTitle.text = this.intent.getStringExtra("currentTeam")
         roundText.text = this.intent.getStringExtra("currentRound")
 
-        wordList = this.intent.getIntExtra("book", -1)
+        wordList = appPrefs.getInt("book", -1)
 
         list = Array(teamsExtra.size) { MutableList(0) { "0.0" } }
         for (i in teamsExtra.indices)

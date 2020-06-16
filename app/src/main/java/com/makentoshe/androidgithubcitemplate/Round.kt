@@ -10,8 +10,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import kotlinx.android.synthetic.main.activity_round.*
-import kotlinx.android.synthetic.main.activity_round.backButton
-import kotlinx.android.synthetic.main.activity_teams.*
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -50,19 +48,6 @@ class Round : AppCompatActivity() {
         else
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-        settings.setOnClickListener {
-            isNightModeOn = !isNightModeOn
-            if (isNightModeOn) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                prefsEditor.putBoolean("NightMode", isNightModeOn)
-                prefsEditor.apply()
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                prefsEditor.putBoolean("NightMode", isNightModeOn)
-                prefsEditor.apply()
-            }
-        }
-
         lastWord.visibility= View.INVISIBLE
 
         val teamNums: Int = appPrefs.getInt("teamsAmount", 2)
@@ -76,7 +61,6 @@ class Round : AppCompatActivity() {
         val fineChanger = appPrefs.getBoolean("fineChanger", false)
         val generalLast = appPrefs.getBoolean("generalLast", false)
         val tasks = appPrefs.getBoolean("tasks", false)
-        val robbery = appPrefs.getBoolean("robbery", false)
         var teamsScores: IntArray = this.intent.getIntArrayExtra("teamsScores")!!
         var isPlaying = false
         var winnersIndex: Int = -1
@@ -230,10 +214,8 @@ class Round : AppCompatActivity() {
                             intent.putExtra("currentWord", word.text)
                             intent.putExtra("newRound", newRound)
                             intent.putExtra("newTeam", newTeam)
-                            intent.putExtra("teams", teamsExtra)
                             intent.putExtra("counter", count)
                             intent.putExtra("teamsScores", teamsScores)
-                            intent.putExtra("book", wordList)
                             intent.putExtra("currentTeam", roundTitle.text.toString())
                             intent.putExtra("currentRound", roundText.text.toString())
                             for (i in teamsExtra.indices)
@@ -330,10 +312,8 @@ class Round : AppCompatActivity() {
                             val intent = Intent(this, Game::class.java)
                             intent.putExtra("newRound", newRound)
                             intent.putExtra("newTeam", newTeam)
-                            intent.putExtra("teams", teamsExtra)
                             intent.putExtra("counter", count)
                             intent.putExtra("teamsScores", teamsScores)
-                            intent.putExtra("book", wordList)
                             for (i in teamsExtra.indices)
                                 intent.putExtra("list$i", list[i].toTypedArray())
                             startActivity(intent)
@@ -423,10 +403,8 @@ class Round : AppCompatActivity() {
                         val intent = Intent(this, Game::class.java)
                         intent.putExtra("newRound", newRound)
                         intent.putExtra("newTeam", newTeam)
-                        intent.putExtra("teams", teamsExtra)
                         intent.putExtra("counter", count)
                         intent.putExtra("teamsScores", teamsScores)
-                        intent.putExtra("book", wordList)
                         for (i in teamsExtra.indices)
                             intent.putExtra("list$i", list[i].toTypedArray())
                         startActivity(intent)
@@ -486,7 +464,7 @@ class Round : AppCompatActivity() {
         words.add(currentWordNumber)
         if (words.size == wordsNumber) {
             words.removeAll(words)
-            Log.e("Error", "${wordsNumber}")
+            Log.e("Error", "$wordsNumber")
         }
         for (i in 1 until currentWordNumber) bufferedReader.readLine()
         currentWord = bufferedReader.readLine()
