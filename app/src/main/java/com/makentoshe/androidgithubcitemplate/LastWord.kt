@@ -1,6 +1,7 @@
 package com.makentoshe.androidgithubcitemplate
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,7 +13,7 @@ import kotlinx.android.synthetic.main.activity_round.roundTitle
 
 class LastWord : AppCompatActivity() {
 
-    lateinit var list: Array<MutableList<String>>
+//    lateinit var list: Array<MutableList<String>>
 
     var wordsNumber: Int = 0
 
@@ -24,10 +25,10 @@ class LastWord : AppCompatActivity() {
 
     lateinit var robberyRoundAdapter: RobberyRoundAdapter
 
-    lateinit var teamsExtra: Array<String>
+    lateinit var teams: Array<String>
     lateinit var teamsScores: IntArray
-    var wordList: Int = -1
-    var teamNums: Int = 0
+    var book: Int = -1
+    var teamsAmount: Int = 0
     var newRound: String = "0"
     var settingsText: IntArray = intArrayOf()
     var settingsInfo: BooleanArray = booleanArrayOf()
@@ -41,34 +42,37 @@ class LastWord : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_last_word)
 
-        teamNums = this.intent.getIntExtra("teamsAmount", 2)
+        val appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
+        val prefsEditor: SharedPreferences.Editor = appPrefs.edit()
+
+        teamsAmount = this.intent.getIntExtra("teamsAmount", 2)
         newRound = this.intent.getStringExtra("newRound")!!
         settingsText = this.intent.getIntArrayExtra("settingsText")!!
         settingsInfo = this.intent.getBooleanArrayExtra("settingsInfo")!!
         word1 = this.intent.getStringExtra("currentWord")!!
-        teamsNums = Array<Int>(teamNums) { it + 1 }
+        teamsNums = Array<Int>(teamsAmount) { it + 1 }
         count = this.intent.getIntExtra("counter", 0)
 
         word.text = word1
 
-        teamsExtra = this.intent.getStringArrayExtra("teams")!!
+        teams = this.intent.getStringArrayExtra("teams")!!
         teamsScores = this.intent.getIntArrayExtra("teamsScores")!!
 
         roundTitle.text = this.intent.getStringExtra("currentTeam")
         roundText.text = this.intent.getStringExtra("currentRound")
 
-        wordList = this.intent.getIntExtra("book", -1)
+        book = this.intent.getIntExtra("book", -1)
 
-        list = Array(teamsExtra.size) { MutableList(0) { "0.0" } }
-        for (i in teamsExtra.indices)
-            list[i] = this.intent.getStringArrayExtra("list$i")!!.toMutableList()
+//        list = Array(teams.size) { MutableList(0) { "0.0" } }
+//        for (i in teams.indices)
+//            list[i] = this.intent.getStringArrayExtra("list$i")!!.toMutableList()
 
 
 
 
         fun createRecyclerView() {
-            var teamsScores1 = IntArray(teamsExtra.size) { 0 } 
-            robberyRoundAdapter = RobberyRoundAdapter(this, teamsExtra, teamsScores1)
+            var teamsScores1 = IntArray(teams.size) { 0 }
+            robberyRoundAdapter = RobberyRoundAdapter(this, teams, teamsScores1)
             robberyRoundRecycler.adapter = robberyRoundAdapter
             robberyRoundRecycler.layoutManager = LinearLayoutManager(this)
 
@@ -82,15 +86,15 @@ class LastWord : AppCompatActivity() {
 
                     teamsScores[position]++
                     teamsScores1[position]++
-                    list[position][roundText.text.toString().dropLast(6).toInt() - 1] =
-                        "${((list[position][roundText.text.toString().dropLast(6)
-                            .toInt() - 1].substringBefore('.')
-                            .toInt()) + 1)}.${list[position][roundText.text.toString()
-                            .dropLast(6).toInt() - 1].substringAfter('.').toInt()}"
+//                    list[position][roundText.text.toString().dropLast(6).toInt() - 1] =
+//                        "${((list[position][roundText.text.toString().dropLast(6)
+//                            .toInt() - 1].substringBefore('.')
+//                            .toInt()) + 1)}.${list[position][roundText.text.toString()
+//                            .dropLast(6).toInt() - 1].substringAfter('.').toInt()}"
                     robberyRoundAdapter.notifyItemChanged(position)
                     if (count == 0) {
 
-                        for (i in teamsExtra.indices) {
+                        for (i in teams.indices) {
                             if (teamsScores[i] > max) {
                                 max = teamsScores[i]
                                 winnersIndex = i
@@ -101,11 +105,11 @@ class LastWord : AppCompatActivity() {
 
                     if (max >= settingsText[0]) {
                         val intent = Intent(this@LastWord, WinPage::class.java)
-                        intent.putExtra("WinTeamName", teamsExtra[winnersIndex])
+                        intent.putExtra("WinTeamName", teams[winnersIndex])
                         intent.putExtra("WinTeamScore", max)
-                        intent.putExtra("teams", teamsExtra)
-                        for (i in teamsExtra.indices)
-                            intent.putExtra("list$i", list[i].toTypedArray())
+                        intent.putExtra("teams", teams)
+//                        for (i in teams.indices)
+//                            intent.putExtra("list$i", list[i].toTypedArray())
                         startActivity(intent)
                         max = 0
                         finish()
@@ -117,16 +121,15 @@ class LastWord : AppCompatActivity() {
                         intent.putExtra("newTeam", newTeam)
                         intent.putExtra("settingsText", settingsText)
                         intent.putExtra("settingsInfo", settingsInfo)
-                        intent.putExtra("teams", teamsExtra)
+                        intent.putExtra("teams", teams)
                         intent.putExtra("counter", count)
                         intent.putExtra("teamsScores", teamsScores)
-                        intent.putExtra("book", wordList)
-                        for (i in teamsExtra.indices)
-                            intent.putExtra("list$i", list[i].toTypedArray())
+                        intent.putExtra("book", book)
+//                        for (i in teams.indices)
+//                            intent.putExtra("list$i", list[i].toTypedArray())
                         startActivity(intent)
                         overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
                         finish()
-
                     }
                 }
             })
@@ -142,7 +145,7 @@ class LastWord : AppCompatActivity() {
 //                newRound =
 //                    (newRound.substringBefore(" ")
 //                        .toInt() + 1).toString() + " раунд"
-                for (i in teamsExtra.indices) {
+                for (i in teams.indices) {
                     if (teamsScores[i] > max) {
                         max = teamsScores[i]
                         winnersIndex = i
@@ -152,11 +155,11 @@ class LastWord : AppCompatActivity() {
 
             if (max >= settingsText[0]) {
                 val intent = Intent(this, WinPage::class.java)
-                intent.putExtra("WinTeamName", teamsExtra[winnersIndex])
+                intent.putExtra("WinTeamName", teams[winnersIndex])
                 intent.putExtra("WinTeamScore", max)
-                intent.putExtra("teams", teamsExtra)
-                for (i in teamsExtra.indices)
-                    intent.putExtra("list$i", list[i].toTypedArray())
+                intent.putExtra("teams", teams)
+//                for (i in teams.indices)
+//                    intent.putExtra("list$i", list[i].toTypedArray())
                 startActivity(intent)
                 max = 0
                 finish()
@@ -167,12 +170,12 @@ class LastWord : AppCompatActivity() {
                 intent.putExtra("newTeam", newTeam)
                 intent.putExtra("settingsText", settingsText)
                 intent.putExtra("settingsInfo", settingsInfo)
-                intent.putExtra("teams", teamsExtra)
+                intent.putExtra("teams", teams)
                 intent.putExtra("counter", count)
                 intent.putExtra("teamsScores", teamsScores)
-                intent.putExtra("book", wordList)
-                for (i in teamsExtra.indices)
-                    intent.putExtra("list$i", list[i].toTypedArray())
+                intent.putExtra("book", book)
+//                for (i in teams.indices)
+//                    intent.putExtra("list$i", list[i].toTypedArray())
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
                 finish()
@@ -184,6 +187,4 @@ class LastWord : AppCompatActivity() {
         super.finish()
         overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
     }
-
-
 }

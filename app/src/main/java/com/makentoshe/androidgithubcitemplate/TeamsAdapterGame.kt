@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 class TeamsAdapterGame(
     var context: Context,
     var teamsNames: Array<String>,
-    var teamsScore: IntArray
+    var teamsScore: Array<Int>
 ) :
     RecyclerView.Adapter<TeamsAdapterGame.TeamsAdapterGameHolder>() {
 

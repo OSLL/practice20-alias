@@ -1,6 +1,7 @@
 package com.makentoshe.androidgithubcitemplate
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
@@ -24,7 +25,7 @@ import java.io.InputStreamReader
 
 class RobberyRound : AppCompatActivity() {
 
-    lateinit var list: Array<MutableList<String>>
+//    lateinit var list: Array<MutableList<String>>
 
     var wordsNumber: Int = 0
     var tasksNumber: Int = 0
@@ -41,9 +42,9 @@ class RobberyRound : AppCompatActivity() {
 
     lateinit var robberyRoundAdapter: RobberyRoundAdapter
 
-    lateinit var teamsExtra: Array<String>
-    lateinit var teamsScores: IntArray
-    var wordList: Int = -1
+    lateinit var teams: Array<String>
+    lateinit var teamsScores: Array<Int>
+    var book: Int = -1
 
     var flagForPause: Boolean = false
 
@@ -51,38 +52,49 @@ class RobberyRound : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_robbery_round)
 
-        lastWord.visibility= View.INVISIBLE
+        val appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
+        var prefsEditor: SharedPreferences.Editor = appPrefs.edit()
+        val teamsAmount = appPrefs.getInt("teamsAmount", 0)
 
-        teamsExtra = this.intent.getStringArrayExtra("teams")!!
-        teamsScores = this.intent.getIntArrayExtra("teamsScores")!!
+        lastWordRobbery.visibility = View.INVISIBLE
 
-        Log.e("Lol", "${teamsExtra[1]} ${teamsScores[1]}")
+        teams = Array(teamsAmount) { "" }
+        teamsScores = Array(teamsAmount) {0}
+        for (i in teams.indices)
+            teams[i] = appPrefs.getString("team$i", "").toString()
+        for (i in teams.indices)
+            teamsScores[i] = appPrefs.getInt("teamsScores$i", 0)
+
+        Log.e("Lol", "${teams[1]} ${teamsScores[1]}")
         var winnersIndex: Int = -1
-        var teamNums: Int = this.intent.getIntExtra("teamsAmount", 2)
-        var newRound: String = this.intent.getStringExtra("round")!!
-        roundTitle.text = this.intent.getStringExtra("currentTeam")
-        roundText.text = this.intent.getStringExtra("currentRound")
-        var settingsText: IntArray = this.intent.getIntArrayExtra("settingsText")!!
-        var settingsInfo: BooleanArray = this.intent.getBooleanArrayExtra("settingsInfo")!!
-        wordList = this.intent.getIntExtra("book", -1)
-        val teamsNums = Array<Int>(teamNums) { it + 1 }
-        var count = this.intent.getIntExtra("counter", 0)
+        var currentRoundText: String = appPrefs.getString("currentRoundText", "1 раунд").toString()
+        var currrentTeamText: String = appPrefs.getString("currentTeamText", "Error").toString()
+        roundTitle.text = currrentTeamText
+        roundText.text = currentRoundText
+        book = appPrefs.getInt("book", -1)
+        val teamsNums = Array(teamsAmount) { it + 1 }
+        var counter = appPrefs.getInt("counter", -1)
         var max = -100000
         var isPlaying = false
+        val fineChanger = appPrefs.getBoolean("fineChanger", false)
+        val generalLast = appPrefs.getBoolean("generalLast", false)
+        val tasks = appPrefs.getBoolean("tasks", false)
+        val roundLength = appPrefs.getInt("roundLength", 10)
+        val wordsForWin = appPrefs.getInt("wordsForWin", 10)
 
-        timerCounter.text = settingsText[1].toString()
+        timerCounter.text = roundLength.toString()
         chronometer.base = (timerCounter.text.toString().toInt() * 1000).toLong()
 
-        list = Array(teamsExtra.size) { MutableList(0) { "0.0" } }
-        for (i in teamsExtra.indices)
-            list[i] = this.intent.getStringArrayExtra("list$i")!!.toMutableList()
-
-        if (count == 0)
-            for (i in list) i.add("0.0")
+//        list = Array(teams.size) { MutableList(0) { "0.0" } }
+//        for (i in teams.indices)
+//            list[i] = this.intent.getStringArrayExtra("list$i")!!.toMutableList()
+//
+//        if (counter == 0)
+//            for (i in list) i.add("0.0")
 
         fun createRecyclerView() {
-            var teamsScores1: IntArray = IntArray(teamsExtra.size) { 0 }
-            robberyRoundAdapter = RobberyRoundAdapter(this, teamsExtra, teamsScores1)
+            var teamsScores1: IntArray = IntArray(teams.size) { 0 }
+            robberyRoundAdapter = RobberyRoundAdapter(this, teams, teamsScores1)
             robberyRoundRecycler.adapter = robberyRoundAdapter
             robberyRoundRecycler.layoutManager = LinearLayoutManager(this)
 
@@ -92,14 +104,14 @@ class RobberyRound : AppCompatActivity() {
                 override fun onCheckClicked(position: Int) {
                     if (flagForFirstTap) {
                         if (flagForLastWord) {
-                            if (count == teamNums) {
-                                count = 0
-                                newRound =
-                                    (newRound.substringBefore(" ")
+                            if (counter == teamsAmount) {
+                                counter = 0
+                                currentRoundText =
+                                    (currentRoundText.substringBefore(" ")
                                         .toInt() + 1).toString() + " раунд"
 
 
-                                for (i in teamsExtra.indices) {
+                                for (i in teams.indices) {
                                     if (teamsScores[i] > max) {
                                         max = teamsScores[i]
                                         winnersIndex = i
@@ -109,46 +121,54 @@ class RobberyRound : AppCompatActivity() {
                             }
 
 
-                            if (count == 0) {
-                                teamsScores[teamNums - 1]++
+                            if (counter == 0) {
+                                teamsScores[teamsAmount - 1]++
                             } else {
-                                teamsScores[count - 1]++
+                                teamsScores[counter - 1]++
                             }
 
 
 
-                            if (max >= settingsText[0]) {
+                            if (max >= wordsForWin.toString().toInt()) {
                                 val intent = Intent(this@RobberyRound, WinPage::class.java)
-                                intent.putExtra("WinTeamName", teamsExtra[winnersIndex])
-                                intent.putExtra("WinTeamScore", max)
-                                intent.putExtra("teams", teamsExtra)
-                                for (i in teamsExtra.indices)
-                                    intent.putExtra("list$i", list[i].toTypedArray())
+                                for (i in 0 until teamsAmount)
+                                    prefsEditor.putInt("teamsScores$i", teamsScores[i])
+                                prefsEditor.putInt("counter", counter)
+                                prefsEditor.putString("currentRoundText", currentRoundText)
+                                prefsEditor.apply()
+//                                intent.putExtra("WinTeamName", teams[winnersIndex])
+//                                intent.putExtra("WinTeamScore", max)
+//                                intent.putExtra("teams", teams)
+//                                for (i in teams.indices)
+//                                    intent.putExtra("list$i", list[i].toTypedArray())
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                                 startActivity(intent)
                                 max = 0
                                 finish()
                             } else {
-                                var newTeam: String = teamsNums[count].toString() + " команда"
+                                var newTeam: String = teamsNums[counter].toString() + " команда"
                                 val intent = Intent(this@RobberyRound, Game::class.java)
-                                intent.putExtra("newRound", newRound)
-                                intent.putExtra("newTeam", newTeam)
-                                intent.putExtra("settingsText", settingsText)
-                                intent.putExtra("settingsInfo", settingsInfo)
-                                intent.putExtra("teams", teamsExtra)
-                                intent.putExtra("counter", count)
-                                intent.putExtra("teamsScores", teamsScores)
-                                intent.putExtra("book", wordList)
-                                for (i in teamsExtra.indices)
-                                    intent.putExtra("list$i", list[i].toTypedArray())
+                                for (i in 0 until teamsAmount)
+                                    prefsEditor.putInt("teamsScores$i", teamsScores[i])
+                                prefsEditor.putInt("counter", counter)
+                                prefsEditor.putString("currentRoundText", currentRoundText)
+                                prefsEditor.apply()
+//                                intent.putExtra("currentRoundText", currentRoundText)
+//                                intent.putExtra("newTeam", newTeam)
+//                                intent.putExtra("teams", teams)
+//                                intent.putExtra("counter", count)
+//                                intent.putExtra("teamsScores", teamsScores)
+//                                intent.putExtra("book", book)
+//                                for (i in teams.indices)
+//                                    intent.putExtra("list$i", list[i].toTypedArray())
                                 startActivity(intent)
                                 overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
                                 finish()
 
                             }
                         }
-                        when (wordList) {
+                        when (book) {
                             0 -> {
                                 var file: InputStream = assets.open("Easy.txt")
 
@@ -173,11 +193,11 @@ class RobberyRound : AppCompatActivity() {
                         }
                         teamsScores[position]++
                         teamsScores1[position]++
-                        list[position][roundText.text.toString().dropLast(6).toInt() - 1] =
-                            "${((list[position][roundText.text.toString().dropLast(6)
-                                .toInt() - 1].substringBefore('.')
-                                .toInt()) + 1)}.${list[position][roundText.text.toString()
-                                .dropLast(6).toInt() - 1].substringAfter('.')}"
+//                        list[position][roundText.text.toString().dropLast(6).toInt() - 1] =
+//                            "${((list[position][roundText.text.toString().dropLast(6)
+//                                .toInt() - 1].substringBefore('.')
+//                                .toInt()) + 1)}.${list[position][roundText.text.toString()
+//                                .dropLast(6).toInt() - 1].substringAfter('.')}"
                         robberyRoundAdapter.notifyItemChanged(position)
                     }
                 }
@@ -193,13 +213,13 @@ class RobberyRound : AppCompatActivity() {
 
 
 
-        if (!settingsInfo[2])
+        if (!tasks)
             taskRobberyText.visibility = View.GONE
 
         backButton.setOnClickListener {
             finish()
         }
-        when (wordList) {
+        when (book) {
             0 -> {
                 var file: InputStream = assets.open("Easy.txt")
 
@@ -228,7 +248,7 @@ class RobberyRound : AppCompatActivity() {
 
 
         pauseButton.setOnClickListener {
-            if (flagForPause){
+            if (flagForPause) {
                 if (isPlaying) {
                     pauseButton.background = resources.getDrawable(R.drawable.medium_level_button)
                     check.isClickable = false
@@ -240,7 +260,7 @@ class RobberyRound : AppCompatActivity() {
                     pauseButton.background = resources.getDrawable(R.drawable.hard_level_button)
                     check.isClickable = true
                     cross.isClickable = true
-                    when (wordList) {
+                    when (book) {
                         0 -> {
                             var file: InputStream = assets.open("Easy.txt")
 
@@ -266,16 +286,16 @@ class RobberyRound : AppCompatActivity() {
                     chronometer.start()
                     isPlaying = true
                 }
-        }
+            }
         }
 
         word.setOnClickListener {
             flagForFirstTap = true
-            flagForPause=true
+            flagForPause = true
             chronometer.start()
             word.isClickable = false
             isPlaying = true
-            if (settingsInfo[2]) {
+            if (tasks) {
                 var fileTaskRobbery: InputStream = assets.open("Tasks.txt")
                 var bufferedReaderTask = BufferedReader(InputStreamReader(fileTaskRobbery))
                 while (bufferedReaderTask.readLine() != null) tasksNumber++
@@ -298,16 +318,16 @@ class RobberyRound : AppCompatActivity() {
                         chronometer.stop()
                         Toast.makeText(applicationContext, "Время вышло!", Toast.LENGTH_SHORT)
                             .show()
-                        count += 1
+                        counter += 1
                         flagForLastWord = true
-                        lastWord.visibility= View.VISIBLE
+                        lastWordRobbery.visibility = View.VISIBLE
                     }
 
                     elapsedMillis = SystemClock.elapsedRealtime() - chronometer.base
                 }
             }
 
-            when (wordList) {
+            when (book) {
                 0 -> {
                     var file: InputStream = assets.open("Easy.txt")
 
@@ -338,14 +358,14 @@ class RobberyRound : AppCompatActivity() {
             cross.isClickable = false
             if (flagForFirstTap) {
                 if (flagForLastWord) {
-                    if (count == teamNums) {
-                        count = 0
-                        newRound =
-                            (newRound.substringBefore(" ")
+                    if (counter == teamsAmount) {
+                        counter = 0
+                        currentRoundText =
+                            (currentRoundText.substringBefore(" ")
                                 .toInt() + 1).toString() + " раунд"
 
 
-                        for (i in teamsExtra.indices) {
+                        for (i in teams.indices) {
                             if (teamsScores[i] > max) {
                                 max = teamsScores[i]
                                 winnersIndex = i
@@ -354,37 +374,39 @@ class RobberyRound : AppCompatActivity() {
 
                     }
 
-                    if (max >= settingsText[0]) {
+                    if (max >= wordsForWin.toString().toInt()) {
                         val intent = Intent(this, WinPage::class.java)
-                        intent.putExtra("WinTeamName", teamsExtra[winnersIndex])
-                        intent.putExtra("WinTeamScore", max)
-                        intent.putExtra("teams", teamsExtra)
-                        for (i in teamsExtra.indices)
-                            intent.putExtra("list$i", list[i].toTypedArray())
+//                        intent.putExtra("WinTeamName", teams[winnersIndex])
+//                        intent.putExtra("WinTeamScore", max)
+//                        intent.putExtra("teams", teams)
+//                        for (i in teams.indices)
+//                            intent.putExtra("list$i", list[i].toTypedArray())
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         startActivity(intent)
                         max = 0
                         finish()
                     } else {
-                        var newTeam: String = teamsNums[count].toString() + " команда"
+                        var newTeam: String = teamsNums[counter].toString() + " команда"
                         val intent = Intent(this, Game::class.java)
-                        intent.putExtra("newRound", newRound)
-                        intent.putExtra("newTeam", newTeam)
-                        intent.putExtra("settingsText", settingsText)
-                        intent.putExtra("settingsInfo", settingsInfo)
-                        intent.putExtra("teams", teamsExtra)
-                        intent.putExtra("counter", count)
-                        intent.putExtra("teamsScores", teamsScores)
-                        intent.putExtra("book", wordList)
-                        for (i in teamsExtra.indices)
-                            intent.putExtra("list$i", list[i].toTypedArray())
+                        for (i in 0 until teamsAmount)
+                            prefsEditor.putInt("teamsScores$i", teamsScores[i])
+                        prefsEditor.putInt("counter", counter)
+                        prefsEditor.putString("currentRoundText", currentRoundText)
+//                        intent.putExtra("currentRoundText", currentRoundText)
+//                        intent.putExtra("newTeam", newTeam)
+//                        intent.putExtra("teams", teams)
+//                        intent.putExtra("counter", count)
+//                        intent.putExtra("teamsScores", teamsScores)
+//                        intent.putExtra("book", book)
+//                        for (i in teams.indices)
+//                            intent.putExtra("list$i", list[i].toTypedArray())
                         startActivity(intent)
                         overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
                         finish()
                     }
                 }
-                when (wordList) {
+                when (book) {
                     0 -> {
                         var file: InputStream = assets.open("Easy.txt")
 
@@ -407,11 +429,9 @@ class RobberyRound : AppCompatActivity() {
                         word.text = newWord(file, bufferedReader)
                     }
                 }
-
             }
             cross.isClickable = true
         }
-
     }
 
     override fun finish() {
@@ -420,7 +440,6 @@ class RobberyRound : AppCompatActivity() {
     }
 
     private fun newWord(file: InputStream, bufferedReader: BufferedReader): String {
-
         currentWordNumber = (0 until wordsNumber).random()
         while (words.contains(currentWordNumber)) {
             if (currentWordNumber == 49) currentWordNumber = 0
@@ -437,6 +456,4 @@ class RobberyRound : AppCompatActivity() {
         file.close()
         return currentWord
     }
-
-
 }

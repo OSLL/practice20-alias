@@ -53,7 +53,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/roundNameSecond"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/roundNameSecond"
-        app:srcCompat="@drawable/easy_level_button" />
+        app:srcCompat="@drawable/hard_level_button" />
 
     <ImageView
         android:id="@+id/knowImage"
@@ -64,6 +64,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/skipImage"
         app:layout_constraintEnd_toStartOf="@+id/skipImage"
         app:layout_constraintTop_toTopOf="@+id/skipImage"
-        app:srcCompat="@drawable/easy_level_button" />
+        app:srcCompat="@drawable/hard_level_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

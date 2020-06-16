@@ -2,6 +2,7 @@ package com.makentoshe.androidgithubcitemplate
 
 import android.app.Dialog
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -23,38 +24,59 @@ class Teams : AppCompatActivity() {
     lateinit var tnld: TextInputLayout
     lateinit var tnet: EditText
     lateinit var list: Array<MutableList<String>>
+    var teamsAmount: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teams)
 
+        var appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
+        val prefsEditor: SharedPreferences.Editor = appPrefs.edit()
+
         addTeamDialog = Dialog(this)
 
-        teams = this.intent.getStringArrayExtra("teams").toMutableList()
+        teamsAmount = appPrefs.getInt("teamsAmount", 0)
+        Log.e("teamsAmount", "${teamsAmount}")
+
+        teams = MutableList(teamsAmount){""}
+
+        for (i in 0 until teamsAmount)
+            teams[i] = appPrefs.getString("team$i", "").toString()
         currentPosition = teams.size
 
-        list = Array(teams.size) { MutableList(0) { "0.0" } }
-        for (i in teams.indices)
-            list[i] = this.intent.getStringArrayExtra("list$i").toMutableList()
-        Log.e("Sas", list.size.toString())
+//        list = Array(teams.size) { MutableList(0) { "0.0" } }
+//        for (i in teams.indices)
+//            list[i] = this.intent.getStringArrayExtra("list$i").toMutableList()
+//        Log.e("Sas", list.size.toString())
 
         createRecyclerView()
 
         continueButtonTeams.setOnClickListener {
             list = Array(teams.size) { MutableList(0) { "0.0" } }
+            var teamsScores = Array(teamsAmount){0}
             val intent = Intent(this, GameSettings::class.java)
-            teams = teamsAdapter.getter().toMutableList()
-            intent.putExtra("teams", teams.toTypedArray())
-            intent.putExtra("settingsText", this.intent.getIntArrayExtra("settingsText"))
-            intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
-            for (i in teams.indices)
-                intent.putExtra("list$i", list[i].toTypedArray())
+//            teams = teamsAdapter.getter().toMutableList()
+//            intent.putExtra("teams", teams.toTypedArray())
+//            intent.putExtra("settingsText", this.intent.getIntArrayExtra("settingsText"))
+//            intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
+//            for (i in teams.indices)
+//                intent.putExtra("list$i", list[i].toTypedArray())
+            prefsEditor.putInt("teamsAmount", teamsAmount)
+            for (i in 0 until teamsAmount)
+                prefsEditor.putString("team$i", teams[i])
+            for (i in 0 until teamsAmount)
+                prefsEditor.putInt("teamsScores$i", teamsScores[i])
+            prefsEditor.apply()
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
 
         }
 
         backButton.setOnClickListener {
+            prefsEditor.putInt("teamsAmount", teamsAmount)
+            for (i in 0 until teamsAmount)
+                prefsEditor.putString("team$i", teams[i])
+            prefsEditor.apply()
             finish()
         }
 
@@ -104,6 +126,7 @@ class Teams : AppCompatActivity() {
                 currentPosition--
                 deleteTeam(position)
                 teamsAdapter.currentMinus()
+                teamsAmount--
             }
 
             override fun onEditClicked(position: Int) {
@@ -255,7 +278,6 @@ class Teams : AppCompatActivity() {
         closeAddTeamDialog.setOnClickListener {
             addTeamDialog.cancel()
             addTeam(tnld.editText?.text.toString().trim(' '), currentPosition++)
-
             if (currentPosition >= 2) {
                 continueButtonTeams.isClickable = true
                 continueButtonTeams.setTextColor(resources.getColor(R.color.activeButton))
@@ -263,6 +285,7 @@ class Teams : AppCompatActivity() {
                 continueButtonTeams.isClickable = false
                 continueButtonTeams.setTextColor(resources.getColor(R.color.noActiveButton))
             }
+            teamsAmount++
         }
 
         if (tnld.editText?.text.toString().isEmpty() || tnld.editText?.text.toString()
