@@ -65,12 +65,18 @@ class Round : AppCompatActivity() {
 
         lastWord.visibility= View.INVISIBLE
 
-        var settingsText: IntArray = this.intent.getIntArrayExtra("settingsText")!!
-        var settingsInfo: BooleanArray = this.intent.getBooleanArrayExtra("settingsInfo")!!
-        var teamNums: Int = this.intent.getIntExtra("teamsAmount", 2)
+        val teamNums: Int = appPrefs.getInt("teamsAmount", 2)
+        val roundLength = appPrefs.getString("roundLength", "10")
+        val wordsForWin = appPrefs.getString("wordsForWin", "10")
         var newRound: String = this.intent.getStringExtra("round")!!
-        var teamsExtra = this.intent.getStringArrayExtra("teams")
-        var wordList = this.intent.getIntExtra("book", -1)
+        var teamsExtra: Array<String> = Array(teamNums) {""}
+        for (i in 0 until teamNums)
+            teamsExtra[i] = appPrefs.getString("team$i", "").toString()
+        val wordList = appPrefs.getInt("book", -1)
+        val fineChanger = appPrefs.getBoolean("fineChanger", false)
+        val generalLast = appPrefs.getBoolean("generalLast", false)
+        val tasks = appPrefs.getBoolean("tasks", false)
+        val robbery = appPrefs.getBoolean("robbery", false)
         var teamsScores: IntArray = this.intent.getIntArrayExtra("teamsScores")!!
         var isPlaying = false
         var winnersIndex: Int = -1
@@ -88,14 +94,14 @@ class Round : AppCompatActivity() {
         if (count == 0)
             for (i in list) i.add("0.0")
 
-        timerCounter.text = settingsText[1].toString()
+        timerCounter.text = roundLength
         chronometer.base = (timerCounter.text.toString().toInt() * 1000).toLong()
 
         backButton.setOnClickListener {
             finish()
         }
 
-        if (!settingsInfo[2])
+        if (!tasks)
             taskText.visibility = View.GONE
 
         when (wordList) {
@@ -184,7 +190,7 @@ class Round : AppCompatActivity() {
             chronometer.start()
             isPlaying = true
             word.isClickable = false
-            if (settingsInfo[2]) {
+            if (tasks) {
                 var fileTask: InputStream = assets.open("Tasks.txt")
                 var bufferedReaderTask = BufferedReader(InputStreamReader(fileTask))
                 while (bufferedReaderTask.readLine() != null) tasksNumber++
@@ -211,7 +217,7 @@ class Round : AppCompatActivity() {
                         count += 1
 
                         flagForLastWord = true
-                        if (settingsInfo[1]) {
+                        if (generalLast) {
                             if (count == teamNums) {
                                 count = 0
                                 newRound =
@@ -224,8 +230,6 @@ class Round : AppCompatActivity() {
                             intent.putExtra("currentWord", word.text)
                             intent.putExtra("newRound", newRound)
                             intent.putExtra("newTeam", newTeam)
-                            intent.putExtra("settingsText", settingsText)
-                            intent.putExtra("settingsInfo", settingsInfo)
                             intent.putExtra("teams", teamsExtra)
                             intent.putExtra("counter", count)
                             intent.putExtra("teamsScores", teamsScores)
@@ -309,7 +313,7 @@ class Round : AppCompatActivity() {
 
 
 
-                        if (max >= settingsText[0]) {
+                        if (max >= wordsForWin.toString().toInt()) {
                             val intent = Intent(this, WinPage::class.java)
                             intent.putExtra("WinTeamName", teamsExtra[winnersIndex])
                             intent.putExtra("teams", teamsExtra)
@@ -326,8 +330,6 @@ class Round : AppCompatActivity() {
                             val intent = Intent(this, Game::class.java)
                             intent.putExtra("newRound", newRound)
                             intent.putExtra("newTeam", newTeam)
-                            intent.putExtra("settingsText", settingsText)
-                            intent.putExtra("settingsInfo", settingsInfo)
                             intent.putExtra("teams", teamsExtra)
                             intent.putExtra("counter", count)
                             intent.putExtra("teamsScores", teamsScores)
@@ -396,7 +398,7 @@ class Round : AppCompatActivity() {
 
                     }
 
-                    if (settingsInfo[0]) {
+                    if (fineChanger) {
                         if (count == 0) {
                             teamsScores[teamNums-1]--
                         } else {
@@ -404,7 +406,7 @@ class Round : AppCompatActivity() {
                         }
                     }
 
-                    if (max >= settingsText[0]) {
+                    if (max >= wordsForWin.toString().toInt()) {
                         val intent = Intent(this, WinPage::class.java)
                         intent.putExtra("WinTeamName", teamsExtra[winnersIndex])
                         intent.putExtra("teams", teamsExtra)
@@ -421,8 +423,6 @@ class Round : AppCompatActivity() {
                         val intent = Intent(this, Game::class.java)
                         intent.putExtra("newRound", newRound)
                         intent.putExtra("newTeam", newTeam)
-                        intent.putExtra("settingsText", settingsText)
-                        intent.putExtra("settingsInfo", settingsInfo)
                         intent.putExtra("teams", teamsExtra)
                         intent.putExtra("counter", count)
                         intent.putExtra("teamsScores", teamsScores)
@@ -458,7 +458,7 @@ class Round : AppCompatActivity() {
                         word.text = newWord(file, bufferedReader)
                     }
                 }
-                if (settingsInfo[0]) {
+                if (fineChanger) {
                     teamsScores[count]--
                 }
             }
