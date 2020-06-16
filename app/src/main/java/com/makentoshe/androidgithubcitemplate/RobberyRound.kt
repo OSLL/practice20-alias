@@ -39,6 +39,7 @@ class RobberyRound : AppCompatActivity() {
 
     var flagForFirstTap: Boolean = false
     var flagForLastWord: Boolean = false
+    var flagForPauseCheck:Boolean = true
 
     lateinit var robberyRoundAdapter: RobberyRoundAdapter
 
@@ -102,7 +103,7 @@ class RobberyRound : AppCompatActivity() {
                 RobberyRoundAdapter.onItemClickListener {
 
                 override fun onCheckClicked(position: Int) {
-                    if (flagForFirstTap) {
+                    if (flagForFirstTap && flagForPauseCheck) {
                         if (flagForLastWord) {
                             if (counter == teamsAmount) {
                                 counter = 0
@@ -167,6 +168,7 @@ class RobberyRound : AppCompatActivity() {
                                 finish()
 
                             }
+
                         }
                         when (book) {
                             0 -> {
@@ -246,20 +248,24 @@ class RobberyRound : AppCompatActivity() {
             }
         }
 
+        var pauseOffSet:Long=0
 
         pauseButton.setOnClickListener {
             if (flagForPause) {
                 if (isPlaying) {
                     pauseButton.background = resources.getDrawable(R.drawable.medium_level_button)
-                    check.isClickable = false
+                  //  check.isClickable = false
                     cross.isClickable = false
+                    flagForPauseCheck=false
                     word.text = "Пауза"
                     chronometer.stop()
+                    pauseOffSet=SystemClock.elapsedRealtime()-chronometer.base
                     isPlaying = false
                 } else {
                     pauseButton.background = resources.getDrawable(R.drawable.hard_level_button)
-                    check.isClickable = true
+                  //  check.isClickable = true
                     cross.isClickable = true
+                    flagForPauseCheck=true
                     when (book) {
                         0 -> {
                             var file: InputStream = assets.open("Easy.txt")
@@ -283,6 +289,7 @@ class RobberyRound : AppCompatActivity() {
                             word.text = newWord(file, bufferedReader)
                         }
                     }
+                    chronometer.base=SystemClock.elapsedRealtime()-pauseOffSet
                     chronometer.start()
                     isPlaying = true
                 }
@@ -292,6 +299,7 @@ class RobberyRound : AppCompatActivity() {
         word.setOnClickListener {
             flagForFirstTap = true
             flagForPause = true
+            chronometer.base = SystemClock.elapsedRealtime()+(timerCounter.text.toString().toInt() * 1000).toLong()+500
             chronometer.start()
             word.isClickable = false
             isPlaying = true
@@ -311,20 +319,16 @@ class RobberyRound : AppCompatActivity() {
                 taskRobberyText.visibility = View.GONE
             }
             chronometer.setOnChronometerTickListener {
-                var elapsedMillis: Long = SystemClock.elapsedRealtime() - chronometer.base
-                if (elapsedMillis > 1000) {
-                    timerCounter.text = (timerCounter.text.toString().toInt() - 1).toString()
+                timerCounter.text =  (chronometer.text.toString().substringBefore(':').toInt()*60+chronometer.text.toString().substringAfter(':').toInt()).toString()//(timerCounter.text.toString().toInt() - 1).toString()
                     if (timerCounter.text.toString().toInt() <= 0) {
                         chronometer.stop()
+                        pauseButton.isClickable=false
                         Toast.makeText(applicationContext, "Время вышло!", Toast.LENGTH_SHORT)
                             .show()
                         counter += 1
                         flagForLastWord = true
                         lastWordRobbery.visibility = View.VISIBLE
                     }
-
-                    elapsedMillis = SystemClock.elapsedRealtime() - chronometer.base
-                }
             }
 
             when (book) {

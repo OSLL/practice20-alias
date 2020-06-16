@@ -44,6 +44,8 @@ class Round : AppCompatActivity() {
 
         lastWord.visibility= View.INVISIBLE
 
+        pauseButton.isClickable=false
+
         var teamsAmount: Int = appPrefs.getInt("teamsAmount", 0)
         teams = Array(teamsAmount){""}
         var currentRoundText: String = appPrefs.getString("currentRoundText", "1 раунд").toString()
@@ -76,7 +78,6 @@ class Round : AppCompatActivity() {
 //            for (i in list) i.add("0.0")
 
         timerCounter.text = roundLength.toString()
-        chronometer.base = (timerCounter.text.toString().toInt() * 1000).toLong()
 
         backButton.setOnClickListener {
             finish()
@@ -122,6 +123,8 @@ class Round : AppCompatActivity() {
         }
 
         var max = -100000
+        var pauseOffSet:Long=0
+
 
         pauseButton.setOnClickListener {
             if (flagForPause) {
@@ -131,6 +134,7 @@ class Round : AppCompatActivity() {
                     cross.isClickable = false
                     word.text = "Пауза"
                     chronometer.stop()
+                    pauseOffSet=SystemClock.elapsedRealtime()-chronometer.base
                     isPlaying = false
                 } else {
                     pauseButton.background = resources.getDrawable(R.drawable.hard_level_button)
@@ -159,6 +163,8 @@ class Round : AppCompatActivity() {
                             word.text = newWord(file, bufferedReader)
                         }
                     }
+
+                    chronometer.base=SystemClock.elapsedRealtime()-pauseOffSet
                     chronometer.start()
                     isPlaying = true
                 }
@@ -168,7 +174,9 @@ class Round : AppCompatActivity() {
         word.setOnClickListener {
             flagForFirstTap = true
             flagForPause=true
+            chronometer.base = SystemClock.elapsedRealtime()+(timerCounter.text.toString().toInt() * 1000).toLong()+500
             chronometer.start()
+
             isPlaying = true
             word.isClickable = false
             if (tasks) {
@@ -188,9 +196,8 @@ class Round : AppCompatActivity() {
             }
 
             chronometer.setOnChronometerTickListener {
-                var elapsedMillis: Long = SystemClock.elapsedRealtime() - chronometer.base
-                if (elapsedMillis > 1000) {
-                    timerCounter.text = (timerCounter.text.toString().toInt() - 1).toString()
+
+                    timerCounter.text =  (chronometer.text.toString().substringBefore(':').toInt()*60+chronometer.text.toString().substringAfter(':').toInt()).toString()//(timerCounter.text.toString().toInt() - 1).toString()
                     if (timerCounter.text.toString().toInt() <= 0) {
                         chronometer.stop()
                         Toast.makeText(applicationContext, "Время вышло!", Toast.LENGTH_SHORT)
@@ -205,6 +212,8 @@ class Round : AppCompatActivity() {
                                     (currentRoundText.substringBefore(" ")
                                         .toInt() + 1).toString() + " раунд"
                             }
+                            prefsEditor.putString("currentWord", word.text.toString())
+                            prefsEditor.apply()
                             val intent = Intent(this, LastWord::class.java)
 //                            intent.putExtra("teamsAmount", teamsAmount)
 //                            intent.putExtra("currentWord", word.text)
@@ -229,17 +238,12 @@ class Round : AppCompatActivity() {
 
 
 
-                    elapsedMillis = SystemClock.elapsedRealtime() - chronometer.base
-                }
+
             }
 
-            var file: InputStream = assets.open("Easy.txt")
 
-            var bufferedReader = BufferedReader(InputStreamReader(file))
 
-            word.text = newWord(file, bufferedReader)
 
-            /*
             when (book) {
                 0 -> {
                     var file: InputStream = assets.open("Easy.txt")
@@ -262,7 +266,7 @@ class Round : AppCompatActivity() {
 
                     word.text = newWord(file, bufferedReader)
                 }
-            }*/
+            }
 
 
 

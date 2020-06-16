@@ -29,10 +29,12 @@ class LastWord : AppCompatActivity() {
     lateinit var teamsScores: IntArray
     var book: Int = -1
     var teamsAmount: Int = 0
-    var newRound: String = "0"
-    var settingsText: IntArray = intArrayOf()
-    var settingsInfo: BooleanArray = booleanArrayOf()
-    var word1: String = "0"
+    var currentRoundText: String = "0"
+    var wordsForWin =0
+//    var settingsText: IntArray = intArrayOf()
+//    var settingsInfo: BooleanArray = booleanArrayOf()
+
+  //  var word1: String = "0"
     var teamsNums: Array<Int> = arrayOf()
     var count = 0
     var max = -100000
@@ -45,15 +47,16 @@ class LastWord : AppCompatActivity() {
         val appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
         val prefsEditor: SharedPreferences.Editor = appPrefs.edit()
 
-        teamsAmount = this.intent.getIntExtra("teamsAmount", 2)
-        newRound = this.intent.getStringExtra("newRound")!!
-        settingsText = this.intent.getIntArrayExtra("settingsText")!!
-        settingsInfo = this.intent.getBooleanArrayExtra("settingsInfo")!!
-        word1 = this.intent.getStringExtra("currentWord")!!
+        teamsAmount = appPrefs.getInt("teamsAmount",2)//this.intent.getIntExtra("teamsAmount", 2)
+        currentRoundText = appPrefs.getString("currentRoundText","1 раунд").toString()//this.intent.getStringExtra("currentRoundText")!!
+        wordsForWin = appPrefs.getInt("wordsForWin", 10)
+//        settingsText = this.intent.getIntArrayExtra("settingsText")!!
+//        settingsInfo = this.intent.getBooleanArrayExtra("settingsInfo")!!
+      // word1 = this.intent.getStringExtra("currentWord")!!
         teamsNums = Array<Int>(teamsAmount) { it + 1 }
         count = this.intent.getIntExtra("counter", 0)
 
-        word.text = word1
+        word.text = appPrefs.getString("currentWord","Error")
 
         teams = this.intent.getStringArrayExtra("teams")!!
         teamsScores = this.intent.getIntArrayExtra("teamsScores")!!
@@ -103,7 +106,7 @@ class LastWord : AppCompatActivity() {
 
                     }
 
-                    if (max >= settingsText[0]) {
+                    if (max >= wordsForWin) {
                         val intent = Intent(this@LastWord, WinPage::class.java)
                         intent.putExtra("WinTeamName", teams[winnersIndex])
                         intent.putExtra("WinTeamScore", max)
@@ -117,10 +120,10 @@ class LastWord : AppCompatActivity() {
                         var newTeam: String = teamsNums[count].toString() + " команда"
 
                         val intent = Intent(this@LastWord, Game::class.java)
-                        intent.putExtra("newRound", newRound)
+                        intent.putExtra("currentRoundText", currentRoundText)
                         intent.putExtra("newTeam", newTeam)
-                        intent.putExtra("settingsText", settingsText)
-                        intent.putExtra("settingsInfo", settingsInfo)
+//                        intent.putExtra("settingsText", settingsText)
+//                        intent.putExtra("settingsInfo", settingsInfo)
                         intent.putExtra("teams", teams)
                         intent.putExtra("counter", count)
                         intent.putExtra("teamsScores", teamsScores)
@@ -142,8 +145,8 @@ class LastWord : AppCompatActivity() {
 
         cross.setOnClickListener {
             if (count == 0) {
-//                newRound =
-//                    (newRound.substringBefore(" ")
+//                currentRoundText =
+//                    (currentRoundText.substringBefore(" ")
 //                        .toInt() + 1).toString() + " раунд"
                 for (i in teams.indices) {
                     if (teamsScores[i] > max) {
@@ -153,7 +156,7 @@ class LastWord : AppCompatActivity() {
                 }
             }
 
-            if (max >= settingsText[0]) {
+            if (max >= wordsForWin) {
                 val intent = Intent(this, WinPage::class.java)
                 intent.putExtra("WinTeamName", teams[winnersIndex])
                 intent.putExtra("WinTeamScore", max)
@@ -166,10 +169,10 @@ class LastWord : AppCompatActivity() {
             } else {
                 var newTeam: String = teamsNums[count].toString() + " команда"
                 val intent = Intent(this, Game::class.java)
-                intent.putExtra("newRound", newRound)
+                intent.putExtra("currentRoundText", currentRoundText)
                 intent.putExtra("newTeam", newTeam)
-                intent.putExtra("settingsText", settingsText)
-                intent.putExtra("settingsInfo", settingsInfo)
+//                intent.putExtra("settingsText", settingsText)
+//                intent.putExtra("settingsInfo", settingsInfo)
                 intent.putExtra("teams", teams)
                 intent.putExtra("counter", count)
                 intent.putExtra("teamsScores", teamsScores)

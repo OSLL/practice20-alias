@@ -140,19 +140,19 @@
         app:layout_constraintTop_toBottomOf="@+id/skipWordsImage"
         app:srcCompat="@drawable/timer" />
 
+
     <Chronometer
         android:id="@+id/chronometer"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
         android:countDown="true"
         android:format="%s"
-        android:textColor="#FFFFFF"
+        android:textColor="#000000"
         android:textSize="1sp"
-        android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="SmallSp" />
-
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/timerCounter"
@@ -190,10 +190,6 @@
         android:id="@+id/word"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginLeft="11dp"
-        android:layout_marginTop="11dp"
-        android:layout_marginRight="11dp"
-        android:layout_marginBottom="11dp"
         android:clickable="true"
         android:gravity="center"
         android:text="Позвони мне, позвони"
