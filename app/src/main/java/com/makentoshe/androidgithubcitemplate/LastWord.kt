@@ -26,10 +26,10 @@ class LastWord : AppCompatActivity() {
 
     lateinit var teams: Array<String>
     lateinit var teamsScores: Array<Int>
-    var book: Int = -1
+    private var book: Int = -1
     var teamsAmount: Int = 0
     var currentRoundText: String = "0"
-    var currentTeamText:String = "0"
+    private var currentTeamText:String = "0"
     var wordsForWin =0
 
     var teamsNums: Array<Int> = arrayOf()
@@ -211,14 +211,14 @@ class LastWord : AppCompatActivity() {
                 prefsEditor.apply()
 //                intent.putExtra("currentRoundText", currentRoundText)
 //                intent.putExtra("newTeam", newTeam)
-////                intent.putExtra("settingsText", settingsText)
-////                intent.putExtra("settingsInfo", settingsInfo)
+//                intent.putExtra("settingsText", settingsText)
+//                intent.putExtra("settingsInfo", settingsInfo)
 //                intent.putExtra("teams", teams)
 //                intent.putExtra("counter", counter)
 //                intent.putExtra("teamsScores", teamsScores)
 //                intent.putExtra("book", book)
-////                for (i in teams.indices)
-////                    intent.putExtra("list$i", list[i].toTypedArray())
+//                for (i in teams.indices)
+//                    intent.putExtra("list$i", list[i].toTypedArray())
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
                 finish()

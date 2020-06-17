@@ -60,6 +60,11 @@ class WinPage : AppCompatActivity() {
         }
 
         backToMenu.setOnClickListener {
+            prefsEditor.putBoolean("teamsFlag", false)
+            prefsEditor.putBoolean("gameSettingsFlag", false)
+            prefsEditor.putBoolean("levelsFlag", false)
+            prefsEditor.putBoolean("gameFlag", false)
+            prefsEditor.apply()
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()

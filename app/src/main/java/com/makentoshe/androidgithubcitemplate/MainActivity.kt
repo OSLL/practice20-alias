@@ -34,12 +34,57 @@ class MainActivity : AppCompatActivity() {
         var currentRoundText = appPrefs.getString("currentRoundText", "1 раунд")
         var counter = appPrefs.getInt("counter", 0)
         var roundNumber = appPrefs.getInt("roundNumber", 0)
+        var teamsFlag = appPrefs.getBoolean("teamsFlag", false)
+        var gameSettingsFlag = appPrefs.getBoolean("gameSettingsFlag", false)
+        var levelsFlag = appPrefs.getBoolean("levelsFlag", false)
+        var gameFlag = appPrefs.getBoolean("gameFlag", false)
 
         val list: Array<MutableList<String>> = Array(teamsAmount) { MutableList(roundNumber) { "0.0" } }
 
+
+
+        if (!teamsFlag && !gameFlag && !levelsFlag && !gameFlag){
+            continueGameButton.isClickable = false
+            continueGameButton.background = resources.getDrawable(R.drawable.add_team_no_active)
+            continueGameButton.setTextColor(resources.getColorStateList(R.color.white))
+        }
+
         continueGameButton.setOnClickListener {
-            var intent = Intent(this, Game::class.java)
-            startActivity(intent)
+            if (gameFlag){
+                val intent = Intent(this, Game::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                startActivity(intent)
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+            } else {
+                if (levelsFlag) {
+                    val intent = Intent(this, Levels::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    startActivity(intent)
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                } else {
+                    if (gameSettingsFlag) {
+                        val intent = Intent(this, GameSettings::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                    } else {
+                        if (teamsFlag){
+                            val intent = Intent(this, Teams::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            startActivity(intent)
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                        } else {
+                            continueGameButton.isClickable = false
+                            continueGameButton.background = resources.getDrawable(R.drawable.add_team_no_active)
+                            continueGameButton.setTextColor(resources.getColorStateList(R.color.white))
+                        }
+                    }
+                }
+            }
         }
 
 
@@ -93,6 +138,10 @@ class MainActivity : AppCompatActivity() {
             prefsEditor.putInt("counter", counter)
             prefsEditor.putInt("roundNumber",roundNumber)
             prefsEditor.clear()
+            prefsEditor.putBoolean("teamsFlag", true)
+            prefsEditor.putBoolean("gameSettingsFlag", false)
+            prefsEditor.putBoolean("levelsFlag", false)
+            prefsEditor.putBoolean("gameFlag", false)
             prefsEditor.apply()
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)

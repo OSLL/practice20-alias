@@ -31,6 +31,7 @@ class Levels : AppCompatActivity() {
 
         easyLevelIcon.setOnClickListener {
             val intent = Intent(this, Game::class.java)
+            prefsEditor.putBoolean("gameFlag", true)
 //            intent.putExtra("teams", teams)
 //            intent.putExtra("settingsText", this.intent.getIntArrayExtra("settingsText"))
 //            intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
@@ -52,6 +53,7 @@ class Levels : AppCompatActivity() {
         middleLevelIcon.setOnClickListener {
 
             val intent = Intent(this, Game::class.java)
+            prefsEditor.putBoolean("gameFlag", true)
 //            intent.putExtra("teams", teams)
 //            intent.putExtra("settingsText", this.intent.getIntArrayExtra("settingsText"))
 //            intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
@@ -73,6 +75,7 @@ class Levels : AppCompatActivity() {
         hardLevelIcon.setOnClickListener {
 
             val intent = Intent(this, Game::class.java)
+            prefsEditor.putBoolean("gameFlag", true)
 //            intent.putExtra("teams", teams)
 //            intent.putExtra("settingsText", this.intent.getIntArrayExtra("settingsText"))
 //            intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
@@ -94,6 +97,7 @@ class Levels : AppCompatActivity() {
         easyLevelText.setOnClickListener {
 
             val intent = Intent(this, Game::class.java)
+            prefsEditor.putBoolean("gameFlag", true)
 //            intent.putExtra("teams", teams)
 //            intent.putExtra("settingsText", this.intent.getIntArrayExtra("settingsText"))
 //            intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
@@ -115,6 +119,7 @@ class Levels : AppCompatActivity() {
         middleLevelText.setOnClickListener {
 
             val intent = Intent(this, Game::class.java)
+            prefsEditor.putBoolean("gameFlag", true)
 //            intent.putExtra("teams", teams)
 //            intent.putExtra("settingsText", this.intent.getIntArrayExtra("settingsText"))
 //            intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
@@ -136,6 +141,7 @@ class Levels : AppCompatActivity() {
         hardLevelText.setOnClickListener {
 
             val intent = Intent(this, Game::class.java)
+            prefsEditor.putBoolean("gameFlag", true)
 //            intent.putExtra("teams", teams)
 //            intent.putExtra("settingsText", this.intent.getIntArrayExtra("settingsText"))
 //            intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
