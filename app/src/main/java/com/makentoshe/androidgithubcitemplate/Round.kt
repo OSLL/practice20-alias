@@ -3,7 +3,7 @@ package com.makentoshe.androidgithubcitemplate
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.SystemClock
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -42,18 +42,18 @@ class Round : AppCompatActivity() {
         val appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
         val prefsEditor: SharedPreferences.Editor = appPrefs.edit()
 
-        lastWord.visibility= View.INVISIBLE
+        lastWord.visibility = View.INVISIBLE
 
-        pauseButton.isClickable=false
+        pauseButton.isClickable = false
 
         var teamsAmount: Int = appPrefs.getInt("teamsAmount", 0)
-        teams = Array(teamsAmount){""}
+        teams = Array(teamsAmount) { "" }
         var currentRoundText: String = appPrefs.getString("currentRoundText", "1 раунд").toString()
-        var currrentTeamText: String = appPrefs.getString("currentTeamText", "1 команда").toString()
+        var currentTeamText: String = appPrefs.getString("currentTeamText", "1 команда").toString()
         for (i in 0 until teamsAmount)
             teams[i] = appPrefs.getString("team$i", "").toString()
         var book = appPrefs.getInt("book", -1)
-        teamsScores = Array(teamsAmount){0}
+        teamsScores = Array(teamsAmount) { 0 }
         for (i in 0 until teamsAmount)
             teamsScores[i] = appPrefs.getInt("teamsScores$i", 0)
         var roundLength = appPrefs.getInt("roundLength", 10)
@@ -63,21 +63,78 @@ class Round : AppCompatActivity() {
         var tasks = appPrefs.getBoolean("tasks", false)
         var isPlaying = false
         var winnersIndex: Int = -1
+        var counter = appPrefs.getInt("counter", -1)
+        var timeLeftMilliseconds:Long=(roundLength.toLong()*1000)
+
+        class myCountDownTimer(timeLeftMilliseconds:Long,val interval:Long): CountDownTimer(timeLeftMilliseconds, interval){
+
+            override fun onTick(p0: Long) {
+                timeLeftMilliseconds=p0
+                timerCounter.text=(timeLeftMilliseconds/1000).toString()
+                if (timerCounter.text.toString().toInt() <= 0) {
+                    chronometer.stop()
+                    pauseButton.isClickable = false
+                    Toast.makeText(applicationContext, "Время вышло!", Toast.LENGTH_SHORT)
+                        .show()
+                    counter += 1
+
+                    flagForLastWord = true
+                    if (generalLast) {
+                        if (counter == teamsAmount) {
+                            counter = 0
+                            currentRoundText =
+                                (currentRoundText.substringBefore(" ")
+                                    .toInt() + 1).toString() + " раунд"
+                        }
+                        prefsEditor.putString("currentWord", word.text.toString())
+                        for (i in 0 until teamsAmount)
+                        prefsEditor.putInt("teamsScores$i", teamsScores[i])
+                        prefsEditor.putInt("counter", counter)
+                        prefsEditor.putString("currentRoundText", currentRoundText)
+                        prefsEditor.apply()
+                        val intent = Intent(this@Round, LastWord::class.java)
+//                            intent.putExtra("teamsAmount", teamsAmount)
+//                            intent.putExtra("currentWord", word.text)
+//                            intent.putExtra("currentRoundText", currentRoundText)
+//                            intent.putExtra("newTeam", newTeam)
+//                            intent.putExtra("teams", teams)
+//                            intent.putExtra("counter", count)
+//                            intent.putExtra("teamsScores", teamsScores)
+//                            intent.putExtra("book", book)
+//                            intent.putExtra("currentTeam", roundTitle.text.toString())
+//                            intent.putExtra("currentRound", roundText.text.toString())
+//                            for (i in teams.indices)
+//                                intent.putExtra("list$i", list[i].toTypedArray())
+                        startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
+                        finish()
+                    }
+                    lastWord.visibility = View.VISIBLE
+
+                }
+            }
+
+            override fun onFinish() {
+
+            }
+
+        }
+        var countDownTimer: myCountDownTimer =  myCountDownTimer(timeLeftMilliseconds, 1000)
 
 //        list = Array(teams.size) { MutableList(0) { "0.0" } }
 //        for (i in teams.indices)
 //            list[i] = this.intent.getStringArrayExtra("list$i")!!.toMutableList()
 
-        roundTitle.text = currrentTeamText
+        roundTitle.text = currentTeamText
         roundText.text = currentRoundText
 
         val teamsNums = Array(teamsAmount) { it + 1 }
-        var counter = appPrefs.getInt("counter", -1)
 
 //        if (counter == 0)
 //            for (i in list) i.add("0.0")
 
         timerCounter.text = roundLength.toString()
+        Log.e("Sassasasa", timerCounter.text.toString())
 
         backButton.setOnClickListener {
             finish()
@@ -123,7 +180,9 @@ class Round : AppCompatActivity() {
         }
 
         var max = -100000
-        var pauseOffSet:Long=0
+    //    var pauseOffSet: Long = 0
+
+
 
 
         pauseButton.setOnClickListener {
@@ -133,8 +192,10 @@ class Round : AppCompatActivity() {
                     check.isClickable = false
                     cross.isClickable = false
                     word.text = "Пауза"
-                    chronometer.stop()
-                    pauseOffSet=SystemClock.elapsedRealtime()-chronometer.base
+
+                    countDownTimer.cancel()
+                  //  chronometer.stop()
+                  //  pauseOffSet = SystemClock.elapsedRealtime() - chronometer.base
                     isPlaying = false
                 } else {
                     pauseButton.background = resources.getDrawable(R.drawable.hard_level_button)
@@ -163,10 +224,13 @@ class Round : AppCompatActivity() {
                             word.text = newWord(file, bufferedReader)
                         }
                     }
-
-                    chronometer.base=SystemClock.elapsedRealtime()-pauseOffSet
-                    chronometer.start()
-                    timerCounter.text =  (chronometer.text.toString().substringBefore(':').toInt()*60+chronometer.text.toString().substringAfter(':').toInt()).toString()
+                    countDownTimer =  myCountDownTimer(timeLeftMilliseconds, 1000)
+                    countDownTimer.start()
+                 //   chronometer.base = SystemClock.elapsedRealtime() - pauseOffSet
+                 //   chronometer.start()
+                 /*   timerCounter.text = (chronometer.text.toString().substringBefore(':')
+                        .toInt() * 60 + chronometer.text.toString().substringAfter(':')
+                        .toInt()).toString()*/
                     isPlaying = true
                 }
             }
@@ -174,9 +238,11 @@ class Round : AppCompatActivity() {
 
         word.setOnClickListener {
             flagForFirstTap = true
-            flagForPause=true
-            chronometer.base = SystemClock.elapsedRealtime()+(timerCounter.text.toString().toInt() * 1000).toLong()+500
-            chronometer.start()
+            flagForPause = true
+            countDownTimer.start()
+            //chronometer.base = SystemClock.elapsedRealtime() + (timerCounter.text.toString()
+           //     .toInt() * 1000).toLong() + 500
+           // chronometer.start()
 
             isPlaying = true
             word.isClickable = false
@@ -196,27 +262,29 @@ class Round : AppCompatActivity() {
                 taskText.visibility = View.GONE
             }
 
-            chronometer.setOnChronometerTickListener {
-
-                    timerCounter.text =  (chronometer.text.toString().substringBefore(':').toInt()*60+chronometer.text.toString().substringAfter(':').toInt()).toString()//(timerCounter.text.toString().toInt() - 1).toString()
-                    if (timerCounter.text.toString().toInt() <= 0) {
-                        chronometer.stop()
-                        pauseButton.isClickable=false
-                        Toast.makeText(applicationContext, "Время вышло!", Toast.LENGTH_SHORT)
-                            .show()
-                        counter += 1
-
-                        flagForLastWord = true
-                        if (generalLast) {
-                            if (counter == teamsAmount) {
-                                counter = 0
-                                currentRoundText =
-                                    (currentRoundText.substringBefore(" ")
-                                        .toInt() + 1).toString() + " раунд"
-                            }
-                            prefsEditor.putString("currentWord", word.text.toString())
-                            prefsEditor.apply()
-                            val intent = Intent(this, LastWord::class.java)
+//            chronometer.setOnChronometerTickListener {
+//
+//                timerCounter.text = (chronometer.text.toString().substringBefore(':')
+//                    .toInt() * 60 + chronometer.text.toString().substringAfter(':')
+//                    .toInt()).toString()//(timerCounter.text.toString().toInt() - 1).toString()
+//                if (timerCounter.text.toString().toInt() <= 0) {
+//                    chronometer.stop()
+//                    pauseButton.isClickable = false
+//                    Toast.makeText(applicationContext, "Время вышло!", Toast.LENGTH_SHORT)
+//                        .show()
+//                    counter += 1
+//
+//                    flagForLastWord = true
+//                    if (generalLast) {
+//                        if (counter == teamsAmount) {
+//                            counter = 0
+//                            currentRoundText =
+//                                (currentRoundText.substringBefore(" ")
+//                                    .toInt() + 1).toString() + " раунд"
+//                        }
+//                        prefsEditor.putString("currentWord", word.text.toString())
+//                        prefsEditor.apply()
+//                        val intent = Intent(this, LastWord::class.java)
 //                            intent.putExtra("teamsAmount", teamsAmount)
 //                            intent.putExtra("currentWord", word.text)
 //                            intent.putExtra("currentRoundText", currentRoundText)
@@ -229,22 +297,14 @@ class Round : AppCompatActivity() {
 //                            intent.putExtra("currentRound", roundText.text.toString())
 //                            for (i in teams.indices)
 //                                intent.putExtra("list$i", list[i].toTypedArray())
-                            startActivity(intent)
-                            overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
-                            finish()
-                        }
-                        lastWord.visibility= View.VISIBLE
-
-                    }
-
-
-
-
-
-            }
-
-
-
+//                        startActivity(intent)
+//                        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
+//                        finish()
+//                    }
+//                    lastWord.visibility = View.VISIBLE
+//
+//                }
+//            }
 
             when (book) {
                 0 -> {
@@ -270,8 +330,6 @@ class Round : AppCompatActivity() {
                 }
             }
 
-
-
             check.setOnClickListener {
                 check.isClickable = false
                 if (flagForFirstTap) {
@@ -279,7 +337,8 @@ class Round : AppCompatActivity() {
                         if (counter == teamsAmount) {
                             counter = 0
                             currentRoundText =
-                                (currentRoundText.substringBefore(" ").toInt() + 1).toString() + " раунд"
+                                (currentRoundText.substringBefore(" ")
+                                    .toInt() + 1).toString() + " раунд"
 
 
                             for (i in teams.indices) {
@@ -292,7 +351,7 @@ class Round : AppCompatActivity() {
                         }
 
                         if (counter == 0) {
-                            teamsScores[teamsAmount-1]++
+                            teamsScores[teamsAmount - 1]++
                         } else {
                             teamsScores[counter - 1]++
                         }
@@ -301,6 +360,8 @@ class Round : AppCompatActivity() {
 
                         if (max >= wordsForWin) {
                             val intent = Intent(this, WinPage::class.java)
+                            prefsEditor.putInt("max", max)
+                            prefsEditor.putString("winner", teams[winnersIndex])
                             for (i in 0 until teamsAmount)
                                 prefsEditor.putInt("teamsScores$i", teamsScores[i])
                             prefsEditor.putInt("counter", counter)
@@ -397,7 +458,7 @@ class Round : AppCompatActivity() {
 
                     if (fineChanger) {
                         if (counter == 0) {
-                            teamsScores[teamsAmount-1]--
+                            teamsScores[teamsAmount - 1]--
                         } else {
                             teamsScores[counter - 1]--
                         }
@@ -405,6 +466,13 @@ class Round : AppCompatActivity() {
 
                     if (max >= wordsForWin) {
                         val intent = Intent(this, WinPage::class.java)
+                        prefsEditor.putInt("max", max)
+                        prefsEditor.putString("winner", teams[winnersIndex])
+                        for (i in 0 until teamsAmount)
+                            prefsEditor.putInt("teamsScores$i", teamsScores[i])
+                        prefsEditor.putInt("counter", counter)
+                        prefsEditor.putString("currentRoundText", currentRoundText)
+                        prefsEditor.apply()
 //                        intent.putExtra("WinTeamName", teams[winnersIndex])
 //                        intent.putExtra("teams", teams)
 //                        intent.putExtra("WinTeamScore", max)
@@ -484,7 +552,7 @@ class Round : AppCompatActivity() {
 
         currentWordNumber = (0 until wordsNumber).random()
         while (words.contains(currentWordNumber)) {
-            if (currentWordNumber == wordsNumber-1) currentWordNumber = 0
+            if (currentWordNumber == wordsNumber - 1) currentWordNumber = 0
             currentWordNumber++
         }
         words.add(currentWordNumber)

@@ -10,16 +10,26 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".LastWord"></activity>
-        <activity android:name=".RobberyRound" />
-        <activity android:name=".Statistics" />
-        <activity android:name=".WinPage" />
-        <activity android:name=".Rules" />
-        <activity android:name=".Round" />
-        <activity android:name=".Game" />
-        <activity android:name=".Levels" />
-        <activity android:name=".Teams" />
-        <activity android:name=".GameSettings" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".RobberyRound"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Statistics"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".WinPage"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Rules"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Round"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Game"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Levels"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Teams"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".GameSettings"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -132,6 +132,8 @@ class RobberyRound : AppCompatActivity() {
 
                             if (max >= wordsForWin.toString().toInt()) {
                                 val intent = Intent(this@RobberyRound, WinPage::class.java)
+                                prefsEditor.putInt("max", max)
+                                prefsEditor.putString("winner", teams[winnersIndex])
                                 for (i in 0 until teamsAmount)
                                     prefsEditor.putInt("teamsScores$i", teamsScores[i])
                                 prefsEditor.putInt("counter", counter)
@@ -380,6 +382,13 @@ class RobberyRound : AppCompatActivity() {
 
                     if (max >= wordsForWin.toString().toInt()) {
                         val intent = Intent(this, WinPage::class.java)
+                        prefsEditor.putInt("max", max)
+                        prefsEditor.putString("winner", teams[winnersIndex])
+                        for (i in 0 until teamsAmount)
+                            prefsEditor.putInt("teamsScores$i", teamsScores[i])
+                        prefsEditor.putInt("counter", counter)
+                        prefsEditor.putString("currentRoundText", currentRoundText)
+                        prefsEditor.apply()
 //                        intent.putExtra("WinTeamName", teams[winnersIndex])
 //                        intent.putExtra("WinTeamScore", max)
 //                        intent.putExtra("teams", teams)
@@ -397,6 +406,7 @@ class RobberyRound : AppCompatActivity() {
                             prefsEditor.putInt("teamsScores$i", teamsScores[i])
                         prefsEditor.putInt("counter", counter)
                         prefsEditor.putString("currentRoundText", currentRoundText)
+                        prefsEditor.apply()
 //                        intent.putExtra("currentRoundText", currentRoundText)
 //                        intent.putExtra("newTeam", newTeam)
 //                        intent.putExtra("teams", teams)

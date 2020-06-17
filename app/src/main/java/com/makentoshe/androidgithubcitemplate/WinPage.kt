@@ -1,6 +1,7 @@
 package com.makentoshe.androidgithubcitemplate
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
@@ -16,14 +17,24 @@ class WinPage : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_win_page)
 
-        var teamsExtra = this.intent.getStringArrayExtra("teams")!!
+        val appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
+        val prefsEditor: SharedPreferences.Editor = appPrefs.edit()
+        val teamsAmount = appPrefs.getInt("teamsAmount", 0)
 
-        list = Array(teamsExtra.size) { MutableList(0) { "0.0" } }
-        for (i in teamsExtra.indices)
-            list[i] = this.intent.getStringArrayExtra("list$i")!!.toMutableList()
+        val teams = Array(teamsAmount) { "" }
+        val teamsScores = Array(teamsAmount) {0}
+        for (i in teams.indices)
+            teams[i] = appPrefs.getString("team$i", "").toString()
+        for (i in teams.indices)
+            teamsScores[i] = appPrefs.getInt("teamsScores$i", 0)
 
-        var winner: String = this.intent.getStringExtra("WinTeamName")!!
-        var max: Int = this.intent.getIntExtra("WinTeamScore", -1)
+
+//        list = Array(teamsExtra.size) { MutableList(0) { "0.0" } }
+//        for (i in teamsExtra.indices)
+//            list[i] = this.intent.getStringArrayExtra("list$i")!!.toMutableList()
+//
+        val winner: String = appPrefs.getString("winner", "Error team")!!
+        val max: Int = appPrefs.getInt("max", -1)!!
         if ((max - (max % 10)) / 10 == 1) {
             youWin.text = "Команда: $winner"
             youWin1.text = "Победила!"
@@ -54,16 +65,16 @@ class WinPage : AppCompatActivity() {
             finish()
         }
 
-        toStatistics.setOnClickListener {
-            val intent = Intent(this, Statistics::class.java)
-            for (i in teamsExtra.indices)
-                intent.putExtra("list$i", list[i].toTypedArray())
-            intent.putExtra("teams", teamsExtra)
-            startActivity(intent)
-            finish()
-        }
+//        toStatistics.setOnClickListener {
+//            val intent = Intent(this, Statistics::class.java)
+//            for (i in teams.indices)
+//                intent.putExtra("list$i", list[i].toTypedArray())
+//            intent.putExtra("teams", teams)
+//            startActivity(intent)
+//            finish()
+//        }
 
-        var backgroundAnimation: Animation = RotateAnimation(
+        val backgroundAnimation: Animation = RotateAnimation(
             0.0f,
             360.0f,
             RotateAnimation.RELATIVE_TO_SELF,
