@@ -166,6 +166,7 @@ class Round : AppCompatActivity() {
 
                     chronometer.base=SystemClock.elapsedRealtime()-pauseOffSet
                     chronometer.start()
+                    timerCounter.text =  (chronometer.text.toString().substringBefore(':').toInt()*60+chronometer.text.toString().substringAfter(':').toInt()).toString()
                     isPlaying = true
                 }
             }
@@ -200,6 +201,7 @@ class Round : AppCompatActivity() {
                     timerCounter.text =  (chronometer.text.toString().substringBefore(':').toInt()*60+chronometer.text.toString().substringAfter(':').toInt()).toString()//(timerCounter.text.toString().toInt() - 1).toString()
                     if (timerCounter.text.toString().toInt() <= 0) {
                         chronometer.stop()
+                        pauseButton.isClickable=false
                         Toast.makeText(applicationContext, "Время вышло!", Toast.LENGTH_SHORT)
                             .show()
                         counter += 1
@@ -299,6 +301,11 @@ class Round : AppCompatActivity() {
 
                         if (max >= wordsForWin) {
                             val intent = Intent(this, WinPage::class.java)
+                            for (i in 0 until teamsAmount)
+                                prefsEditor.putInt("teamsScores$i", teamsScores[i])
+                            prefsEditor.putInt("counter", counter)
+                            prefsEditor.putString("currentRoundText", currentRoundText)
+                            prefsEditor.apply()
 //                            intent.putExtra("WinTeamName", teams[winnersIndex])
 //                            intent.putExtra("teams", teams)
 //                            intent.putExtra("WinTeamScore", max)

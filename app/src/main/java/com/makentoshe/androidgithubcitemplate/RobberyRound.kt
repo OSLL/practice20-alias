@@ -77,8 +77,8 @@ class RobberyRound : AppCompatActivity() {
         var counter = appPrefs.getInt("counter", -1)
         var max = -100000
         var isPlaying = false
-        val fineChanger = appPrefs.getBoolean("fineChanger", false)
-        val generalLast = appPrefs.getBoolean("generalLast", false)
+      //  val fineChanger = appPrefs.getBoolean("fineChanger", false)
+    //    val generalLast = appPrefs.getBoolean("generalLast", false)
         val tasks = appPrefs.getBoolean("tasks", false)
         val roundLength = appPrefs.getInt("roundLength", 10)
         val wordsForWin = appPrefs.getInt("wordsForWin", 10)

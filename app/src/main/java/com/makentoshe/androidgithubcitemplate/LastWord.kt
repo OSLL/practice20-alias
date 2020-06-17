@@ -8,8 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_robbery_round.*
 import kotlinx.android.synthetic.main.activity_round.backButton
 import kotlinx.android.synthetic.main.activity_round.cross
-import kotlinx.android.synthetic.main.activity_round.roundText
-import kotlinx.android.synthetic.main.activity_round.roundTitle
 
 class LastWord : AppCompatActivity() {
 
@@ -30,13 +28,12 @@ class LastWord : AppCompatActivity() {
     var book: Int = -1
     var teamsAmount: Int = 0
     var currentRoundText: String = "0"
+    var currentTeamText:String = "0"
     var wordsForWin =0
 //    var settingsText: IntArray = intArrayOf()
 //    var settingsInfo: BooleanArray = booleanArrayOf()
 
-  //  var word1: String = "0"
     var teamsNums: Array<Int> = arrayOf()
-    var count = 0
     var max = -100000
     var winnersIndex: Int = -1
 
@@ -49,20 +46,21 @@ class LastWord : AppCompatActivity() {
 
         teamsAmount = appPrefs.getInt("teamsAmount",2)//this.intent.getIntExtra("teamsAmount", 2)
         currentRoundText = appPrefs.getString("currentRoundText","1 раунд").toString()//this.intent.getStringExtra("currentRoundText")!!
+        currentTeamText = appPrefs.getString("currentTeamText", "Error").toString()
         wordsForWin = appPrefs.getInt("wordsForWin", 10)
 //        settingsText = this.intent.getIntArrayExtra("settingsText")!!
 //        settingsInfo = this.intent.getBooleanArrayExtra("settingsInfo")!!
       // word1 = this.intent.getStringExtra("currentWord")!!
         teamsNums = Array<Int>(teamsAmount) { it + 1 }
-        count = this.intent.getIntExtra("counter", 0)
+        var counter = appPrefs.getInt("counter", -1)
 
         word.text = appPrefs.getString("currentWord","Error")
 
-        teams = this.intent.getStringArrayExtra("teams")!!
-        teamsScores = this.intent.getIntArrayExtra("teamsScores")!!
+        for (i in teams.indices)
+            teams[i] = appPrefs.getString("team$i", "").toString()
+        for (i in teams.indices)
+            teamsScores[i] = appPrefs.getInt("teamsScores$i", 0)
 
-        roundTitle.text = this.intent.getStringExtra("currentTeam")
-        roundText.text = this.intent.getStringExtra("currentRound")
 
         book = this.intent.getIntExtra("book", -1)
 
@@ -95,7 +93,7 @@ class LastWord : AppCompatActivity() {
 //                            .toInt()) + 1)}.${list[position][roundText.text.toString()
 //                            .dropLast(6).toInt() - 1].substringAfter('.').toInt()}"
                     robberyRoundAdapter.notifyItemChanged(position)
-                    if (count == 0) {
+                    if (counter == 0) {
 
                         for (i in teams.indices) {
                             if (teamsScores[i] > max) {
@@ -108,28 +106,38 @@ class LastWord : AppCompatActivity() {
 
                     if (max >= wordsForWin) {
                         val intent = Intent(this@LastWord, WinPage::class.java)
-                        intent.putExtra("WinTeamName", teams[winnersIndex])
-                        intent.putExtra("WinTeamScore", max)
-                        intent.putExtra("teams", teams)
+                        for (i in 0 until teamsAmount)
+                            prefsEditor.putInt("teamsScores$i", teamsScores[i])
+                        prefsEditor.putInt("counter", counter)
+                        prefsEditor.putString("currentRoundText", currentRoundText)
+                        prefsEditor.apply()
+//                        intent.putExtra("WinTeamName", teams[winnersIndex])
+//                        intent.putExtra("WinTeamScore", max)
+//                        intent.putExtra("teams", teams)
 //                        for (i in teams.indices)
 //                            intent.putExtra("list$i", list[i].toTypedArray())
                         startActivity(intent)
                         max = 0
                         finish()
                     } else {
-                        var newTeam: String = teamsNums[count].toString() + " команда"
+                        var newTeam: String = teamsNums[counter].toString() + " команда"
 
                         val intent = Intent(this@LastWord, Game::class.java)
-                        intent.putExtra("currentRoundText", currentRoundText)
-                        intent.putExtra("newTeam", newTeam)
-//                        intent.putExtra("settingsText", settingsText)
-//                        intent.putExtra("settingsInfo", settingsInfo)
-                        intent.putExtra("teams", teams)
-                        intent.putExtra("counter", count)
-                        intent.putExtra("teamsScores", teamsScores)
-                        intent.putExtra("book", book)
-//                        for (i in teams.indices)
-//                            intent.putExtra("list$i", list[i].toTypedArray())
+                        for (i in 0 until teamsAmount)
+                            prefsEditor.putInt("teamsScores$i", teamsScores[i])
+                        prefsEditor.putInt("counter", counter)
+                        prefsEditor.putString("currentRoundText", currentRoundText)
+                        prefsEditor.apply()
+//                        intent.putExtra("currentRoundText", currentRoundText)
+//                        intent.putExtra("currentTeamText", currentTeamText)
+////                        intent.putExtra("settingsText", settingsText)
+////                        intent.putExtra("settingsInfo", settingsInfo)
+//                        intent.putExtra("teams", teams)
+//                        intent.putExtra("counter", counter)
+//                        intent.putExtra("teamsScores", teamsScores)
+//                        intent.putExtra("book", book)
+////                        for (i in teams.indices)
+////                            intent.putExtra("list$i", list[i].toTypedArray())
                         startActivity(intent)
                         overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
                         finish()
@@ -144,7 +152,7 @@ class LastWord : AppCompatActivity() {
         }
 
         cross.setOnClickListener {
-            if (count == 0) {
+            if (counter == 0) {
 //                currentRoundText =
 //                    (currentRoundText.substringBefore(" ")
 //                        .toInt() + 1).toString() + " раунд"
@@ -158,27 +166,37 @@ class LastWord : AppCompatActivity() {
 
             if (max >= wordsForWin) {
                 val intent = Intent(this, WinPage::class.java)
-                intent.putExtra("WinTeamName", teams[winnersIndex])
-                intent.putExtra("WinTeamScore", max)
-                intent.putExtra("teams", teams)
+                for (i in 0 until teamsAmount)
+                    prefsEditor.putInt("teamsScores$i", teamsScores[i])
+                prefsEditor.putInt("counter", counter)
+                prefsEditor.putString("currentRoundText", currentRoundText)
+                prefsEditor.apply()
+//                intent.putExtra("WinTeamName", teams[winnersIndex])
+//                intent.putExtra("WinTeamScore", max)
+//                intent.putExtra("teams", teams)
 //                for (i in teams.indices)
 //                    intent.putExtra("list$i", list[i].toTypedArray())
                 startActivity(intent)
                 max = 0
                 finish()
             } else {
-                var newTeam: String = teamsNums[count].toString() + " команда"
+                var newTeam: String = teamsNums[counter].toString() + " команда"
                 val intent = Intent(this, Game::class.java)
-                intent.putExtra("currentRoundText", currentRoundText)
-                intent.putExtra("newTeam", newTeam)
-//                intent.putExtra("settingsText", settingsText)
-//                intent.putExtra("settingsInfo", settingsInfo)
-                intent.putExtra("teams", teams)
-                intent.putExtra("counter", count)
-                intent.putExtra("teamsScores", teamsScores)
-                intent.putExtra("book", book)
-//                for (i in teams.indices)
-//                    intent.putExtra("list$i", list[i].toTypedArray())
+                for (i in 0 until teamsAmount)
+                    prefsEditor.putInt("teamsScores$i", teamsScores[i])
+                prefsEditor.putInt("counter", counter)
+                prefsEditor.putString("currentRoundText", currentRoundText)
+                prefsEditor.apply()
+//                intent.putExtra("currentRoundText", currentRoundText)
+//                intent.putExtra("newTeam", newTeam)
+////                intent.putExtra("settingsText", settingsText)
+////                intent.putExtra("settingsInfo", settingsInfo)
+//                intent.putExtra("teams", teams)
+//                intent.putExtra("counter", counter)
+//                intent.putExtra("teamsScores", teamsScores)
+//                intent.putExtra("book", book)
+////                for (i in teams.indices)
+////                    intent.putExtra("list$i", list[i].toTypedArray())
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
                 finish()
