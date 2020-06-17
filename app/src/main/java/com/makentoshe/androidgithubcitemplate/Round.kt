@@ -570,8 +570,7 @@ class Round : AppCompatActivity() {
     }
 
     override fun finish() {
-        super.finish()
-        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
+
     }
 
     private fun newWord(file: InputStream, bufferedReader: BufferedReader): String {
