@@ -72,32 +72,35 @@ class Round : AppCompatActivity() {
             override fun onTick(p0: Long) {
                 timeLeftMilliseconds=p0
                 timerCounter.text=(timeLeftMilliseconds/1000).toString()
-                if (timerCounter.text.toString().toInt() <= 0) {
-                    chronometer.stop()
-                    pauseButton.isClickable = false
-                    Toast.makeText(applicationContext, "Время вышло!", Toast.LENGTH_SHORT)
-                        .show()
-                    counter += 1
 
-                    flagForLastWord = true
-                    if (generalLast) {
-                        if (counter == teamsAmount) {
-                            counter = 0
-                            currentRoundText =
-                                (currentRoundText.substringBefore(" ")
-                                    .toInt() + 1).toString() + " раунд"
-                        }
-                        prefsEditor.putString("currentWord", word.text.toString())
-                        prefsEditor.putInt("roundNumber", roundNumber)
-                        for (i in 0 until teamsAmount)
+
+            }
+
+            override fun onFinish() {
+                pauseButton.isClickable = false
+                Toast.makeText(applicationContext, "Время вышло!", Toast.LENGTH_SHORT)
+                    .show()
+                counter += 1
+
+                flagForLastWord = true
+                if (generalLast) {
+                    if (counter == teamsAmount) {
+                        counter = 0
+                        currentRoundText =
+                            (currentRoundText.substringBefore(" ")
+                                .toInt() + 1).toString() + " раунд"
+                    }
+                    prefsEditor.putString("currentWord", word.text.toString())
+                    prefsEditor.putInt("roundNumber", roundNumber)
+                    for (i in 0 until teamsAmount)
                         prefsEditor.putInt("teamsScores$i", teamsScores[i])
-                        for (i in 0 until teamsAmount)
-                            for (j in 0 until roundNumber)
-                                prefsEditor.putString("list[$i][$j]", list[i][j])
-                        prefsEditor.putInt("counter", counter)
-                        prefsEditor.putString("currentRoundText", currentRoundText)
-                        prefsEditor.apply()
-                        val intent = Intent(this@Round, LastWord::class.java)
+                    for (i in 0 until teamsAmount)
+                        for (j in 0 until roundNumber)
+                            prefsEditor.putString("list[$i][$j]", list[i][j])
+                    prefsEditor.putInt("counter", counter)
+                    prefsEditor.putString("currentRoundText", currentRoundText)
+                    prefsEditor.apply()
+                    val intent = Intent(this@Round, LastWord::class.java)
 //                            intent.putExtra("teamsAmount", teamsAmount)
 //                            intent.putExtra("currentWord", word.text)
 //                            intent.putExtra("currentRoundText", currentRoundText)
@@ -110,17 +113,11 @@ class Round : AppCompatActivity() {
 //                            intent.putExtra("currentRound", roundText.text.toString())
 //                            for (i in teams.indices)
 //                                intent.putExtra("list$i", list[i].toTypedArray())
-                        startActivity(intent)
-                        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
-                        finish()
-                    }
-                    lastWord.visibility = View.VISIBLE
-
+                    startActivity(intent)
+                    overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
+                    finish()
                 }
-            }
-
-            override fun onFinish() {
-
+                lastWord.visibility = View.VISIBLE
             }
 
         }
@@ -136,7 +133,7 @@ class Round : AppCompatActivity() {
 
         if (counter == 0)
             roundNumber++
-
+        Log.e("sas",roundNumber.toString())
         list = Array(teams.size) { MutableList(roundNumber) { "0.0" } }
 
         for (i in 0 until teamsAmount)
@@ -344,6 +341,19 @@ class Round : AppCompatActivity() {
                 check.isClickable = false
                 if (flagForFirstTap) {
                     if (flagForLastWord) {
+
+//                        if (counter == 0) {
+//                            teamsScores[teamsAmount - 1]++
+//                            list[teamsAmount - 1][roundNumber - 1] =
+//                                "${((list[teamsAmount - 1][roundNumber - 1].substringBefore('.')
+//                                    .toInt()) + 1)}.${list[teamsAmount - 1][roundNumber - 1].substringAfter('.')}"
+//                        } else {
+                            teamsScores[counter - 1]++
+                            list[counter-1][roundNumber - 1] =
+                                "${((list[counter-1][roundNumber - 1].substringBefore('.')
+                                    .toInt()) + 1)}.${list[counter-1][roundNumber - 1].substringAfter('.')}"
+//                        }
+
                         if (counter == teamsAmount) {
                             counter = 0
                             currentRoundText =
@@ -359,13 +369,6 @@ class Round : AppCompatActivity() {
                             }
 
                         }
-
-                        if (counter == 0) {
-                            teamsScores[teamsAmount - 1]++
-                        } else {
-                            teamsScores[counter - 1]++
-                        }
-
 
 
                         if (max >= wordsForWin) {
@@ -444,11 +447,9 @@ class Round : AppCompatActivity() {
                         }
                     }
                     teamsScores[counter]++
-                    list[counter][roundText.text.toString().dropLast(6).toInt() - 1] =
-                        "${((list[counter][roundText.text.toString().dropLast(6)
-                            .toInt() - 1].substringBefore('.')
-                            .toInt()) + 1)}.${list[counter][roundText.text.toString()
-                            .dropLast(6).toInt() - 1].substringAfter('.')}"
+                    list[counter][roundNumber - 1] =
+                        "${((list[counter][roundNumber - 1].substringBefore('.')
+                            .toInt()) + 1)}.${list[counter][roundNumber - 1].substringAfter('.')}"
                 }
                 check.isClickable = true
             }
@@ -458,6 +459,24 @@ class Round : AppCompatActivity() {
             cross.isClickable = false
             if (flagForFirstTap) {
                 if (flagForLastWord) {
+
+                    if (fineChanger) {
+//                        if (counter == 0) {
+//                            teamsScores[teamsAmount - 1]--
+//                        } else {
+                            teamsScores[counter - 1]--
+//                        }
+                    }
+//                    if (counter == 0) {
+//                        list[teamsAmount - 1][roundNumber - 1] =
+//                            "${((list[teamsAmount - 1][roundNumber - 1].substringBefore('.')
+//                                .toInt()))}.${list[teamsAmount - 1][roundNumber - 1].substringAfter('.').toInt() + 1}"
+//                    } else {
+                        list[counter-1][roundNumber - 1] =
+                            "${((list[counter-1][roundNumber - 1].substringBefore('.')
+                                .toInt()))}.${list[counter-1][roundNumber - 1].substringAfter('.').toInt() + 1}"
+//                    }
+
                     if (counter == teamsAmount) {
                         counter = 0
                         currentRoundText =
@@ -474,13 +493,6 @@ class Round : AppCompatActivity() {
 
                     }
 
-                    if (fineChanger) {
-                        if (counter == 0) {
-                            teamsScores[teamsAmount - 1]--
-                        } else {
-                            teamsScores[counter - 1]--
-                        }
-                    }
 
                     if (max >= wordsForWin) {
                         val intent = Intent(this, WinPage::class.java)
@@ -561,11 +573,9 @@ class Round : AppCompatActivity() {
                 }
             }
             cross.isClickable = true
-            list[counter][roundText.text.toString().dropLast(6).toInt() - 1] =
-                "${((list[counter][roundText.text.toString().dropLast(6)
-                    .toInt() - 1].substringBefore('.')
-                    .toInt()))}.${list[counter][roundText.text.toString()
-                    .dropLast(6).toInt() - 1].substringAfter('.').toInt() + 1}"
+            list[counter][roundNumber - 1] =
+                "${((list[counter][roundNumber - 1].substringBefore('.')
+                    .toInt()))}.${list[counter][roundNumber - 1].substringAfter('.').toInt() + 1}"
         }
     }
 

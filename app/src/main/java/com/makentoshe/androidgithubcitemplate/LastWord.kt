@@ -93,11 +93,9 @@ class LastWord : AppCompatActivity() {
                     teamsScores1[position]++
                     for (i in teams.indices)
                         Log.e("Any", teamsScores[i].toString())
-                    list[position][roundText.text.toString().dropLast(6).toInt() - 1] =
-                        "${((list[position][roundText.text.toString().dropLast(6)
-                            .toInt() - 1].substringBefore('.')
-                            .toInt()) + 1)}.${list[position][roundText.text.toString()
-                            .dropLast(6).toInt() - 1].substringAfter('.').toInt()}"
+                    list[position][roundNumber - 1] =
+                        "${((list[position][roundNumber - 1].substringBefore('.')
+                            .toInt()) + 1)}.${list[position][roundNumber - 1].substringAfter('.').toInt()}"
                     robberyRoundAdapter.notifyItemChanged(position)
                     if (counter == 0) {
 
@@ -229,6 +227,5 @@ class LastWord : AppCompatActivity() {
     }
 
     override fun finish() {
-
     }
 }

@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
 //            intent.putExtra("settingsInfo", settingsInfo)
 //            for (i in teams.indices)
 //                intent.putExtra("list$i", list[i].toTypedArray())
+            roundNumber = 0
             teamsAmount = 0
             teams = MutableList(teamsAmount){""}
             wordsForWin = 10
@@ -90,6 +91,8 @@ class MainActivity : AppCompatActivity() {
             prefsEditor.putString("currentRoundText", currentRoundText)
             prefsEditor.putString("currentTeamText", currentTeamText)
             prefsEditor.putInt("counter", counter)
+            prefsEditor.putInt("roundNumber",roundNumber)
+            prefsEditor.clear()
             prefsEditor.apply()
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)

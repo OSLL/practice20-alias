@@ -3,7 +3,7 @@ package com.makentoshe.androidgithubcitemplate
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.SystemClock
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -13,7 +13,6 @@ import kotlinx.android.synthetic.main.activity_robbery_round.*
 import kotlinx.android.synthetic.main.activity_robbery_round.pauseButton
 import kotlinx.android.synthetic.main.activity_round.*
 import kotlinx.android.synthetic.main.activity_round.backButton
-import kotlinx.android.synthetic.main.activity_round.chronometer
 import kotlinx.android.synthetic.main.activity_round.cross
 import kotlinx.android.synthetic.main.activity_round.roundText
 import kotlinx.android.synthetic.main.activity_round.roundTitle
@@ -85,7 +84,30 @@ class RobberyRound : AppCompatActivity() {
         var roundNumber = appPrefs.getInt("roundNumber", 0)
 
         timerCounter.text = roundLength.toString()
-        chronometer.base = (timerCounter.text.toString().toInt() * 1000).toLong()
+
+
+
+        var timeLeftMilliseconds:Long=(roundLength.toLong()*1000)
+
+        class myCountDownTimer(timeLeftMilliseconds:Long,val interval:Long): CountDownTimer(timeLeftMilliseconds, interval){
+
+            override fun onTick(p0: Long) {
+                timeLeftMilliseconds=p0
+                timerCounter.text=(timeLeftMilliseconds/1000).toString()
+            }
+
+            override fun onFinish() {
+                pauseButton.isClickable = false
+                Toast.makeText(applicationContext, "Время вышло!", Toast.LENGTH_SHORT)
+                    .show()
+                counter += 1
+
+                flagForLastWord = true
+                lastWordRobbery.visibility = View.VISIBLE
+            }
+
+        }
+        var countDownTimer: myCountDownTimer =  myCountDownTimer(timeLeftMilliseconds, 1000)
 
 //        list = Array(teams.size) { MutableList(0) { "0.0" } }
 //        for (i in teams.indices)
@@ -129,11 +151,11 @@ class RobberyRound : AppCompatActivity() {
                             }
 
 
-                            if (counter == 0) {
-                                teamsScores[teamsAmount - 1]++
-                            } else {
-                                teamsScores[counter - 1]++
-                            }
+
+                                teamsScores[position]++
+                            list[position][roundNumber - 1] =
+                                "${((list[position][roundNumber - 1].substringBefore('.')
+                                    .toInt()) + 1)}.${list[position][roundNumber - 1].substringAfter('.')}"
 
 
 
@@ -214,11 +236,9 @@ class RobberyRound : AppCompatActivity() {
                         }
                         teamsScores[position]++
                         teamsScores1[position]++
-                        list[position][roundText.text.toString().dropLast(6).toInt() - 1] =
-                            "${((list[position][roundText.text.toString().dropLast(6)
-                                .toInt() - 1].substringBefore('.')
-                                .toInt()) + 1)}.${list[position][roundText.text.toString()
-                                .dropLast(6).toInt() - 1].substringAfter('.')}"
+                        list[position][roundNumber - 1] =
+                            "${((list[position][roundNumber - 1].substringBefore('.')
+                                .toInt()) + 1)}.${list[position][roundNumber - 1].substringAfter('.')}"
                         robberyRoundAdapter.notifyItemChanged(position)
                     }
                 }
@@ -267,24 +287,23 @@ class RobberyRound : AppCompatActivity() {
             }
         }
 
-        var pauseOffSet:Long=0
 
         pauseButton.setOnClickListener {
             if (flagForPause) {
                 if (isPlaying) {
                     pauseButton.background = resources.getDrawable(R.drawable.medium_level_button)
-                  //  check.isClickable = false
+                    flagForPauseCheck = false
                     cross.isClickable = false
-                    flagForPauseCheck=false
                     word.text = "Пауза"
-                    chronometer.stop()
-                    pauseOffSet=SystemClock.elapsedRealtime()-chronometer.base
+
+                    countDownTimer.cancel()
+                    //  chronometer.stop()
+                    //  pauseOffSet = SystemClock.elapsedRealtime() - chronometer.base
                     isPlaying = false
                 } else {
                     pauseButton.background = resources.getDrawable(R.drawable.hard_level_button)
-                  //  check.isClickable = true
+                    flagForPauseCheck = true
                     cross.isClickable = true
-                    flagForPauseCheck=true
                     when (book) {
                         0 -> {
                             var file: InputStream = assets.open("Easy.txt")
@@ -308,8 +327,13 @@ class RobberyRound : AppCompatActivity() {
                             word.text = newWord(file, bufferedReader)
                         }
                     }
-                    chronometer.base=SystemClock.elapsedRealtime()-pauseOffSet
-                    chronometer.start()
+                    countDownTimer =  myCountDownTimer(timeLeftMilliseconds, 1000)
+                    countDownTimer.start()
+                    //   chronometer.base = SystemClock.elapsedRealtime() - pauseOffSet
+                    //   chronometer.start()
+                    /*   timerCounter.text = (chronometer.text.toString().substringBefore(':')
+                           .toInt() * 60 + chronometer.text.toString().substringAfter(':')
+                           .toInt()).toString()*/
                     isPlaying = true
                 }
             }
@@ -318,8 +342,7 @@ class RobberyRound : AppCompatActivity() {
         word.setOnClickListener {
             flagForFirstTap = true
             flagForPause = true
-            chronometer.base = SystemClock.elapsedRealtime()+(timerCounter.text.toString().toInt() * 1000).toLong()+500
-            chronometer.start()
+            countDownTimer.start()
             word.isClickable = false
             isPlaying = true
             if (tasks) {
@@ -337,7 +360,7 @@ class RobberyRound : AppCompatActivity() {
             } else {
                 taskRobberyText.visibility = View.GONE
             }
-            chronometer.setOnChronometerTickListener {
+          /*  chronometer.setOnChronometerTickListener {
                 timerCounter.text =  (chronometer.text.toString().substringBefore(':').toInt()*60+chronometer.text.toString().substringAfter(':').toInt()).toString()//(timerCounter.text.toString().toInt() - 1).toString()
                     if (timerCounter.text.toString().toInt() <= 0) {
                         chronometer.stop()
@@ -349,7 +372,7 @@ class RobberyRound : AppCompatActivity() {
                         lastWordRobbery.visibility = View.VISIBLE
                     }
             }
-
+*/
             when (book) {
                 0 -> {
                     var file: InputStream = assets.open("Easy.txt")
