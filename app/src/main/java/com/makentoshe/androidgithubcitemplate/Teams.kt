@@ -198,9 +198,7 @@ class Teams : AppCompatActivity() {
                                     tnld.isErrorEnabled = false
                                     tnld.isErrorEnabled = true
                                 }
-
                             }
-
                         }
                     }
 
@@ -257,13 +255,9 @@ class Teams : AppCompatActivity() {
                                     tnld.isErrorEnabled = false
                                     tnld.isErrorEnabled = true
                                 }
-
                             }
-
                         }
-
                     }
-
                 })
             }
         })
@@ -339,9 +333,7 @@ class Teams : AppCompatActivity() {
                     tnld.isErrorEnabled = false
                     tnld.isErrorEnabled = true
                 }
-
             }
-
         }
 
         tnet.addTextChangedListener(object : TextWatcher {
@@ -400,9 +392,7 @@ class Teams : AppCompatActivity() {
                             tnld.isErrorEnabled = false
                             tnld.isErrorEnabled = true
                         }
-
                     }
-
                 }
             }
 
@@ -459,12 +449,9 @@ class Teams : AppCompatActivity() {
                             tnld.isErrorEnabled = false
                             tnld.isErrorEnabled = true
                         }
-
                     }
-
                 }
             }
-
         })
     }
 }

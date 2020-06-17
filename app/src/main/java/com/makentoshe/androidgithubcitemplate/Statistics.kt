@@ -1,6 +1,7 @@
 package com.makentoshe.androidgithubcitemplate
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,11 +15,16 @@ class Statistics : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_statistics)
 
-        val teamsExtra = this.intent.getStringArrayExtra("teams")
+        val appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
+        val prefsEditor: SharedPreferences.Editor = appPrefs.edit()
 
-        list = Array(teamsExtra.size) { MutableList(0) { "0.0" } }
+        val teamsExtra = this.intent.getStringArrayExtra("teams")
+        var roundNumber = appPrefs.getInt("roundNumber", 0)
+
+        list = Array(teamsExtra.size) { MutableList(roundNumber) { "0.0" } }
         for (i in teamsExtra.indices)
-            list[i] = this.intent.getStringArrayExtra("list$i")!!.toMutableList()
+            for (j in 0 until roundNumber)
+                list[i][j] = appPrefs.getString("list[$i][$j]", "0.0").toString()
 
         backButton.setOnClickListener {
             finish()

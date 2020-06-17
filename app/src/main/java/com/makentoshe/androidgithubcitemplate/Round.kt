@@ -15,7 +15,7 @@ import java.io.InputStreamReader
 
 class Round : AppCompatActivity() {
 
-//    lateinit var list: Array<MutableList<String>>
+    lateinit var list: Array<MutableList<String>>
 
     private var wordsNumber: Int = 0
     private var tasksNumber: Int = 0
@@ -65,6 +65,7 @@ class Round : AppCompatActivity() {
         var winnersIndex: Int = -1
         var counter = appPrefs.getInt("counter", -1)
         var timeLeftMilliseconds:Long=(roundLength.toLong()*1000)
+        var roundNumber = appPrefs.getInt("roundNumber", 0)
 
         class myCountDownTimer(timeLeftMilliseconds:Long,val interval:Long): CountDownTimer(timeLeftMilliseconds, interval){
 
@@ -87,8 +88,12 @@ class Round : AppCompatActivity() {
                                     .toInt() + 1).toString() + " раунд"
                         }
                         prefsEditor.putString("currentWord", word.text.toString())
+                        prefsEditor.putInt("roundNumber", roundNumber)
                         for (i in 0 until teamsAmount)
                         prefsEditor.putInt("teamsScores$i", teamsScores[i])
+                        for (i in 0 until teamsAmount)
+                            for (j in 0 until roundNumber)
+                                prefsEditor.putString("list[$i][$j]", list[i][j])
                         prefsEditor.putInt("counter", counter)
                         prefsEditor.putString("currentRoundText", currentRoundText)
                         prefsEditor.apply()
@@ -121,7 +126,6 @@ class Round : AppCompatActivity() {
         }
         var countDownTimer: myCountDownTimer =  myCountDownTimer(timeLeftMilliseconds, 1000)
 
-//        list = Array(teams.size) { MutableList(0) { "0.0" } }
 //        for (i in teams.indices)
 //            list[i] = this.intent.getStringArrayExtra("list$i")!!.toMutableList()
 
@@ -130,8 +134,14 @@ class Round : AppCompatActivity() {
 
         val teamsNums = Array(teamsAmount) { it + 1 }
 
-//        if (counter == 0)
-//            for (i in list) i.add("0.0")
+        if (counter == 0)
+            roundNumber++
+
+        list = Array(teams.size) { MutableList(roundNumber) { "0.0" } }
+
+        for (i in 0 until teamsAmount)
+            for (j in 0 until roundNumber)
+                list[i][j] = appPrefs.getString("list[$i][$j]", "0.0").toString()
 
         timerCounter.text = roundLength.toString()
         Log.e("Sassasasa", timerCounter.text.toString())
@@ -360,12 +370,16 @@ class Round : AppCompatActivity() {
 
                         if (max >= wordsForWin) {
                             val intent = Intent(this, WinPage::class.java)
+                            prefsEditor.putInt("roundNumber", roundNumber)
                             prefsEditor.putInt("max", max)
                             prefsEditor.putString("winner", teams[winnersIndex])
                             for (i in 0 until teamsAmount)
                                 prefsEditor.putInt("teamsScores$i", teamsScores[i])
                             prefsEditor.putInt("counter", counter)
                             prefsEditor.putString("currentRoundText", currentRoundText)
+                            for (i in 0 until teamsAmount)
+                                for (j in 0 until roundNumber)
+                                    prefsEditor.putString("list[$i][$j]", list[i][j])
                             prefsEditor.apply()
 //                            intent.putExtra("WinTeamName", teams[winnersIndex])
 //                            intent.putExtra("teams", teams)
@@ -379,10 +393,14 @@ class Round : AppCompatActivity() {
                             finish()
                         } else {
                             val intent = Intent(this, Game::class.java)
+                            prefsEditor.putInt("roundNumber", roundNumber)
                             for (i in 0 until teamsAmount)
                                 prefsEditor.putInt("teamsScores$i", teamsScores[i])
                             prefsEditor.putInt("counter", counter)
                             prefsEditor.putString("currentRoundText", currentRoundText)
+                            for (i in 0 until teamsAmount)
+                                for (j in 0 until roundNumber)
+                                    prefsEditor.putString("list[$i][$j]", list[i][j])
                             prefsEditor.apply()
 //                            intent.putExtra("currentRoundText", currentRoundText)
 //                            intent.putExtra("newTeam", newTeam)
@@ -426,11 +444,11 @@ class Round : AppCompatActivity() {
                         }
                     }
                     teamsScores[counter]++
-//                    list[count][roundText.text.toString().dropLast(6).toInt() - 1] =
-//                        "${((list[count][roundText.text.toString().dropLast(6)
-//                            .toInt() - 1].substringBefore('.')
-//                            .toInt()) + 1)}.${list[count][roundText.text.toString()
-//                            .dropLast(6).toInt() - 1].substringAfter('.')}"
+                    list[counter][roundText.text.toString().dropLast(6).toInt() - 1] =
+                        "${((list[counter][roundText.text.toString().dropLast(6)
+                            .toInt() - 1].substringBefore('.')
+                            .toInt()) + 1)}.${list[counter][roundText.text.toString()
+                            .dropLast(6).toInt() - 1].substringAfter('.')}"
                 }
                 check.isClickable = true
             }
@@ -466,12 +484,16 @@ class Round : AppCompatActivity() {
 
                     if (max >= wordsForWin) {
                         val intent = Intent(this, WinPage::class.java)
+                        prefsEditor.putInt("roundNumber", roundNumber)
                         prefsEditor.putInt("max", max)
                         prefsEditor.putString("winner", teams[winnersIndex])
                         for (i in 0 until teamsAmount)
                             prefsEditor.putInt("teamsScores$i", teamsScores[i])
                         prefsEditor.putInt("counter", counter)
                         prefsEditor.putString("currentRoundText", currentRoundText)
+                        for (i in 0 until teamsAmount)
+                            for (j in 0 until roundNumber)
+                                prefsEditor.putString("list[$i][$j]", list[i][j])
                         prefsEditor.apply()
 //                        intent.putExtra("WinTeamName", teams[winnersIndex])
 //                        intent.putExtra("teams", teams)
@@ -486,10 +508,14 @@ class Round : AppCompatActivity() {
                     } else {
                         var newTeam: String = teamsNums[counter].toString() + " команда"
                         val intent = Intent(this, Game::class.java)
+                        prefsEditor.putInt("roundNumber", roundNumber)
                         for (i in 0 until teamsAmount)
                             prefsEditor.putInt("teamsScores$i", teamsScores[i])
                         prefsEditor.putInt("counter", counter)
                         prefsEditor.putString("currentRoundText", currentRoundText)
+                        for (i in 0 until teamsAmount)
+                            for (j in 0 until roundNumber)
+                                prefsEditor.putString("list[$i][$j]", list[i][j])
                         prefsEditor.apply()
 //                        intent.putExtra("currentRoundText", currentRoundText)
 //                        intent.putExtra("newTeam", newTeam)
@@ -535,11 +561,11 @@ class Round : AppCompatActivity() {
                 }
             }
             cross.isClickable = true
-//            list[count][roundText.text.toString().dropLast(6).toInt() - 1] =
-//                "${((list[count][roundText.text.toString().dropLast(6)
-//                    .toInt() - 1].substringBefore('.')
-//                    .toInt()))}.${list[count][roundText.text.toString()
-//                    .dropLast(6).toInt() - 1].substringAfter('.').toInt() + 1}"
+            list[counter][roundText.text.toString().dropLast(6).toInt() - 1] =
+                "${((list[counter][roundText.text.toString().dropLast(6)
+                    .toInt() - 1].substringBefore('.')
+                    .toInt()))}.${list[counter][roundText.text.toString()
+                    .dropLast(6).toInt() - 1].substringAfter('.').toInt() + 1}"
         }
     }
 

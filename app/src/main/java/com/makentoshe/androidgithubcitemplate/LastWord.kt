@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.activity_round.cross
 
 class LastWord : AppCompatActivity() {
 
-//    lateinit var list: Array<MutableList<String>>
+    lateinit var list: Array<MutableList<String>>
 
     var wordsNumber: Int = 0
 
@@ -66,7 +66,13 @@ class LastWord : AppCompatActivity() {
 //        for (i in teams.indices)
 //            list[i] = this.intent.getStringArrayExtra("list$i")!!.toMutableList()
 
+        var roundNumber = appPrefs.getInt("roundNumber", 0)
 
+        list = Array(teams.size) { MutableList(roundNumber) { "0.0" } }
+
+        for (i in 0 until teamsAmount)
+            for (j in 0 until roundNumber)
+                list[i][j] = appPrefs.getString("list[$i][$j]", "0.0").toString()
 
 
         fun createRecyclerView() {
@@ -87,11 +93,11 @@ class LastWord : AppCompatActivity() {
                     teamsScores1[position]++
                     for (i in teams.indices)
                         Log.e("Any", teamsScores[i].toString())
-//                    list[position][roundText.text.toString().dropLast(6).toInt() - 1] =
-//                        "${((list[position][roundText.text.toString().dropLast(6)
-//                            .toInt() - 1].substringBefore('.')
-//                            .toInt()) + 1)}.${list[position][roundText.text.toString()
-//                            .dropLast(6).toInt() - 1].substringAfter('.').toInt()}"
+                    list[position][roundText.text.toString().dropLast(6).toInt() - 1] =
+                        "${((list[position][roundText.text.toString().dropLast(6)
+                            .toInt() - 1].substringBefore('.')
+                            .toInt()) + 1)}.${list[position][roundText.text.toString()
+                            .dropLast(6).toInt() - 1].substringAfter('.').toInt()}"
                     robberyRoundAdapter.notifyItemChanged(position)
                     if (counter == 0) {
 
@@ -112,6 +118,9 @@ class LastWord : AppCompatActivity() {
                             prefsEditor.putInt("teamsScores$i", teamsScores[i])
                         prefsEditor.putInt("counter", counter)
                         prefsEditor.putString("currentRoundText", currentRoundText)
+                        for (i in 0 until teamsAmount)
+                            for (j in 0 until roundNumber)
+                                prefsEditor.putString("list[$i][$j]", list[i][j])
                         prefsEditor.apply()
 //                        intent.putExtra("WinTeamName", teams[winnersIndex])
 //                        intent.putExtra("WinTeamScore", max)
@@ -130,6 +139,9 @@ class LastWord : AppCompatActivity() {
                         prefsEditor.putInt("counter", counter)
                         prefsEditor.putString("currentRoundText", currentRoundText)
                         prefsEditor.putString("currentTeamText", currentTeamText)
+                        for (i in 0 until teamsAmount)
+                            for (j in 0 until roundNumber)
+                                prefsEditor.putString("list[$i][$j]", list[i][j])
                         prefsEditor.apply()
 //                        intent.putExtra("currentRoundText", currentRoundText)
 //                        intent.putExtra("currentTeamText", currentTeamText)
@@ -175,6 +187,9 @@ class LastWord : AppCompatActivity() {
                     prefsEditor.putInt("teamsScores$i", teamsScores[i])
                 prefsEditor.putInt("counter", counter)
                 prefsEditor.putString("currentRoundText", currentRoundText)
+                for (i in 0 until teamsAmount)
+                    for (j in 0 until roundNumber)
+                        prefsEditor.putString("list[$i][$j]", list[i][j])
                 prefsEditor.apply()
 //                intent.putExtra("WinTeamName", teams[winnersIndex])
 //                intent.putExtra("WinTeamScore", max)
@@ -192,6 +207,9 @@ class LastWord : AppCompatActivity() {
                 prefsEditor.putInt("counter", counter)
                 prefsEditor.putString("currentRoundText", currentRoundText)
                 prefsEditor.putString("currentTeamText", currentTeamText)
+                for (i in 0 until teamsAmount)
+                    for (j in 0 until roundNumber)
+                        prefsEditor.putString("list[$i][$j]", list[i][j])
                 prefsEditor.apply()
 //                intent.putExtra("currentRoundText", currentRoundText)
 //                intent.putExtra("newTeam", newTeam)

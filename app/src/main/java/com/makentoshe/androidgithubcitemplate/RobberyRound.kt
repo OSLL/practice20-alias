@@ -25,7 +25,7 @@ import java.io.InputStreamReader
 
 class RobberyRound : AppCompatActivity() {
 
-//    lateinit var list: Array<MutableList<String>>
+    lateinit var list: Array<MutableList<String>>
 
     var wordsNumber: Int = 0
     var tasksNumber: Int = 0
@@ -54,7 +54,7 @@ class RobberyRound : AppCompatActivity() {
         setContentView(R.layout.activity_robbery_round)
 
         val appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
-        var prefsEditor: SharedPreferences.Editor = appPrefs.edit()
+        val prefsEditor: SharedPreferences.Editor = appPrefs.edit()
         val teamsAmount = appPrefs.getInt("teamsAmount", 0)
 
         lastWordRobbery.visibility = View.INVISIBLE
@@ -82,6 +82,7 @@ class RobberyRound : AppCompatActivity() {
         val tasks = appPrefs.getBoolean("tasks", false)
         val roundLength = appPrefs.getInt("roundLength", 10)
         val wordsForWin = appPrefs.getInt("wordsForWin", 10)
+        var roundNumber = appPrefs.getInt("roundNumber", 0)
 
         timerCounter.text = roundLength.toString()
         chronometer.base = (timerCounter.text.toString().toInt() * 1000).toLong()
@@ -90,8 +91,14 @@ class RobberyRound : AppCompatActivity() {
 //        for (i in teams.indices)
 //            list[i] = this.intent.getStringArrayExtra("list$i")!!.toMutableList()
 //
-//        if (counter == 0)
-//            for (i in list) i.add("0.0")
+        if (counter == 0)
+            roundNumber++
+
+        list = Array(teams.size) { MutableList(roundNumber) { "0.0" } }
+
+        for (i in 0 until teamsAmount)
+            for (j in 0 until roundNumber)
+                list[i][j] = appPrefs.getString("list[$i][$j]", "0.0").toString()
 
         fun createRecyclerView() {
             var teamsScores1: IntArray = IntArray(teams.size) { 0 }
@@ -132,12 +139,18 @@ class RobberyRound : AppCompatActivity() {
 
                             if (max >= wordsForWin.toString().toInt()) {
                                 val intent = Intent(this@RobberyRound, WinPage::class.java)
+                                prefsEditor.putInt("roundNumber", roundNumber)
                                 prefsEditor.putInt("max", max)
                                 prefsEditor.putString("winner", teams[winnersIndex])
                                 for (i in 0 until teamsAmount)
                                     prefsEditor.putInt("teamsScores$i", teamsScores[i])
                                 prefsEditor.putInt("counter", counter)
                                 prefsEditor.putString("currentRoundText", currentRoundText)
+                                prefsEditor.putInt("max", max)
+                                prefsEditor.putString("winner", teams[winnersIndex])
+                                for (i in 0 until teamsAmount)
+                                    for (j in 0 until roundNumber)
+                                        prefsEditor.putString("list[$i][$j]", list[i][j])
                                 prefsEditor.apply()
 //                                intent.putExtra("WinTeamName", teams[winnersIndex])
 //                                intent.putExtra("WinTeamScore", max)
@@ -152,10 +165,14 @@ class RobberyRound : AppCompatActivity() {
                             } else {
                                 var newTeam: String = teamsNums[counter].toString() + " команда"
                                 val intent = Intent(this@RobberyRound, Game::class.java)
+                                prefsEditor.putInt("roundNumber", roundNumber)
                                 for (i in 0 until teamsAmount)
                                     prefsEditor.putInt("teamsScores$i", teamsScores[i])
                                 prefsEditor.putInt("counter", counter)
                                 prefsEditor.putString("currentRoundText", currentRoundText)
+                                for (i in 0 until teamsAmount)
+                                    for (j in 0 until roundNumber)
+                                        prefsEditor.putString("list[$i][$j]", list[i][j])
                                 prefsEditor.apply()
 //                                intent.putExtra("currentRoundText", currentRoundText)
 //                                intent.putExtra("newTeam", newTeam)
@@ -197,11 +214,11 @@ class RobberyRound : AppCompatActivity() {
                         }
                         teamsScores[position]++
                         teamsScores1[position]++
-//                        list[position][roundText.text.toString().dropLast(6).toInt() - 1] =
-//                            "${((list[position][roundText.text.toString().dropLast(6)
-//                                .toInt() - 1].substringBefore('.')
-//                                .toInt()) + 1)}.${list[position][roundText.text.toString()
-//                                .dropLast(6).toInt() - 1].substringAfter('.')}"
+                        list[position][roundText.text.toString().dropLast(6).toInt() - 1] =
+                            "${((list[position][roundText.text.toString().dropLast(6)
+                                .toInt() - 1].substringBefore('.')
+                                .toInt()) + 1)}.${list[position][roundText.text.toString()
+                                .dropLast(6).toInt() - 1].substringAfter('.')}"
                         robberyRoundAdapter.notifyItemChanged(position)
                     }
                 }
@@ -382,18 +399,24 @@ class RobberyRound : AppCompatActivity() {
 
                     if (max >= wordsForWin.toString().toInt()) {
                         val intent = Intent(this, WinPage::class.java)
+                        prefsEditor.putInt("roundNumber", roundNumber)
                         prefsEditor.putInt("max", max)
                         prefsEditor.putString("winner", teams[winnersIndex])
                         for (i in 0 until teamsAmount)
                             prefsEditor.putInt("teamsScores$i", teamsScores[i])
                         prefsEditor.putInt("counter", counter)
                         prefsEditor.putString("currentRoundText", currentRoundText)
+                        for (i in 0 until teamsAmount)
+                            for (j in 0 until roundNumber)
+                                prefsEditor.putString("list[$i][$j]", list[i][j])
                         prefsEditor.apply()
 //                        intent.putExtra("WinTeamName", teams[winnersIndex])
 //                        intent.putExtra("WinTeamScore", max)
 //                        intent.putExtra("teams", teams)
 //                        for (i in teams.indices)
 //                            intent.putExtra("list$i", list[i].toTypedArray())
+                        prefsEditor.putInt("max", max)
+                        prefsEditor.putString("winner", teams[winnersIndex])
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         startActivity(intent)
@@ -402,10 +425,14 @@ class RobberyRound : AppCompatActivity() {
                     } else {
                         var newTeam: String = teamsNums[counter].toString() + " команда"
                         val intent = Intent(this, Game::class.java)
+                        prefsEditor.putInt("roundNumber", roundNumber)
                         for (i in 0 until teamsAmount)
                             prefsEditor.putInt("teamsScores$i", teamsScores[i])
                         prefsEditor.putInt("counter", counter)
                         prefsEditor.putString("currentRoundText", currentRoundText)
+                        for (i in 0 until teamsAmount)
+                            for (j in 0 until roundNumber)
+                                prefsEditor.putString("list[$i][$j]", list[i][j])
                         prefsEditor.apply()
 //                        intent.putExtra("currentRoundText", currentRoundText)
 //                        intent.putExtra("newTeam", newTeam)

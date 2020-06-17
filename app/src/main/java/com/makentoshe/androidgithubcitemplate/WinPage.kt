@@ -65,14 +65,11 @@ class WinPage : AppCompatActivity() {
             finish()
         }
 
-//        toStatistics.setOnClickListener {
-//            val intent = Intent(this, Statistics::class.java)
-//            for (i in teams.indices)
-//                intent.putExtra("list$i", list[i].toTypedArray())
-//            intent.putExtra("teams", teams)
-//            startActivity(intent)
-//            finish()
-//        }
+        toStatistics.setOnClickListener {
+            val intent = Intent(this, Statistics::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         val backgroundAnimation: Animation = RotateAnimation(
             0.0f,

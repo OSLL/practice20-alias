@@ -33,8 +33,9 @@ class MainActivity : AppCompatActivity() {
         var currentTeamText = appPrefs.getString("currentTeamText", "1 команда")
         var currentRoundText = appPrefs.getString("currentRoundText", "1 раунд")
         var counter = appPrefs.getInt("counter", 0)
+        var roundNumber = appPrefs.getInt("roundNumber", 0)
 
-        val list: Array<MutableList<String>> = Array(0) { MutableList(0) { "0.0" } }
+        val list: Array<MutableList<String>> = Array(teamsAmount) { MutableList(roundNumber) { "0.0" } }
 
         continueGameButton.setOnClickListener {
             var intent = Intent(this, Game::class.java)
@@ -47,8 +48,6 @@ class MainActivity : AppCompatActivity() {
 //            var settingsText: IntArray = arrayOf(10, 10).toIntArray()
 //            var settingsInfo: BooleanArray = Array<Boolean>(4, { false }).toBooleanArray()
             val intent = Intent(this, Teams::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
 //            intent.putExtra("teams", teams.toTypedArray())
 //            intent.putExtra("settingsText", settingsText)
 //            intent.putExtra("settingsInfo", settingsInfo)
@@ -67,6 +66,9 @@ class MainActivity : AppCompatActivity() {
             teamsScores = Array(teamsAmount){0}
             currentTeamText = "1 команда"
             currentRoundText = "1 раунд"
+            for (i in 0 until teamsAmount)
+                for (j in 0 until roundNumber)
+                    list[i][j] = "0.0"
             prefsEditor.putInt("teamsAmount", teamsAmount)
             for (i in 0 until teamsAmount){
                 prefsEditor.putString("team$i", teams[i])
@@ -75,6 +77,9 @@ class MainActivity : AppCompatActivity() {
             for (i in 0 until teamsAmount) {
                 prefsEditor.putInt("teamsScores$i", teamsScores[i])
             }
+            for (i in 0 until teamsAmount)
+                for (j in 0 until roundNumber)
+                    prefsEditor.putString("list[$i][$j]", list[i][j])
             prefsEditor.putInt("wordsForWin", wordsForWin)
             prefsEditor.putInt("roundLength", roundLength)
             prefsEditor.putBoolean("fineChanger", fineChanger)
