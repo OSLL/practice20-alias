@@ -141,7 +141,7 @@ class Teams : AppCompatActivity() {
 
             override fun onEditClicked(position: Int) {
 
-                addTeamDialog.setContentView(R.layout.diaolog_team_name)
+                addTeamDialog.setContentView(R.layout.dialog_teams)
                 closeAddTeamDialog = addTeamDialog.findViewById(R.id.addTeamDialog)
                 tnld = addTeamDialog.findViewById(R.id.teamNameLayoutDialog)
                 tnet = addTeamDialog.findViewById(R.id.teamNameDialog)
@@ -280,7 +280,7 @@ class Teams : AppCompatActivity() {
     }
 
     private fun showAddTeamDialog() {
-        addTeamDialog.setContentView(R.layout.diaolog_team_name)
+        addTeamDialog.setContentView(R.layout.dialog_teams)
         closeAddTeamDialog = addTeamDialog.findViewById(R.id.addTeamDialog)
         tnld = addTeamDialog.findViewById(R.id.teamNameLayoutDialog)
         tnet = addTeamDialog.findViewById(R.id.teamNameDialog)
