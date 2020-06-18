@@ -19,6 +19,7 @@ class Levels : AppCompatActivity() {
 
         easyLevelIcon.setOnClickListener {
             val intent = Intent(this, Game::class.java)
+            prefsEditor.putBoolean("gameFlag",true)
             prefsEditor.putInt("book", 0)
             prefsEditor.apply()
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -29,6 +30,7 @@ class Levels : AppCompatActivity() {
 
         middleLevelIcon.setOnClickListener {
             val intent = Intent(this, Game::class.java)
+            prefsEditor.putBoolean("gameFlag",true)
             prefsEditor.putInt("book", 1)
             prefsEditor.apply()
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -39,6 +41,7 @@ class Levels : AppCompatActivity() {
 
         hardLevelIcon.setOnClickListener {
             val intent = Intent(this, Game::class.java)
+            prefsEditor.putBoolean("gameFlag",true)
             prefsEditor.putInt("book", 2)
             prefsEditor.apply()
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -49,6 +52,7 @@ class Levels : AppCompatActivity() {
 
         easyLevelText.setOnClickListener {
             val intent = Intent(this, Game::class.java)
+            prefsEditor.putBoolean("gameFlag",true)
             prefsEditor.putInt("book", 0)
             prefsEditor.apply()
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -59,6 +63,7 @@ class Levels : AppCompatActivity() {
 
         middleLevelText.setOnClickListener {
             val intent = Intent(this, Game::class.java)
+            prefsEditor.putBoolean("gameFlag",true)
             prefsEditor.putInt("book", 1)
             prefsEditor.apply()
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -69,6 +74,7 @@ class Levels : AppCompatActivity() {
 
         hardLevelText.setOnClickListener {
             val intent = Intent(this, Game::class.java)
+            prefsEditor.putBoolean("gameFlag",true)
             prefsEditor.putInt("book", 2)
             prefsEditor.apply()
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

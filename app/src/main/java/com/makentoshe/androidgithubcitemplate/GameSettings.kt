@@ -27,19 +27,35 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
 
         fineSwitcher.isChecked = fineChanger
 
-        fineSwitcher.setOnCheckedChangeListener {buttonView, isChecked -> fineChanger = isChecked }
+        fineSwitcher.setOnCheckedChangeListener { buttonView, isChecked ->
+            fineChanger = isChecked
+            prefsEditor.putBoolean("fineChanger", fineChanger)
+            prefsEditor.apply()
+        }
 
         generalLastWordSwitcher.isChecked = generalLast
 
-        generalLastWordSwitcher.setOnCheckedChangeListener { buttonView, isChecked -> generalLast = isChecked }
+        generalLastWordSwitcher.setOnCheckedChangeListener { buttonView, isChecked ->
+            generalLast = isChecked
+            prefsEditor.putBoolean("generalLast", generalLast)
+            prefsEditor.apply()
+        }
 
         taskSwitcher.isChecked = tasks
 
-        taskSwitcher.setOnCheckedChangeListener { buttonView, isChecked -> tasks = isChecked }
+        taskSwitcher.setOnCheckedChangeListener { buttonView, isChecked ->
+            tasks = isChecked
+            prefsEditor.putBoolean("tasks", tasks)
+            prefsEditor.apply()
+        }
 
         robberySwitcher.isChecked = robbery
 
-        robberySwitcher.setOnCheckedChangeListener { buttonView, isChecked -> robbery = isChecked }
+        robberySwitcher.setOnCheckedChangeListener { buttonView, isChecked ->
+            robbery = isChecked
+            prefsEditor.putBoolean("robbery", robbery)
+            prefsEditor.apply()
+        }
 
 
         continueButton.setOnClickListener {
@@ -61,6 +77,8 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 wordsAmountCounter.text = "$p1"
                 wordsForWin = wordsAmountCounter.text.toString().toInt()
+                prefsEditor.putInt("wordsForWin", wordsForWin)
+                prefsEditor.apply()
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {
@@ -70,13 +88,15 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(p0: SeekBar?) {}
         })
 
-        wordsAmountSlider.progress=wordsForWin
+        wordsAmountSlider.progress = wordsForWin
 
         roundTimeSlider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 roundTimeCounter.text = "$p1"
                 roundLength = roundTimeCounter.text.toString().toInt()
+                prefsEditor.putInt("roundLength", roundLength)
+                prefsEditor.apply()
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {}
@@ -84,7 +104,7 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(p0: SeekBar?) {}
         })
 
-        roundTimeSlider.progress=roundLength
+        roundTimeSlider.progress = roundLength
 
         backButton.setOnClickListener {
             val intent = Intent(this, Teams::class.java)

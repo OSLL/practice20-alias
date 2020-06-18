@@ -24,13 +24,15 @@ class Teams : AppCompatActivity() {
     lateinit var tnet: EditText
     lateinit var list: Array<MutableList<String>>
     var teamsAmount: Int = 0
+  lateinit var appPrefs: SharedPreferences
+    lateinit var prefsEditor: SharedPreferences.Editor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teams)
 
-        val appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
-        val prefsEditor: SharedPreferences.Editor = appPrefs.edit()
+         appPrefs = getSharedPreferences("AppPrefs", 0)
+         prefsEditor = appPrefs.edit()
 
         addTeamDialog = Dialog(this)
 
@@ -129,6 +131,14 @@ class Teams : AppCompatActivity() {
                     addTeamDialog.cancel()
                     teams[position] = tnld.editText?.text.toString().trim(' ')
                     teamsAdapter.notifyItemChanged(position)
+                    list = Array(teams.size) { MutableList(0) { "0.0" } }
+                    val teamsScores = Array(teamsAmount){0}
+                    prefsEditor.putInt("teamsAmount", teamsAmount)
+                    for (i in 0 until teamsAmount)
+                        prefsEditor.putString("team$i", teams[i])
+                    for (i in 0 until teamsAmount)
+                        prefsEditor.putInt("teamsScores$i", teamsScores[i])
+                    prefsEditor.apply()
                 }
                 tnet.addTextChangedListener(object : TextWatcher {
 
@@ -268,6 +278,14 @@ class Teams : AppCompatActivity() {
                 continueButtonTeams.setTextColor(resources.getColor(R.color.noActiveButton))
             }
             teamsAmount++
+            list = Array(teams.size) { MutableList(0) { "0.0" } }
+            val teamsScores = Array(teamsAmount){0}
+            prefsEditor.putInt("teamsAmount", teamsAmount)
+            for (i in 0 until teamsAmount)
+                prefsEditor.putString("team$i", teams[i])
+            for (i in 0 until teamsAmount)
+                prefsEditor.putInt("teamsScores$i", teamsScores[i])
+            prefsEditor.apply()
         }
 
         if (tnld.editText?.text.toString().isEmpty() || tnld.editText?.text.toString()
