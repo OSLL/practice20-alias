@@ -6,7 +6,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
@@ -30,13 +29,12 @@ class Teams : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teams)
 
-        var appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
+        val appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
         val prefsEditor: SharedPreferences.Editor = appPrefs.edit()
 
         addTeamDialog = Dialog(this)
 
         teamsAmount = appPrefs.getInt("teamsAmount", 0)
-        Log.e("teamsAmount", "${teamsAmount}")
 
         teams = MutableList(teamsAmount){""}
 
@@ -44,24 +42,13 @@ class Teams : AppCompatActivity() {
             teams[i] = appPrefs.getString("team$i", "").toString()
         currentPosition = teams.size
 
-//        list = Array(teams.size) { MutableList(0) { "0.0" } }
-//        for (i in teams.indices)
-//            list[i] = this.intent.getStringArrayExtra("list$i").toMutableList()
-//        Log.e("Sas", list.size.toString())
-
         createRecyclerView()
 
         continueButtonTeams.setOnClickListener {
             prefsEditor.putBoolean("gameSettingsFlag", true)
             list = Array(teams.size) { MutableList(0) { "0.0" } }
-            var teamsScores = Array(teamsAmount){0}
+            val teamsScores = Array(teamsAmount){0}
             val intent = Intent(this, GameSettings::class.java)
-//            teams = teamsAdapter.getter().toMutableList()
-//            intent.putExtra("teams", teams.toTypedArray())
-//            intent.putExtra("settingsText", this.intent.getIntArrayExtra("settingsText"))
-//            intent.putExtra("settingsInfo", this.intent.getBooleanArrayExtra("settingsInfo"))
-//            for (i in teams.indices)
-//                intent.putExtra("list$i", list[i].toTypedArray())
             prefsEditor.putInt("teamsAmount", teamsAmount)
             for (i in 0 until teamsAmount)
                 prefsEditor.putString("team$i", teams[i])
@@ -98,7 +85,7 @@ class Teams : AppCompatActivity() {
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
     }
 
-    fun addTeam(name: String, position: Int) {
+    private fun addTeam(name: String, position: Int) {
         teams.add(name)
         teamsAdapter.notifyItemInserted(position)
     }
@@ -117,12 +104,12 @@ class Teams : AppCompatActivity() {
         }
     }
 
-    fun createRecyclerView() {
+    private fun createRecyclerView() {
         teamsAdapter = TeamsAdapter(this, teams, currentPosition)
         teamsView.adapter = teamsAdapter
         teamsView.layoutManager = LinearLayoutManager(this)
 
-        teamsAdapter.setOnItemClickListener(object : TeamsAdapter.onItemClickListener {
+        teamsAdapter.setOnItemClickListener(object : TeamsAdapter.OnItemClickListener {
             override fun onDeleteClicked(position: Int) {
                 currentPosition--
                 deleteTeam(position)
@@ -157,8 +144,8 @@ class Teams : AppCompatActivity() {
                                 resources.getDrawable(R.drawable.add_team_no_active)
                         } else {
                             if (tnld.editText?.text.toString().length > 20) {
-                                var counterEnd: Int = 0
-                                var counterStart: Int = 0
+                                var counterEnd = 0
+                                var counterStart = 0
                                 while (tnld.editText?.text.toString()[tnld.editText?.text.toString().length - 1 - counterEnd] == ' ') {
                                     counterEnd++
                                 }
@@ -214,8 +201,8 @@ class Teams : AppCompatActivity() {
                                 resources.getDrawable(R.drawable.add_team_no_active)
                         } else {
                             if (tnld.editText?.text.toString().length > 20) {
-                                var counterEnd: Int = 0
-                                var counterStart: Int = 0
+                                var counterEnd = 0
+                                var counterStart = 0
                                 while (tnld.editText?.text.toString()[tnld.editText?.text.toString().length - 1 - counterEnd] == ' ') {
                                     counterEnd++
                                 }
@@ -264,7 +251,7 @@ class Teams : AppCompatActivity() {
         })
     }
 
-    fun showAddTeamDialog() {
+    private fun showAddTeamDialog() {
         addTeamDialog.setContentView(R.layout.diaolog_team_name)
         closeAddTeamDialog = addTeamDialog.findViewById(R.id.addTeamDialog)
         tnld = addTeamDialog.findViewById(R.id.teamNameLayoutDialog)
@@ -292,8 +279,8 @@ class Teams : AppCompatActivity() {
                 resources.getDrawable(R.drawable.add_team_no_active)
         } else {
             if (tnld.editText?.text.toString().length > 20) {
-                var counterEnd: Int = 0
-                var counterStart: Int = 0
+                var counterEnd = 0
+                var counterStart = 0
                 while (tnld.editText?.text.toString()[tnld.editText?.text.toString().length - 1 - counterEnd] == ' ') {
                     counterEnd++
                 }
@@ -351,8 +338,8 @@ class Teams : AppCompatActivity() {
                         resources.getDrawable(R.drawable.add_team_no_active)
                 } else {
                     if (tnld.editText?.text.toString().length > 20) {
-                        var counterEnd: Int = 0
-                        var counterStart: Int = 0
+                        var counterEnd = 0
+                        var counterStart = 0
                         while (tnld.editText?.text.toString()[tnld.editText?.text.toString().length - 1 - counterEnd] == ' ') {
                             counterEnd++
                         }
@@ -408,8 +395,8 @@ class Teams : AppCompatActivity() {
                         resources.getDrawable(R.drawable.add_team_no_active)
                 } else {
                     if (tnld.editText?.text.toString().length > 20) {
-                        var counterEnd: Int = 0
-                        var counterStart: Int = 0
+                        var counterEnd = 0
+                        var counterStart = 0
                         while (tnld.editText?.text.toString()[tnld.editText?.text.toString().length - 1 - counterEnd] == ' ') {
                             counterEnd++
                         }

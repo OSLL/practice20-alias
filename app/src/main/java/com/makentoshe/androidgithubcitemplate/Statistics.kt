@@ -17,11 +17,11 @@ class Statistics : AppCompatActivity() {
 
         val appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
         val prefsEditor: SharedPreferences.Editor = appPrefs.edit()
-        var teamsAmount = appPrefs.getInt("teamsAmount", 0)
-        var teams=Array(teamsAmount){""}
+        val teamsAmount = appPrefs.getInt("teamsAmount", 0)
+        val teams=Array(teamsAmount){""}
         for (i in 0 until teamsAmount)
             teams[i] = appPrefs.getString("team$i", "").toString()
-        var roundNumber = appPrefs.getInt("roundNumber", 0)
+        val roundNumber = appPrefs.getInt("roundNumber", 0)
 
         list = Array(teams.size) { MutableList(roundNumber) { "0.0" } }
         for (i in teams.indices)
@@ -42,7 +42,7 @@ class Statistics : AppCompatActivity() {
             finish()
         }
 
-        var firstAdapter = FirstAdapter(this, list, teams.toMutableList())
+        val firstAdapter = FirstAdapter(this, list, teams.toMutableList())
         firstView.adapter = firstAdapter
         firstView.layoutManager = LinearLayoutManager(this)
     }

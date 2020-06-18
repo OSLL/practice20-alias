@@ -28,11 +28,6 @@ class WinPage : AppCompatActivity() {
         for (i in teams.indices)
             teamsScores[i] = appPrefs.getInt("teamsScores$i", 0)
 
-
-//        list = Array(teamsExtra.size) { MutableList(0) { "0.0" } }
-//        for (i in teamsExtra.indices)
-//            list[i] = this.intent.getStringArrayExtra("list$i")!!.toMutableList()
-//
         val winner: String = appPrefs.getString("winner", "Error team")!!
         val max: Int = appPrefs.getInt("max", -1)!!
         if ((max - (max % 10)) / 10 == 1) {

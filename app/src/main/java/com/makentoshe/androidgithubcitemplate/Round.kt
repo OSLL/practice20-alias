@@ -46,34 +46,32 @@ class Round : AppCompatActivity() {
 
         pauseButton.isClickable = false
 
-        var teamsAmount: Int = appPrefs.getInt("teamsAmount", 0)
+        val teamsAmount: Int = appPrefs.getInt("teamsAmount", 0)
         teams = Array(teamsAmount) { "" }
         var currentRoundText: String = appPrefs.getString("currentRoundText", "1 раунд").toString()
-        var currentTeamText: String = appPrefs.getString("currentTeamText", "1 команда").toString()
+        val currentTeamText: String = appPrefs.getString("currentTeamText", "1 команда").toString()
         for (i in 0 until teamsAmount)
             teams[i] = appPrefs.getString("team$i", "").toString()
-        var book = appPrefs.getInt("book", -1)
+        val book = appPrefs.getInt("book", -1)
         teamsScores = Array(teamsAmount) { 0 }
         for (i in 0 until teamsAmount)
             teamsScores[i] = appPrefs.getInt("teamsScores$i", 0)
-        var roundLength = appPrefs.getInt("roundLength", 10)
-        var wordsForWin = appPrefs.getInt("wordsForWin", 10)
-        var fineChanger = appPrefs.getBoolean("fineChanger", false)
-        var generalLast = appPrefs.getBoolean("generalLast", false)
-        var tasks = appPrefs.getBoolean("tasks", false)
+        val roundLength = appPrefs.getInt("roundLength", 10)
+        val wordsForWin = appPrefs.getInt("wordsForWin", 10)
+        val fineChanger = appPrefs.getBoolean("fineChanger", false)
+        val generalLast = appPrefs.getBoolean("generalLast", false)
+        val tasks = appPrefs.getBoolean("tasks", false)
         var isPlaying = false
         var winnersIndex: Int = -1
         var counter = appPrefs.getInt("counter", -1)
         var timeLeftMilliseconds:Long=(roundLength.toLong()*1000)
         var roundNumber = appPrefs.getInt("roundNumber", 0)
 
-        class myCountDownTimer(timeLeftMilliseconds:Long,val interval:Long): CountDownTimer(timeLeftMilliseconds, interval){
+        class MyCountDownTimer(timeLeftMilliseconds:Long, interval:Long): CountDownTimer(timeLeftMilliseconds, interval){
 
             override fun onTick(p0: Long) {
                 timeLeftMilliseconds=p0
                 timerCounter.text=(timeLeftMilliseconds/1000).toString()
-
-
             }
 
             override fun onFinish() {
@@ -101,18 +99,6 @@ class Round : AppCompatActivity() {
                     prefsEditor.putString("currentRoundText", currentRoundText)
                     prefsEditor.apply()
                     val intent = Intent(this@Round, LastWord::class.java)
-//                            intent.putExtra("teamsAmount", teamsAmount)
-//                            intent.putExtra("currentWord", word.text)
-//                            intent.putExtra("currentRoundText", currentRoundText)
-//                            intent.putExtra("newTeam", newTeam)
-//                            intent.putExtra("teams", teams)
-//                            intent.putExtra("counter", count)
-//                            intent.putExtra("teamsScores", teamsScores)
-//                            intent.putExtra("book", book)
-//                            intent.putExtra("currentTeam", roundTitle.text.toString())
-//                            intent.putExtra("currentRound", roundText.text.toString())
-//                            for (i in teams.indices)
-//                                intent.putExtra("list$i", list[i].toTypedArray())
                     startActivity(intent)
                     overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
                     finish()
@@ -121,10 +107,7 @@ class Round : AppCompatActivity() {
             }
 
         }
-        var countDownTimer: myCountDownTimer =  myCountDownTimer(timeLeftMilliseconds, 1000)
-
-//        for (i in teams.indices)
-//            list[i] = this.intent.getStringArrayExtra("list$i")!!.toMutableList()
+        var countDownTimer =  MyCountDownTimer(timeLeftMilliseconds, 1000)
 
         roundTitle.text = currentTeamText
         roundText.text = currentRoundText
@@ -141,7 +124,6 @@ class Round : AppCompatActivity() {
                 list[i][j] = appPrefs.getString("list[$i][$j]", "0.0").toString()
 
         timerCounter.text = roundLength.toString()
-        Log.e("Sassasasa", timerCounter.text.toString())
 
         backButton.setOnClickListener {
             finish()
@@ -152,45 +134,32 @@ class Round : AppCompatActivity() {
 
         when (book) {
             0 -> {
-                var file: InputStream = assets.open("Easy.txt")
-
-                var bufferedReader = BufferedReader(InputStreamReader(file))
-
+                val file: InputStream = assets.open("Easy.txt")
+                val bufferedReader = BufferedReader(InputStreamReader(file))
                 while (bufferedReader.readLine() != null) {
                     wordsNumber++
-                    Log.e("Sas", wordsNumber.toString())
                 }
                 file.close()
             }
             1 -> {
-                var file: InputStream = assets.open("Middle.txt")
-
-                var bufferedReader = BufferedReader(InputStreamReader(file))
-
+                val file: InputStream = assets.open("Middle.txt")
+                val bufferedReader = BufferedReader(InputStreamReader(file))
                 while (bufferedReader.readLine() != null) {
                     wordsNumber++
-                    Log.e("Sas", wordsNumber.toString())
                 }
                 file.close()
             }
             2 -> {
-                var file: InputStream = assets.open("Hard.txt")
-
-                var bufferedReader = BufferedReader(InputStreamReader(file))
-
+                val file: InputStream = assets.open("Hard.txt")
+                val bufferedReader = BufferedReader(InputStreamReader(file))
                 while (bufferedReader.readLine() != null) {
                     wordsNumber++
-                    Log.e("Sas", wordsNumber.toString())
                 }
                 file.close()
             }
         }
 
         var max = -100000
-    //    var pauseOffSet: Long = 0
-
-
-
 
         pauseButton.setOnClickListener {
             if (flagForPause) {
@@ -201,8 +170,6 @@ class Round : AppCompatActivity() {
                     word.text = "Пауза"
 
                     countDownTimer.cancel()
-                  //  chronometer.stop()
-                  //  pauseOffSet = SystemClock.elapsedRealtime() - chronometer.base
                     isPlaying = false
                 } else {
                     pauseButton.background = resources.getDrawable(R.drawable.hard_level_button)
@@ -210,34 +177,23 @@ class Round : AppCompatActivity() {
                     cross.isClickable = true
                     when (book) {
                         0 -> {
-                            var file: InputStream = assets.open("Easy.txt")
-
-                            var bufferedReader = BufferedReader(InputStreamReader(file))
-
-                            word.text = newWord(file, bufferedReader)
+                            val file: InputStream = assets.open("Easy.txt")
+                            val bufferedReader = BufferedReader(InputStreamReader(file))
+                            word.text = newWord(bufferedReader)
                         }
                         1 -> {
-                            var file: InputStream = assets.open("Middle.txt")
-
-                            var bufferedReader = BufferedReader(InputStreamReader(file))
-
-                            word.text = newWord(file, bufferedReader)
+                            val file: InputStream = assets.open("Middle.txt")
+                            val bufferedReader = BufferedReader(InputStreamReader(file))
+                            word.text = newWord(bufferedReader)
                         }
                         2 -> {
-                            var file: InputStream = assets.open("Hard.txt")
-
-                            var bufferedReader = BufferedReader(InputStreamReader(file))
-
-                            word.text = newWord(file, bufferedReader)
+                            val file: InputStream = assets.open("Hard.txt")
+                            val bufferedReader = BufferedReader(InputStreamReader(file))
+                            word.text = newWord(bufferedReader)
                         }
                     }
-                    countDownTimer =  myCountDownTimer(timeLeftMilliseconds, 1000)
+                    countDownTimer =  MyCountDownTimer(timeLeftMilliseconds, 1000)
                     countDownTimer.start()
-                 //   chronometer.base = SystemClock.elapsedRealtime() - pauseOffSet
-                 //   chronometer.start()
-                 /*   timerCounter.text = (chronometer.text.toString().substringBefore(':')
-                        .toInt() * 60 + chronometer.text.toString().substringAfter(':')
-                        .toInt()).toString()*/
                     isPlaying = true
                 }
             }
@@ -247,10 +203,6 @@ class Round : AppCompatActivity() {
             flagForFirstTap = true
             flagForPause = true
             countDownTimer.start()
-            //chronometer.base = SystemClock.elapsedRealtime() + (timerCounter.text.toString()
-           //     .toInt() * 1000).toLong() + 500
-           // chronometer.start()
-
             isPlaying = true
             word.isClickable = false
             if (tasks) {
@@ -269,71 +221,21 @@ class Round : AppCompatActivity() {
                 taskText.visibility = View.GONE
             }
 
-//            chronometer.setOnChronometerTickListener {
-//
-//                timerCounter.text = (chronometer.text.toString().substringBefore(':')
-//                    .toInt() * 60 + chronometer.text.toString().substringAfter(':')
-//                    .toInt()).toString()//(timerCounter.text.toString().toInt() - 1).toString()
-//                if (timerCounter.text.toString().toInt() <= 0) {
-//                    chronometer.stop()
-//                    pauseButton.isClickable = false
-//                    Toast.makeText(applicationContext, "Время вышло!", Toast.LENGTH_SHORT)
-//                        .show()
-//                    counter += 1
-//
-//                    flagForLastWord = true
-//                    if (generalLast) {
-//                        if (counter == teamsAmount) {
-//                            counter = 0
-//                            currentRoundText =
-//                                (currentRoundText.substringBefore(" ")
-//                                    .toInt() + 1).toString() + " раунд"
-//                        }
-//                        prefsEditor.putString("currentWord", word.text.toString())
-//                        prefsEditor.apply()
-//                        val intent = Intent(this, LastWord::class.java)
-//                            intent.putExtra("teamsAmount", teamsAmount)
-//                            intent.putExtra("currentWord", word.text)
-//                            intent.putExtra("currentRoundText", currentRoundText)
-//                            intent.putExtra("newTeam", newTeam)
-//                            intent.putExtra("teams", teams)
-//                            intent.putExtra("counter", count)
-//                            intent.putExtra("teamsScores", teamsScores)
-//                            intent.putExtra("book", book)
-//                            intent.putExtra("currentTeam", roundTitle.text.toString())
-//                            intent.putExtra("currentRound", roundText.text.toString())
-//                            for (i in teams.indices)
-//                                intent.putExtra("list$i", list[i].toTypedArray())
-//                        startActivity(intent)
-//                        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
-//                        finish()
-//                    }
-//                    lastWord.visibility = View.VISIBLE
-//
-//                }
-//            }
-
             when (book) {
                 0 -> {
-                    var file: InputStream = assets.open("Easy.txt")
-
-                    var bufferedReader = BufferedReader(InputStreamReader(file))
-
-                    word.text = newWord(file, bufferedReader)
+                    val file: InputStream = assets.open("Easy.txt")
+                    val bufferedReader = BufferedReader(InputStreamReader(file))
+                    word.text = newWord(bufferedReader)
                 }
                 1 -> {
-                    var file: InputStream = assets.open("Middle.txt")
-
-                    var bufferedReader = BufferedReader(InputStreamReader(file))
-
-                    word.text = newWord(file, bufferedReader)
+                    val file: InputStream = assets.open("Middle.txt")
+                    val bufferedReader = BufferedReader(InputStreamReader(file))
+                    word.text = newWord(bufferedReader)
                 }
                 2 -> {
-                    var file: InputStream = assets.open("Hard.txt")
-
-                    var bufferedReader = BufferedReader(InputStreamReader(file))
-
-                    word.text = newWord(file, bufferedReader)
+                    val file: InputStream = assets.open("Hard.txt")
+                    val bufferedReader = BufferedReader(InputStreamReader(file))
+                    word.text = newWord(bufferedReader)
                 }
             }
 
@@ -341,18 +243,10 @@ class Round : AppCompatActivity() {
                 check.isClickable = false
                 if (flagForFirstTap) {
                     if (flagForLastWord) {
-
-//                        if (counter == 0) {
-//                            teamsScores[teamsAmount - 1]++
-//                            list[teamsAmount - 1][roundNumber - 1] =
-//                                "${((list[teamsAmount - 1][roundNumber - 1].substringBefore('.')
-//                                    .toInt()) + 1)}.${list[teamsAmount - 1][roundNumber - 1].substringAfter('.')}"
-//                        } else {
                             teamsScores[counter - 1]++
                             list[counter-1][roundNumber - 1] =
                                 "${((list[counter-1][roundNumber - 1].substringBefore('.')
                                     .toInt()) + 1)}.${list[counter-1][roundNumber - 1].substringAfter('.')}"
-//                        }
 
                         if (counter == teamsAmount) {
                             counter = 0
@@ -384,13 +278,6 @@ class Round : AppCompatActivity() {
                                 for (j in 0 until roundNumber)
                                     prefsEditor.putString("list[$i][$j]", list[i][j])
                             prefsEditor.apply()
-//                            intent.putExtra("WinTeamName", teams[winnersIndex])
-//                            intent.putExtra("teams", teams)
-//                            intent.putExtra("WinTeamScore", max)
-//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-//                            for (i in teams.indices)
-//                                intent.putExtra("list$i", list[i].toTypedArray())
                             startActivity(intent)
                             max = 0
                             finish()
@@ -405,16 +292,6 @@ class Round : AppCompatActivity() {
                                 for (j in 0 until roundNumber)
                                     prefsEditor.putString("list[$i][$j]", list[i][j])
                             prefsEditor.apply()
-//                            intent.putExtra("currentRoundText", currentRoundText)
-//                            intent.putExtra("newTeam", newTeam)
-//                            intent.putExtra("settingsText", settingsText)
-//                            intent.putExtra("settingsInfo", settingsInfo)
-//                            intent.putExtra("teams", teams)
-//                            intent.putExtra("counter", count)
-//                            intent.putExtra("teamsScores", teamsScores)
-//                            intent.putExtra("book", book)
-//                            for (i in teams.indices)
-//                                intent.putExtra("list$i", list[i].toTypedArray())
                             startActivity(intent)
                             overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
                             finish()
@@ -425,25 +302,19 @@ class Round : AppCompatActivity() {
                         (knowWordsCounter.text.toString().toInt() + 1).toString()
                     when (book) {
                         0 -> {
-                            var file: InputStream = assets.open("Easy.txt")
-
-                            var bufferedReader = BufferedReader(InputStreamReader(file))
-
-                            word.text = newWord(file, bufferedReader)
+                            val file: InputStream = assets.open("Easy.txt")
+                            val bufferedReader = BufferedReader(InputStreamReader(file))
+                            word.text = newWord(bufferedReader)
                         }
                         1 -> {
-                            var file: InputStream = assets.open("Middle.txt")
-
-                            var bufferedReader = BufferedReader(InputStreamReader(file))
-
-                            word.text = newWord(file, bufferedReader)
+                            val file: InputStream = assets.open("Middle.txt")
+                            val bufferedReader = BufferedReader(InputStreamReader(file))
+                            word.text = newWord(bufferedReader)
                         }
                         2 -> {
-                            var file: InputStream = assets.open("Hard.txt")
-
-                            var bufferedReader = BufferedReader(InputStreamReader(file))
-
-                            word.text = newWord(file, bufferedReader)
+                            val file: InputStream = assets.open("Hard.txt")
+                            val bufferedReader = BufferedReader(InputStreamReader(file))
+                            word.text = newWord(bufferedReader)
                         }
                     }
                     teamsScores[counter]++
@@ -461,21 +332,11 @@ class Round : AppCompatActivity() {
                 if (flagForLastWord) {
 
                     if (fineChanger) {
-//                        if (counter == 0) {
-//                            teamsScores[teamsAmount - 1]--
-//                        } else {
                             teamsScores[counter - 1]--
-//                        }
                     }
-//                    if (counter == 0) {
-//                        list[teamsAmount - 1][roundNumber - 1] =
-//                            "${((list[teamsAmount - 1][roundNumber - 1].substringBefore('.')
-//                                .toInt()))}.${list[teamsAmount - 1][roundNumber - 1].substringAfter('.').toInt() + 1}"
-//                    } else {
                         list[counter-1][roundNumber - 1] =
                             "${((list[counter-1][roundNumber - 1].substringBefore('.')
                                 .toInt()))}.${list[counter-1][roundNumber - 1].substringAfter('.').toInt() + 1}"
-//                    }
 
                     if (counter == teamsAmount) {
                         counter = 0
@@ -490,7 +351,6 @@ class Round : AppCompatActivity() {
                                 winnersIndex = i
                             }
                         }
-
                     }
 
 
@@ -507,18 +367,11 @@ class Round : AppCompatActivity() {
                             for (j in 0 until roundNumber)
                                 prefsEditor.putString("list[$i][$j]", list[i][j])
                         prefsEditor.apply()
-//                        intent.putExtra("WinTeamName", teams[winnersIndex])
-//                        intent.putExtra("teams", teams)
-//                        intent.putExtra("WinTeamScore", max)
-//                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-//                        for (i in teams.indices)
-//                            intent.putExtra("list$i", list[i].toTypedArray())
                         startActivity(intent)
                         max = 0
                         finish()
                     } else {
-                        var newTeam: String = teamsNums[counter].toString() + " команда"
+                        teamsNums[counter].toString() + " команда"
                         val intent = Intent(this, Game::class.java)
                         prefsEditor.putInt("roundNumber", roundNumber)
                         for (i in 0 until teamsAmount)
@@ -529,16 +382,6 @@ class Round : AppCompatActivity() {
                             for (j in 0 until roundNumber)
                                 prefsEditor.putString("list[$i][$j]", list[i][j])
                         prefsEditor.apply()
-//                        intent.putExtra("currentRoundText", currentRoundText)
-//                        intent.putExtra("newTeam", newTeam)
-//                        intent.putExtra("settingsText", settingsText)
-//                        intent.putExtra("settingsInfo", settingsInfo)
-//                        intent.putExtra("teams", teams)
-//                        intent.putExtra("counter", counter)
-//                        intent.putExtra("teamsScores", teamsScores)
-//                        intent.putExtra("book", book)
-//                        for (i in teams.indices)
-//                            intent.putExtra("list$i", list[i].toTypedArray())
                         startActivity(intent)
                         overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
                         finish()
@@ -547,25 +390,19 @@ class Round : AppCompatActivity() {
                 skipWordsCounter.text = (skipWordsCounter.text.toString().toInt() + 1).toString()
                 when (book) {
                     0 -> {
-                        var file: InputStream = assets.open("Easy.txt")
-
-                        var bufferedReader = BufferedReader(InputStreamReader(file))
-
-                        word.text = newWord(file, bufferedReader)
+                        val file: InputStream = assets.open("Easy.txt")
+                        val bufferedReader = BufferedReader(InputStreamReader(file))
+                        word.text = newWord(bufferedReader)
                     }
                     1 -> {
-                        var file: InputStream = assets.open("Middle.txt")
-
-                        var bufferedReader = BufferedReader(InputStreamReader(file))
-
-                        word.text = newWord(file, bufferedReader)
+                        val file: InputStream = assets.open("Middle.txt")
+                        val bufferedReader = BufferedReader(InputStreamReader(file))
+                        word.text = newWord(bufferedReader)
                     }
                     2 -> {
-                        var file: InputStream = assets.open("Hard.txt")
-
-                        var bufferedReader = BufferedReader(InputStreamReader(file))
-
-                        word.text = newWord(file, bufferedReader)
+                        val file: InputStream = assets.open("Hard.txt")
+                        val bufferedReader = BufferedReader(InputStreamReader(file))
+                        word.text = newWord(bufferedReader)
                     }
                 }
                 if (fineChanger) {
@@ -583,7 +420,7 @@ class Round : AppCompatActivity() {
 
     }
 
-    private fun newWord(file: InputStream, bufferedReader: BufferedReader): String {
+    private fun newWord(bufferedReader: BufferedReader): String {
 
         currentWordNumber = (0 until wordsNumber).random()
         while (words.contains(currentWordNumber)) {
@@ -593,7 +430,7 @@ class Round : AppCompatActivity() {
         words.add(currentWordNumber)
         if (words.size == wordsNumber) {
             words.removeAll(words)
-            Log.e("Error", "${wordsNumber}")
+            Log.e("Error", "$wordsNumber")
         }
         for (i in 1 until currentWordNumber) bufferedReader.readLine()
         currentWord = bufferedReader.readLine()
