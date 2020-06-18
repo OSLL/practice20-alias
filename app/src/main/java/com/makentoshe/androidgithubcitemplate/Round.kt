@@ -75,6 +75,7 @@ class Round : AppCompatActivity() {
             }
 
             override fun onFinish() {
+                timerCounter.text = "0"
                 pauseButton.isClickable = false
                 Toast.makeText(applicationContext, "Время вышло!", Toast.LENGTH_SHORT)
                     .show()
