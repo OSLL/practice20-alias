@@ -14,7 +14,7 @@ class Levels : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_levels)
 
-        var appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
+        val appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
         val prefsEditor: SharedPreferences.Editor = appPrefs.edit()
 
         easyLevelIcon.setOnClickListener {

@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_robbery_round.*
 import kotlinx.android.synthetic.main.activity_robbery_round.pauseButton
+import kotlinx.android.synthetic.main.activity_round.*
 import kotlinx.android.synthetic.main.activity_round.backButton
 import kotlinx.android.synthetic.main.activity_round.cross
 import kotlinx.android.synthetic.main.activity_round.roundText
@@ -23,22 +24,26 @@ import java.io.InputStreamReader
 class RobberyRound : AppCompatActivity() {
 
     lateinit var list: Array<MutableList<String>>
-    var wordsNumber: Int = 0
-    var tasksNumber: Int = 0
-    var currentWord = ""
-    var currentWordNumber: Int = 0
-    var currentTaskNumber: Int = 0
-    var words: MutableList<Int> = mutableListOf()
+    private var wordsNumber: Int = 0
+    private var tasksNumber: Int = 0
+    private var currentWord = ""
+    private var currentWordNumber: Int = 0
+    private var currentTaskNumber: Int = 0
+    private var words: MutableList<Int> = mutableListOf()
 
+    private var flagForAppClosedOrBackButtonPressed:Boolean=true
     var flagForFirstTap: Boolean = false
     var flagForLastWord: Boolean = false
     var flagForPauseCheck: Boolean = true
-    var flagForPause: Boolean = false
+    private var flagForPause: Boolean = false
+    var isPlaying = false
 
     lateinit var robberyRoundAdapter: RobberyRoundAdapter
     lateinit var teams: Array<String>
     lateinit var teamsScores: Array<Int>
     var book: Int = -1
+
+    lateinit var countDownTimer:CountDownTimer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,13 +63,12 @@ class RobberyRound : AppCompatActivity() {
             teamsScores[i] = appPrefs.getInt("teamsScores$i", 0)
         var winnersIndex: Int = -1
         var currentRoundText: String = appPrefs.getString("currentRoundText", "1 раунд").toString()
-        var currentTeamText: String = appPrefs.getString("currentTeamText", "Error").toString()
+        val currentTeamText: String = appPrefs.getString("currentTeamText", "Error").toString()
         roundTitle.text = currentTeamText
         roundText.text = currentRoundText
         book = appPrefs.getInt("book", -1)
         var counter = appPrefs.getInt("counter", -1)
         var max = -100000
-        var isPlaying = false
         val tasks = appPrefs.getBoolean("tasks", false)
         val roundLength = appPrefs.getInt("roundLength", 10)
         val wordsForWin = appPrefs.getInt("wordsForWin", 10)
@@ -72,7 +76,7 @@ class RobberyRound : AppCompatActivity() {
         timerCounter.text = roundLength.toString()
         var timeLeftMilliseconds: Long = (roundLength.toLong() * 1000)
 
-        class MyCountDownTimer(timeLeftMilliseconds: Long, val interval: Long) :
+        class MyCountDownTimer(timeLeftMilliseconds: Long,  interval: Long) :
             CountDownTimer(timeLeftMilliseconds, interval) {
 
             override fun onTick(p0: Long) {
@@ -93,7 +97,7 @@ class RobberyRound : AppCompatActivity() {
 
         }
 
-        var countDownTimer = MyCountDownTimer(timeLeftMilliseconds, 1000)
+         countDownTimer = MyCountDownTimer(timeLeftMilliseconds, 1000)
 
         if (counter == 0)
             roundNumber++
@@ -105,7 +109,7 @@ class RobberyRound : AppCompatActivity() {
                 list[i][j] = appPrefs.getString("list[$i][$j]", "0.0").toString()
 
         fun createRecyclerView() {
-            var teamsScores1 = IntArray(teams.size) { 0 }
+            val teamsScores1 = IntArray(teams.size) { 0 }
             robberyRoundAdapter = RobberyRoundAdapter(this, teams, teamsScores1)
             robberyRoundRecycler.adapter = robberyRoundAdapter
             robberyRoundRecycler.layoutManager = LinearLayoutManager(this)
@@ -169,23 +173,23 @@ class RobberyRound : AppCompatActivity() {
                         }
                         when (book) {
                             0 -> {
-                                var file: InputStream = assets.open("Easy.txt")
+                                val file: InputStream = assets.open("Easy.txt")
 
-                                var bufferedReader = BufferedReader(InputStreamReader(file))
+                                val bufferedReader = BufferedReader(InputStreamReader(file))
 
                                 word.text = newWord(file, bufferedReader)
                             }
                             1 -> {
-                                var file: InputStream = assets.open("Middle.txt")
+                                val file: InputStream = assets.open("Middle.txt")
 
-                                var bufferedReader = BufferedReader(InputStreamReader(file))
+                                val bufferedReader = BufferedReader(InputStreamReader(file))
 
                                 word.text = newWord(file, bufferedReader)
                             }
                             2 -> {
-                                var file: InputStream = assets.open("Hard.txt")
+                                val file: InputStream = assets.open("Hard.txt")
 
-                                var bufferedReader = BufferedReader(InputStreamReader(file))
+                                val bufferedReader = BufferedReader(InputStreamReader(file))
 
                                 word.text = newWord(file, bufferedReader)
                             }
@@ -210,25 +214,25 @@ class RobberyRound : AppCompatActivity() {
 
         when (book) {
             0 -> {
-                var file: InputStream = assets.open("Easy.txt")
+                val file: InputStream = assets.open("Easy.txt")
 
-                var bufferedReader = BufferedReader(InputStreamReader(file))
+                val bufferedReader = BufferedReader(InputStreamReader(file))
 
                 while (bufferedReader.readLine() != null) wordsNumber++
                 file.close()
             }
             1 -> {
-                var file: InputStream = assets.open("Middle.txt")
+                val file: InputStream = assets.open("Middle.txt")
 
-                var bufferedReader = BufferedReader(InputStreamReader(file))
+                val bufferedReader = BufferedReader(InputStreamReader(file))
 
                 while (bufferedReader.readLine() != null) wordsNumber++
                 file.close()
             }
             2 -> {
-                var file: InputStream = assets.open("Hard.txt")
+                val file: InputStream = assets.open("Hard.txt")
 
-                var bufferedReader = BufferedReader(InputStreamReader(file))
+                val bufferedReader = BufferedReader(InputStreamReader(file))
 
                 while (bufferedReader.readLine() != null) wordsNumber++
                 file.close()
@@ -250,23 +254,23 @@ class RobberyRound : AppCompatActivity() {
                     cross.isClickable = true
                     when (book) {
                         0 -> {
-                            var file: InputStream = assets.open("Easy.txt")
+                            val file: InputStream = assets.open("Easy.txt")
 
-                            var bufferedReader = BufferedReader(InputStreamReader(file))
+                            val bufferedReader = BufferedReader(InputStreamReader(file))
 
                             word.text = newWord(file, bufferedReader)
                         }
                         1 -> {
-                            var file: InputStream = assets.open("Middle.txt")
+                            val file: InputStream = assets.open("Middle.txt")
 
-                            var bufferedReader = BufferedReader(InputStreamReader(file))
+                            val bufferedReader = BufferedReader(InputStreamReader(file))
 
                             word.text = newWord(file, bufferedReader)
                         }
                         2 -> {
-                            var file: InputStream = assets.open("Hard.txt")
+                            val file: InputStream = assets.open("Hard.txt")
 
-                            var bufferedReader = BufferedReader(InputStreamReader(file))
+                            val bufferedReader = BufferedReader(InputStreamReader(file))
 
                             word.text = newWord(file, bufferedReader)
                         }
@@ -302,28 +306,36 @@ class RobberyRound : AppCompatActivity() {
 
             when (book) {
                 0 -> {
-                    var file: InputStream = assets.open("Easy.txt")
+                    val file: InputStream = assets.open("Easy.txt")
 
-                    var bufferedReader = BufferedReader(InputStreamReader(file))
+                    val bufferedReader = BufferedReader(InputStreamReader(file))
 
                     word.text = newWord(file, bufferedReader)
                 }
                 1 -> {
-                    var file: InputStream = assets.open("Middle.txt")
+                    val file: InputStream = assets.open("Middle.txt")
 
-                    var bufferedReader = BufferedReader(InputStreamReader(file))
+                    val bufferedReader = BufferedReader(InputStreamReader(file))
 
                     word.text = newWord(file, bufferedReader)
                 }
                 2 -> {
-                    var file: InputStream = assets.open("Hard.txt")
+                    val file: InputStream = assets.open("Hard.txt")
 
-                    var bufferedReader = BufferedReader(InputStreamReader(file))
+                    val bufferedReader = BufferedReader(InputStreamReader(file))
 
                     word.text = newWord(file, bufferedReader)
                 }
             }
         }
+
+        //Реализовать вычет очков для играющей команды
+        //Реализовать вычет очков для играющей команды
+        //Реализовать вычет очков для играющей команды
+        //Реализовать вычет очков для играющей команды
+        //Реализовать вычет очков для играющей команды
+        //Реализовать вычет очков для играющей команды
+        //Реализовать вычет очков для играющей команды
 
         cross.setOnClickListener {
             cross.isClickable = false
@@ -380,23 +392,23 @@ class RobberyRound : AppCompatActivity() {
 
                 when (book) {
                     0 -> {
-                        var file: InputStream = assets.open("Easy.txt")
+                        val file: InputStream = assets.open("Easy.txt")
 
-                        var bufferedReader = BufferedReader(InputStreamReader(file))
+                        val bufferedReader = BufferedReader(InputStreamReader(file))
 
                         word.text = newWord(file, bufferedReader)
                     }
                     1 -> {
-                        var file: InputStream = assets.open("Middle.txt")
+                        val file: InputStream = assets.open("Middle.txt")
 
-                        var bufferedReader = BufferedReader(InputStreamReader(file))
+                        val bufferedReader = BufferedReader(InputStreamReader(file))
 
                         word.text = newWord(file, bufferedReader)
                     }
                     2 -> {
-                        var file: InputStream = assets.open("Hard.txt")
+                        val file: InputStream = assets.open("Hard.txt")
 
-                        var bufferedReader = BufferedReader(InputStreamReader(file))
+                        val bufferedReader = BufferedReader(InputStreamReader(file))
 
                         word.text = newWord(file, bufferedReader)
                     }
@@ -406,7 +418,26 @@ class RobberyRound : AppCompatActivity() {
         }
     }
 
-    override fun finish() {}
+    override fun finish() {
+        flagForAppClosedOrBackButtonPressed=false
+        super.finish()
+        overridePendingTransition(R.anim.slide_in_up,R.anim.slide_out_down)
+    }
+    override fun onStop(){
+        super.onStop()
+        if (flagForPause) {
+            if (isPlaying) {
+                pauseButton.background = resources.getDrawable(R.drawable.medium_level_button)
+                flagForPauseCheck = false
+                cross.isClickable = false
+                word.text = "Пауза"
+                countDownTimer.cancel()
+                isPlaying = false
+            }
+        }
+
+    }
+
 
     private fun newWord(file: InputStream, bufferedReader: BufferedReader): String {
         currentWordNumber = (0 until wordsNumber).random()

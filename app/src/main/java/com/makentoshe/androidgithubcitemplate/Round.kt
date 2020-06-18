@@ -35,6 +35,12 @@ class Round : AppCompatActivity() {
 
     private var flagForPause: Boolean = false
 
+    private var flagForAppClosedOrBackButtonPressed:Boolean =true
+
+    private var isPlaying = false
+
+    private lateinit var countDownTimer:CountDownTimer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_round)
@@ -61,7 +67,6 @@ class Round : AppCompatActivity() {
         val fineChanger = appPrefs.getBoolean("fineChanger", false)
         val generalLast = appPrefs.getBoolean("generalLast", false)
         val tasks = appPrefs.getBoolean("tasks", false)
-        var isPlaying = false
         var winnersIndex: Int = -1
         var counter = appPrefs.getInt("counter", -1)
         var timeLeftMilliseconds:Long=(roundLength.toLong()*1000)
@@ -70,8 +75,12 @@ class Round : AppCompatActivity() {
         class MyCountDownTimer(timeLeftMilliseconds:Long, interval:Long): CountDownTimer(timeLeftMilliseconds, interval){
 
             override fun onTick(p0: Long) {
-                timeLeftMilliseconds=p0
-                timerCounter.text=(timeLeftMilliseconds/1000).toString()
+                if (flagForAppClosedOrBackButtonPressed) {
+                    timeLeftMilliseconds = p0
+                    timerCounter.text = (timeLeftMilliseconds / 1000).toString()
+                } else{
+                    this.cancel()
+                }
             }
 
             override fun onFinish() {
@@ -108,7 +117,7 @@ class Round : AppCompatActivity() {
             }
 
         }
-        var countDownTimer =  MyCountDownTimer(timeLeftMilliseconds, 1000)
+        countDownTimer =  MyCountDownTimer(timeLeftMilliseconds, 1000)
 
         roundTitle.text = currentTeamText
         roundText.text = currentRoundText
@@ -117,7 +126,6 @@ class Round : AppCompatActivity() {
 
         if (counter == 0)
             roundNumber++
-        Log.e("sas",roundNumber.toString())
         list = Array(teams.size) { MutableList(roundNumber) { "0.0" } }
 
         for (i in 0 until teamsAmount)
@@ -418,7 +426,23 @@ class Round : AppCompatActivity() {
     }
 
     override fun finish() {
+        flagForAppClosedOrBackButtonPressed=false
+        super.finish()
+        overridePendingTransition(R.anim.slide_in_up,R.anim.slide_out_down)
+    }
 
+    override fun onStop(){
+        super.onStop()
+        if (flagForFirstTap) {
+            if (isPlaying) {
+                pauseButton.background = resources.getDrawable(R.drawable.medium_level_button)
+                check.isClickable = false
+                cross.isClickable = false
+                word.text = "Пауза"
+                countDownTimer.cancel()
+                isPlaying = false
+            }
+        }
     }
 
     private fun newWord(bufferedReader: BufferedReader): String {

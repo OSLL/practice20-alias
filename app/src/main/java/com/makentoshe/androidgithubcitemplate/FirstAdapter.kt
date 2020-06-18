@@ -30,7 +30,7 @@ class FirstAdapter(
 
         holder.teamNameFirst.text = teamsNames[position]
 
-        var secondAdapter = SecondAdapter(context, teamsScores[position])
+        val secondAdapter = SecondAdapter(context, teamsScores[position])
         holder.secondRecycler.adapter = secondAdapter
         holder.secondRecycler.layoutManager = LinearLayoutManager(context)
 

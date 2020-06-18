@@ -22,7 +22,7 @@ class Game : AppCompatActivity() {
         teams = Array(teamsAmount){""}
         for (i in 0 until teamsAmount)
             teams[i] = appPrefs.getString("team$i", "").toString()
-        var currentTeamText = appPrefs.getString("currentTeamText", "1 команда").toString()
+        var currentTeamText:String
         val currentRoundText: String = appPrefs.getString("currentRoundText", "1 раунд").toString()
         val counter = appPrefs.getInt("counter", -1)
         val teamsScores = Array(teamsAmount){0}
@@ -43,13 +43,13 @@ class Game : AppCompatActivity() {
         teamsViewGame.layoutManager = LinearLayoutManager(this)
 
         if ((wordsForWin - (wordsForWin % 10)) / 10 == 1) {
-            pointsText.text = wordsForWin.toString() + " очков"
+            pointsText.text = "$wordsForWin очков"
         } else {
             when (wordsForWin % 10) {
-                0 -> pointsText.text = wordsForWin.toString() + " очков"
-                1 -> pointsText.text = wordsForWin.toString() + " очко"
-                2, 3, 4 -> pointsText.text = wordsForWin.toString() + " очка"
-                5, 6, 7, 8, 9 -> pointsText.text = wordsForWin.toString() + " очков"
+                0 -> pointsText.text = "$wordsForWin очков"
+                1 -> pointsText.text = "$wordsForWin очко"
+                2, 3, 4 -> pointsText.text = "$wordsForWin очка"
+                5, 6, 7, 8, 9 -> pointsText.text = "$wordsForWin очков"
             }
         }
 

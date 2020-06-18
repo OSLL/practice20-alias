@@ -29,7 +29,7 @@ class WinPage : AppCompatActivity() {
             teamsScores[i] = appPrefs.getInt("teamsScores$i", 0)
 
         val winner: String = appPrefs.getString("winner", "Error team")!!
-        val max: Int = appPrefs.getInt("max", -1)!!
+        val max: Int = appPrefs.getInt("max", -1)
         if ((max - (max % 10)) / 10 == 1) {
             youWin.text = "Команда: $winner"
             youWin1.text = "Победила!"

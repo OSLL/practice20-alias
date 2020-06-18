@@ -12,25 +12,25 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
+        val appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
         val prefsEditor: SharedPreferences.Editor = appPrefs.edit()
         var teamsAmount = appPrefs.getInt("teamsAmount", 0)
         var teams = MutableList(teamsAmount){""}
         for (i in 0 until teamsAmount)
             teams[i] = appPrefs.getString("team$i", "").toString()
-        var wordsForWin = appPrefs.getInt("wordsForWin", 10)
-        var roundLength = appPrefs.getInt("roundLength", 10)
-        var fineChanger = appPrefs.getBoolean("fineChanger", false)
-        var generalLast = appPrefs.getBoolean("generalLast", false)
-        var tasks = appPrefs.getBoolean("tasks", false)
-        var robbery = appPrefs.getBoolean("robbery", false)
-        var book = appPrefs.getInt("book", -1)
+        var wordsForWin: Int
+        var roundLength: Int
+        var fineChanger: Boolean
+        var generalLast: Boolean
+        var tasks: Boolean
+        var robbery: Boolean
+        var book: Int
         var teamsScores = Array(teamsAmount){0}
         for (i in 0 until teamsAmount)
             teamsScores[i] = appPrefs.getInt("teamsScores$i", 0)
-        var currentTeamText = appPrefs.getString("currentTeamText", "1 команда")
-        var currentRoundText = appPrefs.getString("currentRoundText", "1 раунд")
-        var counter = appPrefs.getInt("counter", 0)
+        var currentTeamText: String
+        var currentRoundText: String
+        var counter: Int
         var roundNumber = appPrefs.getInt("roundNumber", 0)
         val list: Array<MutableList<String>> = Array(teamsAmount) { MutableList(roundNumber) { "0.0" } }
         var teamsFlag = appPrefs.getBoolean("teamsFlag", false)

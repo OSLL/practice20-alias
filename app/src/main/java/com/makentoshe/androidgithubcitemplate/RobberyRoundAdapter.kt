@@ -9,16 +9,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class RobberyRoundAdapter(var context: Context,
-                          var teamsNames: Array<String>,
-                          var teamsScore: IntArray) :
+                          private var teamsNames: Array<String>,
+                          private var teamsScore: IntArray) :
     RecyclerView.Adapter<RobberyRoundAdapter.RobberyRoundAdapterHolder>() {
-    var wordCounterText:MutableList<TextView> = mutableListOf()
+    private var wordCounterText:MutableList<TextView> = mutableListOf()
 
     interface OnItemClickListener{
         fun onCheckClicked(position: Int)
     }
 
-    lateinit var mListener: OnItemClickListener
+    private lateinit var mListener: OnItemClickListener
 
     fun setOnItemClickListener(listener: OnItemClickListener){
         mListener = listener
@@ -30,7 +30,7 @@ class RobberyRoundAdapter(var context: Context,
         val counterRobbery = itemView.findViewById<TextView>(R.id.counterRobbery)!!
         init {
             checkRobbery.setOnClickListener {
-                var position = adapterPosition
+                val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION)
                     listener.onCheckClicked(position)
             }

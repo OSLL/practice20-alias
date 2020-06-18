@@ -14,10 +14,10 @@ class LastWord : AppCompatActivity() {
     lateinit var robberyRoundAdapter: RobberyRoundAdapter
     lateinit var teams: Array<String>
     lateinit var teamsScores: Array<Int>
-    var book: Int = -1
+    private var book: Int = -1
     var teamsAmount: Int = 0
     var currentRoundText: String = "0"
-    var currentTeamText: String = "0"
+    private var currentTeamText: String = "0"
     var wordsForWin = 0
 
     var teamsNumbers: Array<Int> = arrayOf()
@@ -36,8 +36,14 @@ class LastWord : AppCompatActivity() {
         currentTeamText = appPrefs.getString("currentTeamText", "Error").toString()
         wordsForWin = appPrefs.getInt("wordsForWin", 10)
         teamsNumbers = Array(teamsAmount) { it + 1 }
-        var counter = appPrefs.getInt("counter", -1)
+        val counter = appPrefs.getInt("counter", -1)
         word.text = appPrefs.getString("currentWord", "Error")
+        roundTitle.text=currentTeamText
+        if (counter==0) {
+            roundText.text = (currentRoundText.substringBefore(" ").toInt() - 1).toString() + " раунд"
+        }else{
+            roundText.text = currentRoundText
+        }
         teams = Array(teamsAmount) { "" }
         teamsScores = Array(teamsAmount) { 0 }
         for (i in teams.indices)
@@ -45,14 +51,14 @@ class LastWord : AppCompatActivity() {
         for (i in teams.indices)
             teamsScores[i] = appPrefs.getInt("teamsScores$i", 0)
         book = appPrefs.getInt("book", -1)
-        var roundNumber = appPrefs.getInt("roundNumber", 0)
+        val roundNumber = appPrefs.getInt("roundNumber", 0)
         list = Array(teams.size) { MutableList(roundNumber) { "0.0" } }
         for (i in 0 until teamsAmount)
             for (j in 0 until roundNumber)
                 list[i][j] = appPrefs.getString("list[$i][$j]", "0.0").toString()
 
         fun createRecyclerView() {
-            var teamsScores1 = IntArray(teams.size) { 0 }
+            val teamsScores1 = IntArray(teams.size) { 0 }
             robberyRoundAdapter = RobberyRoundAdapter(this, teams, teamsScores1)
             robberyRoundRecycler.adapter = robberyRoundAdapter
             robberyRoundRecycler.layoutManager = LinearLayoutManager(this)
@@ -93,7 +99,7 @@ class LastWord : AppCompatActivity() {
                         max = 0
                         finish()
                     } else {
-                        var currentTeamText: String = teamsNumbers[counter].toString() + " команда"
+                        val currentTeamText: String = teamsNumbers[counter].toString() + " команда"
                         val intent = Intent(this@LastWord, Game::class.java)
                         for (i in 0 until teamsAmount)
                             prefsEditor.putInt("teamsScores$i", teamsScores[i])
@@ -116,6 +122,13 @@ class LastWord : AppCompatActivity() {
         backButton.setOnClickListener {
             finish()
         }
+
+        //Реализовать вычет очков для играющей команды
+        //Реализовать вычет очков для играющей команды
+        //Реализовать вычет очков для играющей команды
+        //Реализовать вычет очков для играющей команды
+        //Реализовать вычет очков для играющей команды
+        //Реализовать вычет очков для играющей команды
 
         cross.setOnClickListener {
             if (counter == 0) {
@@ -143,7 +156,7 @@ class LastWord : AppCompatActivity() {
                 max = 0
                 finish()
             } else {
-                var currentTeamText: String = teamsNumbers[counter].toString() + " команда"
+                val currentTeamText: String = teamsNumbers[counter].toString() + " команда"
                 val intent = Intent(this, Game::class.java)
                 for (i in 0 until teamsAmount)
                     prefsEditor.putInt("teamsScores$i", teamsScores[i])
@@ -161,6 +174,5 @@ class LastWord : AppCompatActivity() {
         }
     }
 
-    override fun finish() {
-    }
+    override fun finish() {}
 }
