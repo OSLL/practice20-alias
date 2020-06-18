@@ -53,7 +53,7 @@
         android:text="Добавить команду"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
-        android:textColor="@color/white"
+        android:textColor="@android:color/white"
         android:background="@drawable/add_team_no_active"
         android:clickable="false"
         app:layout_constraintEnd_toEndOf="parent"

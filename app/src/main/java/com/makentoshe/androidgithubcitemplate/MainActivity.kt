@@ -33,10 +33,13 @@ class MainActivity : AppCompatActivity() {
         var counter: Int
         var roundNumber = appPrefs.getInt("roundNumber", 0)
         val list: Array<MutableList<String>> = Array(teamsAmount) { MutableList(roundNumber) { "0.0" } }
-        var teamsFlag = appPrefs.getBoolean("teamsFlag", false)
-        var gameSettingsFlag = appPrefs.getBoolean("gameSettingsFlag", false)
-        var levelsFlag = appPrefs.getBoolean("levelsFlag", false)
-        var gameFlag = appPrefs.getBoolean("gameFlag", false)
+        val teamsFlag = appPrefs.getBoolean("teamsFlag", false)
+        val gameSettingsFlag = appPrefs.getBoolean("gameSettingsFlag", false)
+        val levelsFlag = appPrefs.getBoolean("levelsFlag", false)
+        val gameFlag = appPrefs.getBoolean("gameFlag", false)
+        var isNightModeOn = appPrefs.getBoolean("isNightModeOn", false)
+
+
 
         if (!teamsFlag && !gameFlag && !levelsFlag && !gameFlag){
             continueGameButton.isClickable = false
@@ -121,12 +124,15 @@ class MainActivity : AppCompatActivity() {
             prefsEditor.putBoolean("gameSettingsFlag", false)
             prefsEditor.putBoolean("levelsFlag", false)
             prefsEditor.putBoolean("gameFlag", false)
+            prefsEditor.putBoolean("isNightModeOn", isNightModeOn)
             prefsEditor.apply()
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 
         rules_button.setOnClickListener {
+            prefsEditor.putBoolean("isNightModeOn", isNightModeOn)
+            prefsEditor.apply()
             val intent = Intent(this, Rules::class.java)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_up)

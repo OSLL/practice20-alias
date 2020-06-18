@@ -1,65 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:layout_gravity="bottom"
-android:background="@color/white"
-tools:context=".Rules">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="bottom"
+    android:background="@color/background"
+    tools:context=".Rules">
 
-<Button
-    android:id="@+id/back_button"
-    android:layout_width="50dp"
-    android:layout_height="50dp"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="20dp"
-    android:background="@drawable/back_button"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    <Button
+        android:id="@+id/back_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/back_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-<Button
-    android:id="@+id/settings"
-    android:layout_width="40dp"
-    android:layout_height="40dp"
-    android:layout_marginTop="25dp"
-    android:layout_marginEnd="16dp"
-    android:background="@drawable/menu_button"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
-
-<TextView
-    android:id="@+id/rules_text"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="78dp"
-    android:layout_marginTop="24dp"
-    android:layout_marginEnd="88dp"
-    android:text="Правила"
-    android:textColor="#000000"
-    android:textSize="30sp"
-    app:layout_constraintEnd_toStartOf="@id/settings"
-    app:layout_constraintStart_toEndOf="@id/back_button"
-    app:layout_constraintTop_toTopOf="parent" />
-
-<ScrollView
-    android:id="@+id/rulesScrollView"
-    android:layout_width="0dp"
-    android:layout_height="616dp"
-    android:layout_marginStart="5dp"
-    android:layout_marginTop="28dp"
-    android:layout_marginEnd="5dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/back_button">
+    <Button
+        android:id="@+id/settings"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/menu_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
+        android:id="@+id/rules_text"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="        В игру «Элиас» играют командами, минимум по два человека в каждой.\n\t\t\t\t\t Вам надо объяснять слова, которые будут появлятся на экране, для членов Вашей команды, используя, например, синонимы, антонимы, устойчивые выражения и так далее.\n\t\t\t\t\t Главное — не произнести само разгадываемое слово и однокоренные ему.\n\t\t\t\t\t Ваша команда должна отгадать как можно больше слов до того, как закончится время!\t За каждое разгаданное слово команда получает 1 очко.\t Команда, которая наберёт установленное количество очков первой - победитель!\n\t\t\t\t\t На время каждого раунда внутри команды выбирается ведущий - человек, который будет объяснять слова. Эта роль передаётся по очереди, а когда прошёл круг - запускайте его заново.\n\t\t\t\t\t Как только раунд начнётся, на экране появится слово, которое необходимо будет объяснить. Услышав правильный ответ, ведущий сразу нажимает на зелёную кнопку справа от карточки и слово поменяется.\n\t\t\t\t\t Если у вас не получается объяснить слово членам вашей команды - можете нажать на красную кнопку слева от карточки - вы увидите новое слово, которое вам предстоит объяснить.     Когда закончится время раунда, очередь объяснения переходит следующей команде."
+        android:layout_marginStart="78dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="88dp"
+        android:text="Правила"
         android:textColor="#000000"
-        android:textSize="21sp" />
-</ScrollView>
+        android:textSize="30sp"
+        app:layout_constraintEnd_toStartOf="@id/settings"
+        app:layout_constraintStart_toEndOf="@id/back_button"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/rulesScrollView"
+        android:layout_width="0dp"
+        android:layout_height="616dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/back_button">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="        В игру «Элиас» играют командами, минимум по два человека в каждой.\n\t\t\t\t\t Вам надо объяснять слова, которые будут появлятся на экране, для членов Вашей команды, используя, например, синонимы, антонимы, устойчивые выражения и так далее.\n\t\t\t\t\t Главное — не произнести само разгадываемое слово и однокоренные ему.\n\t\t\t\t\t Ваша команда должна отгадать как можно больше слов до того, как закончится время!\t За каждое разгаданное слово команда получает 1 очко.\t Команда, которая наберёт установленное количество очков первой - победитель!\n\t\t\t\t\t На время каждого раунда внутри команды выбирается ведущий - человек, который будет объяснять слова. Эта роль передаётся по очереди, а когда прошёл круг - запускайте его заново.\n\t\t\t\t\t Как только раунд начнётся, на экране появится слово, которое необходимо будет объяснить. Услышав правильный ответ, ведущий сразу нажимает на зелёную кнопку справа от карточки и слово поменяется.\n\t\t\t\t\t Если у вас не получается объяснить слово членам вашей команды - можете нажать на красную кнопку слева от карточки - вы увидите новое слово, которое вам предстоит объяснить.     Когда закончится время раунда, очередь объяснения переходит следующей команде."
+            android:textColor="#000000"
+            android:textSize="21sp" />
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

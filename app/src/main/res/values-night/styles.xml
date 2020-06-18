@@ -1,0 +1,16 @@
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="MySwitch" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">@color/mainColor</item>
+        <item name="colorSwitchThumbNormal">@android:color/holo_orange_dark</item>
+    </style>
+
+    <style name="SeekBarStyle" parent="Theme.AppCompat.Light">
+        <item name="android:colorControlActivated">@color/mainColor</item>
+    </style>
+</resources>
