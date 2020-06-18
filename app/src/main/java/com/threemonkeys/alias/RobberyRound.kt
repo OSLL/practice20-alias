@@ -1,4 +1,4 @@
-package com.makentoshe.androidgithubcitemplate
+package com.threemonkeys.alias
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_robbery_round.*
 import kotlinx.android.synthetic.main.activity_robbery_round.pauseButton
-import kotlinx.android.synthetic.main.activity_round.*
 import kotlinx.android.synthetic.main.activity_round.backButton
 import kotlinx.android.synthetic.main.activity_round.cross
 import kotlinx.android.synthetic.main.activity_round.roundText

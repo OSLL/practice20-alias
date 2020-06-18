@@ -1,4 +1,4 @@
-package com.makentoshe.androidgithubcitemplate
+package com.threemonkeys.alias
 
 import android.app.Dialog
 import android.content.Intent

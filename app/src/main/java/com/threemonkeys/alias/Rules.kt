@@ -1,4 +1,4 @@
-package com.makentoshe.androidgithubcitemplate
+package com.threemonkeys.alias
 
 import android.content.SharedPreferences
 import android.os.Bundle

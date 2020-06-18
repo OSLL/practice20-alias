@@ -1,4 +1,4 @@
-package com.makentoshe.androidgithubcitemplate
+package com.makentoshe.alias
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
