@@ -16,16 +16,16 @@ class Game : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
-        var appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
+        val appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
         val prefsEditor: SharedPreferences.Editor = appPrefs.edit()
         val teamsAmount = appPrefs.getInt("teamsAmount", 0)
         teams = Array(teamsAmount){""}
         for (i in 0 until teamsAmount)
             teams[i] = appPrefs.getString("team$i", "").toString()
-        var currentTeamText: String = appPrefs.getString("currentTeamText", "1 команда").toString()
-        var currentRoundText: String = appPrefs.getString("currentRoundText", "1 раунд").toString()
-        var counter = appPrefs.getInt("counter", -1)
-        var teamsScores = Array(teamsAmount){0}
+        var currentTeamText = appPrefs.getString("currentTeamText", "1 команда").toString()
+        val currentRoundText: String = appPrefs.getString("currentRoundText", "1 раунд").toString()
+        val counter = appPrefs.getInt("counter", -1)
+        val teamsScores = Array(teamsAmount){0}
         for (i in 0 until teamsAmount)
             teamsScores[i] = appPrefs.getInt("teamsScores$i", 0)
         val wordsForWin = appPrefs.getInt("wordsForWin", 10)

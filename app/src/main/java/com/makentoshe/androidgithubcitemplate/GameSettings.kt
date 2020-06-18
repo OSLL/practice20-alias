@@ -15,7 +15,7 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_settings)
 
-        var appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
+        val appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
         val prefsEditor: SharedPreferences.Editor = appPrefs.edit()
 
         var wordsForWin = appPrefs.getInt("wordsForWin", 10)
