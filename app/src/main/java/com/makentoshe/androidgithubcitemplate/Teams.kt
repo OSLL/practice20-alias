@@ -55,8 +55,6 @@ class Teams : AppCompatActivity() {
             prefsEditor.apply()
         }
 
-        addTeamDialog = Dialog(this)
-
         teamsAmount = appPrefs.getInt("teamsAmount", 0)
 
         teams = MutableList(teamsAmount) { "" }
@@ -146,6 +144,7 @@ class Teams : AppCompatActivity() {
                 closeAddTeamDialog = addTeamDialog.findViewById(R.id.addTeamDialog)
                 tnld = addTeamDialog.findViewById(R.id.teamNameLayoutDialog)
                 tnet = addTeamDialog.findViewById(R.id.teamNameDialog)
+                addTeamDialog.window!!.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
                 addTeamDialog.show()
                 tnld.editText?.setText(teams[position])
                 closeAddTeamDialog.setOnClickListener {
@@ -281,6 +280,7 @@ class Teams : AppCompatActivity() {
     }
 
     private fun showAddTeamDialog() {
+        addTeamDialog = Dialog(this)
         addTeamDialog.setContentView(R.layout.dialog_teams)
         closeAddTeamDialog = addTeamDialog.findViewById(R.id.addTeamDialog)
         tnld = addTeamDialog.findViewById(R.id.teamNameLayoutDialog)
@@ -327,7 +327,7 @@ class Teams : AppCompatActivity() {
                 if (counterEnd >= 1 || counterStart >= 1) {
                     if (counterEnd >= 5 || counterStart >= 2) {
                         tnld.error =
-                            "Молодец, ты нашёл пасхалку,a теперь убери пробелы"
+                            "Молодец, ты нашёл пасхалку, a теперь убери пробелы"
                         closeAddTeamDialog.isClickable = false
                         closeAddTeamDialog.background =
                             resources.getDrawable(R.drawable.add_team_no_active)
