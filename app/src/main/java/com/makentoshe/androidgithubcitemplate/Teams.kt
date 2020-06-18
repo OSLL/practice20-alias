@@ -3,6 +3,7 @@ package com.makentoshe.androidgithubcitemplate
 import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -284,6 +285,7 @@ class Teams : AppCompatActivity() {
         closeAddTeamDialog = addTeamDialog.findViewById(R.id.addTeamDialog)
         tnld = addTeamDialog.findViewById(R.id.teamNameLayoutDialog)
         tnet = addTeamDialog.findViewById(R.id.teamNameDialog)
+        addTeamDialog.window!!.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
         addTeamDialog.show()
         closeAddTeamDialog.setOnClickListener {
             addTeamDialog.cancel()
