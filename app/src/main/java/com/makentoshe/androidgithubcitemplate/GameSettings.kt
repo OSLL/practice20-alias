@@ -43,7 +43,7 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
 
 
         continueButton.setOnClickListener {
-
+            prefsEditor.putBoolean("levelsFlag", true)
             val intent = Intent(this, Levels::class.java)
             prefsEditor.putInt("wordsForWin", wordsForWin)
             prefsEditor.putInt("roundLength", roundLength)

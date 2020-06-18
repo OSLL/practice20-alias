@@ -31,12 +31,12 @@
         android:id="@+id/counterRobbery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="100dp"
         android:text="0"
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/teamRobbery"
         app:layout_constraintEnd_toStartOf="@+id/checkRobbery"
-        app:layout_constraintStart_toEndOf="@+id/teamRobbery"
         app:layout_constraintTop_toTopOf="@+id/teamRobbery" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

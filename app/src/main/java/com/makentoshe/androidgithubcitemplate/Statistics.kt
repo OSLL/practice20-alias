@@ -28,6 +28,12 @@ class Statistics : AppCompatActivity() {
             for (j in 0 until roundNumber)
                 list[i][j] = appPrefs.getString("list[$i][$j]", "0.0").toString()
 
+        prefsEditor.putBoolean("teamsFlag", false)
+        prefsEditor.putBoolean("gameSettingsFlag", false)
+        prefsEditor.putBoolean("levelsFlag", false)
+        prefsEditor.putBoolean("gameFlag", false)
+        prefsEditor.apply()
+
         backButton.setOnClickListener {
             finish()
         }

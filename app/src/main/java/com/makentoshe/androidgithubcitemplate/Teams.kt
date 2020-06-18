@@ -52,6 +52,7 @@ class Teams : AppCompatActivity() {
         createRecyclerView()
 
         continueButtonTeams.setOnClickListener {
+            prefsEditor.putBoolean("gameSettingsFlag", true)
             list = Array(teams.size) { MutableList(0) { "0.0" } }
             var teamsScores = Array(teamsAmount){0}
             val intent = Intent(this, GameSettings::class.java)
