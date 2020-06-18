@@ -14,19 +14,19 @@ class RobberyRoundAdapter(var context: Context,
     RecyclerView.Adapter<RobberyRoundAdapter.RobberyRoundAdapterHolder>() {
     var wordCounterText:MutableList<TextView> = mutableListOf()
 
-    interface onItemClickListener{
+    interface OnItemClickListener{
         fun onCheckClicked(position: Int)
     }
 
-    lateinit var mListener: onItemClickListener
+    lateinit var mListener: OnItemClickListener
 
-    fun setOnItemClickListener(listener: onItemClickListener){
+    fun setOnItemClickListener(listener: OnItemClickListener){
         mListener = listener
     }
 
-    class RobberyRoundAdapterHolder(itemView: View,listener: onItemClickListener) : RecyclerView.ViewHolder(itemView) {
+    class RobberyRoundAdapterHolder(itemView: View,listener: OnItemClickListener) : RecyclerView.ViewHolder(itemView) {
         val teamRobbery = itemView.findViewById<TextView>(R.id.teamRobbery)!!
-        val checkRobbery = itemView.findViewById<Button>(R.id.checkRobbery)!!
+        private val checkRobbery = itemView.findViewById<Button>(R.id.checkRobbery)!!
         val counterRobbery = itemView.findViewById<TextView>(R.id.counterRobbery)!!
         init {
             checkRobbery.setOnClickListener {
@@ -51,7 +51,4 @@ class RobberyRoundAdapter(var context: Context,
         holder.counterRobbery.text = teamsScore[position].toString()
         wordCounterText.add(holder.counterRobbery)
     }
-
-    fun wordsCounterGetter() :Array<TextView> = wordCounterText.toTypedArray()
-
 }

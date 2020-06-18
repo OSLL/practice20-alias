@@ -14,8 +14,8 @@ class FirstAdapter(
     var teamsNames: MutableList<String>) : RecyclerView.Adapter<FirstAdapter.FirstAdapterHolder>() {
 
     class FirstAdapterHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val secondRecycler = itemView.findViewById<RecyclerView>(R.id.secondRecycler)
-        val teamNameFirst = itemView.findViewById<TextView>(R.id.teamNameFirst)
+        val secondRecycler: RecyclerView = itemView.findViewById(R.id.secondRecycler)
+        val teamNameFirst: TextView = itemView.findViewById(R.id.teamNameFirst)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FirstAdapter.FirstAdapterHolder {

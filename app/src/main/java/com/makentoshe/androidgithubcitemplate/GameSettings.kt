@@ -25,36 +25,26 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
         var tasks = appPrefs.getBoolean("tasks", false)
         var robbery = appPrefs.getBoolean("robbery", false)
 
-//        var teams = this.intent.getStringArrayExtra("teams")
-//        list = Array(teams.size) { MutableList(0) { "0.0" } }
-//        var settingsText = this.intent.getIntArrayExtra("settingsText")
-//        var settingsInfo =this.intent.getBooleanArrayExtra("settingsInfo" )
-//
-//        for (i in teams.indices)
-//            list[i] = this.intent.getStringArrayExtra("list$i").toMutableList()
-
         fineSwitcher.isChecked = fineChanger
 
-        fineSwitcher.setOnCheckedChangeListener { buttonView, isChecked -> if (isChecked) fineChanger=true else fineChanger=false}
+        fineSwitcher.setOnCheckedChangeListener {buttonView, isChecked -> fineChanger = isChecked }
 
         generalLastWordSwitcher.isChecked = generalLast
 
-        generalLastWordSwitcher.setOnCheckedChangeListener { buttonView, isChecked -> if (isChecked) generalLast=true else generalLast=false}
+        generalLastWordSwitcher.setOnCheckedChangeListener { buttonView, isChecked -> generalLast = isChecked }
 
         taskSwitcher.isChecked = tasks
 
-        taskSwitcher.setOnCheckedChangeListener { buttonView, isChecked -> if (isChecked) tasks=true else tasks=false}
+        taskSwitcher.setOnCheckedChangeListener { buttonView, isChecked -> tasks = isChecked }
 
         robberySwitcher.isChecked = robbery
 
-        robberySwitcher.setOnCheckedChangeListener { buttonView, isChecked -> if (isChecked) robbery=true else robbery=false}
+        robberySwitcher.setOnCheckedChangeListener { buttonView, isChecked -> robbery = isChecked }
 
 
         continueButton.setOnClickListener {
 
             val intent = Intent(this, Levels::class.java)
-//            intent.putExtra("teams", teams)
-//            intent.putExtra("settingsText",settingsTetx.toTypedArray())
             prefsEditor.putInt("wordsForWin", wordsForWin)
             prefsEditor.putInt("roundLength", roundLength)
             prefsEditor.putBoolean("fineChanger", fineChanger)
@@ -65,7 +55,6 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
-
 
         wordsAmountSlider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 
@@ -99,9 +88,6 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
 
         backButton.setOnClickListener {
             val intent = Intent(this, Teams::class.java)
-//            intent.putExtra("teams", teams)
-//            for (i in teams.indices)
-//                intent.putExtra("list$i", list[i].toTypedArray())
             prefsEditor.putInt("wordsForWin", wordsForWin)
             prefsEditor.putInt("roundLength", roundLength)
             prefsEditor.putBoolean("fineChanger", fineChanger)
@@ -112,7 +98,6 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
             startActivity(intent)
             finish()
         }
-
     }
 
     override fun finish() {

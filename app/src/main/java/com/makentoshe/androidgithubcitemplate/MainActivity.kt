@@ -14,7 +14,6 @@ class MainActivity : AppCompatActivity() {
 
         var appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
         val prefsEditor: SharedPreferences.Editor = appPrefs.edit()
-
         var teamsAmount = appPrefs.getInt("teamsAmount", 0)
         var teams = MutableList(teamsAmount){""}
         for (i in 0 until teamsAmount)
@@ -29,12 +28,10 @@ class MainActivity : AppCompatActivity() {
         var teamsScores = Array(teamsAmount){0}
         for (i in 0 until teamsAmount)
             teamsScores[i] = appPrefs.getInt("teamsScores$i", 0)
-
         var currentTeamText = appPrefs.getString("currentTeamText", "1 команда")
         var currentRoundText = appPrefs.getString("currentRoundText", "1 раунд")
         var counter = appPrefs.getInt("counter", 0)
         var roundNumber = appPrefs.getInt("roundNumber", 0)
-
         val list: Array<MutableList<String>> = Array(teamsAmount) { MutableList(roundNumber) { "0.0" } }
 
         continueGameButton.setOnClickListener {
@@ -42,17 +39,8 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
         newGameButton.setOnClickListener {
-//            var teams: MutableList<String> = mutableListOf()
-//            var settingsText: IntArray = arrayOf(10, 10).toIntArray()
-//            var settingsInfo: BooleanArray = Array<Boolean>(4, { false }).toBooleanArray()
             val intent = Intent(this, Teams::class.java)
-//            intent.putExtra("teams", teams.toTypedArray())
-//            intent.putExtra("settingsText", settingsText)
-//            intent.putExtra("settingsInfo", settingsInfo)
-//            for (i in teams.indices)
-//                intent.putExtra("list$i", list[i].toTypedArray())
             roundNumber = 0
             teamsAmount = 0
             teams = MutableList(teamsAmount){""}

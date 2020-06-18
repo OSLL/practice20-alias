@@ -3,36 +3,24 @@ package com.makentoshe.androidgithubcitemplate
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_robbery_round.*
-import kotlinx.android.synthetic.main.activity_round.backButton
 import kotlinx.android.synthetic.main.activity_round.cross
 
 class LastWord : AppCompatActivity() {
 
     lateinit var list: Array<MutableList<String>>
-
-    var wordsNumber: Int = 0
-
-    var currentWord = ""
-
-    var currentWordNumber: Int = 0
-
-    var words: MutableList<Int> = mutableListOf()
-
     lateinit var robberyRoundAdapter: RobberyRoundAdapter
-
     lateinit var teams: Array<String>
     lateinit var teamsScores: Array<Int>
     var book: Int = -1
     var teamsAmount: Int = 0
     var currentRoundText: String = "0"
-    var currentTeamText:String = "0"
-    var wordsForWin =0
+    var currentTeamText: String = "0"
+    var wordsForWin = 0
 
-    var teamsNums: Array<Int> = arrayOf()
+    var teamsNumbers: Array<Int> = arrayOf()
     var max = -100000
     var winnersIndex: Int = -1
 
@@ -43,37 +31,25 @@ class LastWord : AppCompatActivity() {
         val appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
         val prefsEditor: SharedPreferences.Editor = appPrefs.edit()
 
-        teamsAmount = appPrefs.getInt("teamsAmount",2)
-        currentRoundText = appPrefs.getString("currentRoundText","1 раунд").toString()
+        teamsAmount = appPrefs.getInt("teamsAmount", 2)
+        currentRoundText = appPrefs.getString("currentRoundText", "1 раунд").toString()
         currentTeamText = appPrefs.getString("currentTeamText", "Error").toString()
         wordsForWin = appPrefs.getInt("wordsForWin", 10)
-        teamsNums = Array<Int>(teamsAmount) { it + 1 }
+        teamsNumbers = Array(teamsAmount) { it + 1 }
         var counter = appPrefs.getInt("counter", -1)
-
-        word.text = appPrefs.getString("currentWord","Error")
-        teams = Array(teamsAmount){""}
-        teamsScores = Array(teamsAmount){0}
+        word.text = appPrefs.getString("currentWord", "Error")
+        teams = Array(teamsAmount) { "" }
+        teamsScores = Array(teamsAmount) { 0 }
         for (i in teams.indices)
             teams[i] = appPrefs.getString("team$i", "").toString()
         for (i in teams.indices)
             teamsScores[i] = appPrefs.getInt("teamsScores$i", 0)
-
-        for (i in teams.indices)
-            Log.e("Any", teamsScores[i].toString())
         book = appPrefs.getInt("book", -1)
-
-//        list = Array(teams.size) { MutableList(0) { "0.0" } }
-//        for (i in teams.indices)
-//            list[i] = this.intent.getStringArrayExtra("list$i")!!.toMutableList()
-
         var roundNumber = appPrefs.getInt("roundNumber", 0)
-
         list = Array(teams.size) { MutableList(roundNumber) { "0.0" } }
-
         for (i in 0 until teamsAmount)
             for (j in 0 until roundNumber)
                 list[i][j] = appPrefs.getString("list[$i][$j]", "0.0").toString()
-
 
         fun createRecyclerView() {
             var teamsScores1 = IntArray(teams.size) { 0 }
@@ -81,31 +57,24 @@ class LastWord : AppCompatActivity() {
             robberyRoundRecycler.adapter = robberyRoundAdapter
             robberyRoundRecycler.layoutManager = LinearLayoutManager(this)
 
-
-
             robberyRoundAdapter.setOnItemClickListener(object :
-                RobberyRoundAdapter.onItemClickListener {
+                RobberyRoundAdapter.OnItemClickListener {
 
                 override fun onCheckClicked(position: Int) {
-
-
                     teamsScores[position]++
                     teamsScores1[position]++
-                    for (i in teams.indices)
-                        Log.e("Any", teamsScores[i].toString())
                     list[position][roundNumber - 1] =
                         "${((list[position][roundNumber - 1].substringBefore('.')
-                            .toInt()) + 1)}.${list[position][roundNumber - 1].substringAfter('.').toInt()}"
+                            .toInt()) + 1)}.${list[position][roundNumber - 1].substringAfter('.')
+                            .toInt()}"
                     robberyRoundAdapter.notifyItemChanged(position)
                     if (counter == 0) {
-
                         for (i in teams.indices) {
                             if (teamsScores[i] > max) {
                                 max = teamsScores[i]
                                 winnersIndex = i
                             }
                         }
-
                     }
 
                     if (max >= wordsForWin) {
@@ -120,17 +89,11 @@ class LastWord : AppCompatActivity() {
                             for (j in 0 until roundNumber)
                                 prefsEditor.putString("list[$i][$j]", list[i][j])
                         prefsEditor.apply()
-//                        intent.putExtra("WinTeamName", teams[winnersIndex])
-//                        intent.putExtra("WinTeamScore", max)
-//                        intent.putExtra("teams", teams)
-//                        for (i in teams.indices)
-//                            intent.putExtra("list$i", list[i].toTypedArray())
                         startActivity(intent)
                         max = 0
                         finish()
                     } else {
-                        var currentTeamText: String = teamsNums[counter].toString() + " команда"
-
+                        var currentTeamText: String = teamsNumbers[counter].toString() + " команда"
                         val intent = Intent(this@LastWord, Game::class.java)
                         for (i in 0 until teamsAmount)
                             prefsEditor.putInt("teamsScores$i", teamsScores[i])
@@ -141,16 +104,6 @@ class LastWord : AppCompatActivity() {
                             for (j in 0 until roundNumber)
                                 prefsEditor.putString("list[$i][$j]", list[i][j])
                         prefsEditor.apply()
-//                        intent.putExtra("currentRoundText", currentRoundText)
-//                        intent.putExtra("currentTeamText", currentTeamText)
-//                        intent.putExtra("settingsText", settingsText)
-//                        intent.putExtra("settingsInfo", settingsInfo)
-//                        intent.putExtra("teams", teams)
-//                        intent.putExtra("counter", counter)
-//                        intent.putExtra("teamsScores", teamsScores)
-//                        intent.putExtra("book", book)
-//                        for (i in teams.indices)
-//                            intent.putExtra("list$i", list[i].toTypedArray())
                         startActivity(intent)
                         overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
                         finish()
@@ -166,9 +119,6 @@ class LastWord : AppCompatActivity() {
 
         cross.setOnClickListener {
             if (counter == 0) {
-//                currentRoundText =
-//                    (currentRoundText.substringBefore(" ")
-//                        .toInt() + 1).toString() + " раунд"
                 for (i in teams.indices) {
                     if (teamsScores[i] > max) {
                         max = teamsScores[i]
@@ -189,16 +139,11 @@ class LastWord : AppCompatActivity() {
                     for (j in 0 until roundNumber)
                         prefsEditor.putString("list[$i][$j]", list[i][j])
                 prefsEditor.apply()
-//                intent.putExtra("WinTeamName", teams[winnersIndex])
-//                intent.putExtra("WinTeamScore", max)
-//                intent.putExtra("teams", teams)
-//                for (i in teams.indices)
-//                    intent.putExtra("list$i", list[i].toTypedArray())
                 startActivity(intent)
                 max = 0
                 finish()
             } else {
-                var currentTeamText: String = teamsNums[counter].toString() + " команда"
+                var currentTeamText: String = teamsNumbers[counter].toString() + " команда"
                 val intent = Intent(this, Game::class.java)
                 for (i in 0 until teamsAmount)
                     prefsEditor.putInt("teamsScores$i", teamsScores[i])
@@ -209,16 +154,6 @@ class LastWord : AppCompatActivity() {
                     for (j in 0 until roundNumber)
                         prefsEditor.putString("list[$i][$j]", list[i][j])
                 prefsEditor.apply()
-//                intent.putExtra("currentRoundText", currentRoundText)
-//                intent.putExtra("newTeam", newTeam)
-////                intent.putExtra("settingsText", settingsText)
-////                intent.putExtra("settingsInfo", settingsInfo)
-//                intent.putExtra("teams", teams)
-//                intent.putExtra("counter", counter)
-//                intent.putExtra("teamsScores", teamsScores)
-//                intent.putExtra("book", book)
-////                for (i in teams.indices)
-////                    intent.putExtra("list$i", list[i].toTypedArray())
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down)
                 finish()
