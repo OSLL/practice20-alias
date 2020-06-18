@@ -10,18 +10,18 @@ import androidx.recyclerview.widget.RecyclerView
 
 class TeamsAdapter(
     var context: Context,
-    var teamsNames: MutableList<String>,
-    var currentPosition: Int
+    private var teamsNames: MutableList<String>,
+    private var currentPosition: Int
     ) : RecyclerView.Adapter<TeamsAdapter.TeamsAdapterHolder>() {
 
-    interface onItemClickListener{
+    interface OnItemClickListener{
         fun onDeleteClicked(position: Int){}
         fun onEditClicked(position: Int)
     }
 
-    lateinit var mListener: onItemClickListener
+    private lateinit var mListener: OnItemClickListener
 
-    fun setOnItemClickListener(listener: onItemClickListener){
+    fun setOnItemClickListener(listener: OnItemClickListener){
         mListener = listener
     }
 
@@ -29,7 +29,7 @@ class TeamsAdapter(
         currentPosition--
     }
 
-    class TeamsAdapterHolder(itemView: View, listener: onItemClickListener) : RecyclerView.ViewHolder(itemView) {
+    class TeamsAdapterHolder(itemView: View, listener: OnItemClickListener) : RecyclerView.ViewHolder(itemView) {
 
         val teamName = itemView.findViewById<TextView>(R.id.teamName)!!
         private val buttonDelete = itemView.findViewById<Button>(R.id.buttonDelete)!!
@@ -37,13 +37,13 @@ class TeamsAdapter(
 
         init {
             buttonDelete.setOnClickListener {
-                var position = adapterPosition
+                val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION)
                     listener.onDeleteClicked(position)
             }
 
             buttonEdit.setOnClickListener {
-                var position = adapterPosition
+                val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION)
                     listener.onEditClicked(position)
             }
@@ -61,9 +61,6 @@ class TeamsAdapter(
 
     override fun onBindViewHolder(holder: TeamsAdapterHolder, position: Int) {
 
-        holder.teamName.text = "${teamsNames[position]}"
+        holder.teamName.text = teamsNames[position]
     }
-
-    fun getter(): Array<String> = teamsNames.toTypedArray()
-
 }

@@ -1,6 +1,7 @@
 package com.makentoshe.androidgithubcitemplate
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,11 +15,24 @@ class Statistics : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_statistics)
 
-        val teamsExtra = this.intent.getStringArrayExtra("teams")
+        val appPrefs: SharedPreferences = getSharedPreferences("AppPrefs", 0)
+        val prefsEditor: SharedPreferences.Editor = appPrefs.edit()
+        val teamsAmount = appPrefs.getInt("teamsAmount", 0)
+        val teams=Array(teamsAmount){""}
+        for (i in 0 until teamsAmount)
+            teams[i] = appPrefs.getString("team$i", "").toString()
+        val roundNumber = appPrefs.getInt("roundNumber", 0)
 
-        list = Array(teamsExtra.size) { MutableList(0) { "0.0" } }
-        for (i in teamsExtra.indices)
-            list[i] = this.intent.getStringArrayExtra("list$i")!!.toMutableList()
+        list = Array(teams.size) { MutableList(roundNumber) { "0.0" } }
+        for (i in teams.indices)
+            for (j in 0 until roundNumber)
+                list[i][j] = appPrefs.getString("list[$i][$j]", "0.0").toString()
+
+        prefsEditor.putBoolean("teamsFlag", false)
+        prefsEditor.putBoolean("gameSettingsFlag", false)
+        prefsEditor.putBoolean("levelsFlag", false)
+        prefsEditor.putBoolean("gameFlag", false)
+        prefsEditor.apply()
 
         backButton.setOnClickListener {
             finish()
@@ -28,7 +42,7 @@ class Statistics : AppCompatActivity() {
             finish()
         }
 
-        var firstAdapter = FirstAdapter(this, list, teamsExtra.toMutableList())
+        val firstAdapter = FirstAdapter(this, list, teams.toMutableList())
         firstView.adapter = firstAdapter
         firstView.layoutManager = LinearLayoutManager(this)
     }
