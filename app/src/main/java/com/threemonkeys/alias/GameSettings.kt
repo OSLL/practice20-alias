@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.widget.Button
 import android.widget.SeekBar
+import android.widget.Switch
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -33,14 +34,25 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
         }
 
         settings.setOnClickListener {
-            isNightModeOn = !isNightModeOn
-            if (isNightModeOn) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            val settingsDialog = Dialog(this)
+            settingsDialog.setContentView(R.layout.dialog_settings)
+            val changeTheme: Switch =
+                settingsDialog.findViewById(R.id.themeChanger)
+            changeTheme.isChecked = isNightModeOn
+            settingsDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            settingsDialog.show()
+            settingsDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            changeTheme.setOnCheckedChangeListener { buttonView, isChecked ->
+                isNightModeOn = isChecked
+                if (isNightModeOn) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                }
+                prefsEditor.putBoolean("isNightModeOn", isNightModeOn)
+                prefsEditor.apply()
+                settingsDialog.cancel()
             }
-            prefsEditor.putBoolean("isNightModeOn", isNightModeOn)
-            prefsEditor.apply()
         }
 
         var wordsForWin = appPrefs.getInt("wordsForWin", 10)
@@ -151,8 +163,7 @@ class GameSettings : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
                 gameSettingsDialog.findViewById(R.id.closeGameSettingsDialog)
             val textGameSettingsDialog: TextView =
                 gameSettingsDialog.findViewById(R.id.textGameSettingsDialog)
-            textGameSettingsDialog.text =
-                "Если вы не можете объяснить слово и пропускаете его, то ваша команда теряет одно очко \n P.S. Не распространяется на общее последнее слово"
+            textGameSettingsDialog.text = "Если вы не можете объяснить слово и пропускаете его, то ваша команда теряет одно очко \n P.S. Не распространяется на общее последнее слово"
             gameSettingsDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             gameSettingsDialog.show()
             closeGameSettingsDialog.setOnClickListener {

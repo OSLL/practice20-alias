@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         if (!teamsFlag && !gameFlag && !levelsFlag && !gameFlag){
             continueGameButton.isClickable = false
             continueGameButton.background = resources.getDrawable(R.drawable.add_team_no_active)
-            continueGameButton.setTextColor(resources.getColorStateList(R.color.white))
+            continueGameButton.setTextColor(resources.getColorStateList(R.color.whiteForContinue))
         }
 
         continueGameButton.setOnClickListener {
@@ -126,6 +127,11 @@ class MainActivity : AppCompatActivity() {
             prefsEditor.putBoolean("gameFlag", false)
             prefsEditor.putBoolean("isNightModeOn", isNightModeOn)
             prefsEditor.apply()
+            if (isNightModeOn) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }

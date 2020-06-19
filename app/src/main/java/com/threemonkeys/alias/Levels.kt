@@ -1,8 +1,12 @@
 package com.threemonkeys.alias
 
+import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import kotlinx.android.synthetic.main.activity_levels.*
@@ -27,14 +31,25 @@ class Levels : AppCompatActivity() {
         }
 
         settings.setOnClickListener {
-            isNightModeOn = !isNightModeOn
-            if (isNightModeOn){
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            val settingsDialog = Dialog(this)
+            settingsDialog.setContentView(R.layout.dialog_settings)
+            val changeTheme: Switch =
+                settingsDialog.findViewById(R.id.themeChanger)
+            changeTheme.isChecked = isNightModeOn
+            settingsDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            settingsDialog.show()
+            settingsDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            changeTheme.setOnCheckedChangeListener { buttonView, isChecked ->
+                isNightModeOn = isChecked
+                if (isNightModeOn) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                }
+                prefsEditor.putBoolean("isNightModeOn", isNightModeOn)
+                prefsEditor.apply()
+                settingsDialog.cancel()
             }
-            prefsEditor.putBoolean("isNightModeOn", isNightModeOn)
-            prefsEditor.apply()
         }
 
         easyLevelIcon.setOnClickListener {

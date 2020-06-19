@@ -11,4 +11,5 @@
     <color name="mainColor">#D01313</color>
     <color name="activeButton">#FF00862E</color>
     <color name="background">#FFFFFF</color>
+    <color name="whiteForContinue">#FFFFFF</color>
 </resources>
