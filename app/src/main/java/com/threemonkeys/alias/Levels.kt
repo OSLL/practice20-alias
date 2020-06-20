@@ -126,7 +126,8 @@ class Levels : AppCompatActivity() {
     }
 
     override fun finish() {
-        super.finish()
+        val intent = Intent(this, GameSettings::class.java)
+        startActivity(intent)
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
     }
 }
